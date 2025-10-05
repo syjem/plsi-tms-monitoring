@@ -47,5 +47,8 @@ export interface ApiLogData {
 
 export interface AttendanceSheetProps {
   initialData?: ApiLogData[];
-  employee: string;
+  employee: {
+    id: string;
+    name: string;
+  };
 }

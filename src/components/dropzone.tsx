@@ -3,7 +3,7 @@
 import { cn, formatBytes } from "@/lib/utils";
 import { type usePDFExtract } from "@/hooks/use-pdf-extract";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, File, Loader2, Upload, X } from "lucide-react";
+import { File, Loader2, Upload, X } from "lucide-react";
 import {
   createContext,
   type PropsWithChildren,
@@ -11,6 +11,8 @@ import {
   useContext,
 } from "react";
 import Image from "next/image";
+
+/* --------------------------- Context Setup --------------------------- */
 
 type DropzoneContextType = Omit<
   ReturnType<typeof usePDFExtract>,
@@ -25,6 +27,8 @@ type DropzoneProps = ReturnType<typeof usePDFExtract> & {
   className?: string;
 };
 
+/* ----------------------------- Root Wrapper -------------------------- */
+
 const Dropzone = ({
   className,
   children,
@@ -32,45 +36,43 @@ const Dropzone = ({
   getInputProps,
   ...restProps
 }: PropsWithChildren<DropzoneProps>) => {
-  const isSuccess = restProps.isSuccess;
+  const { files, errors, extractedData, isDragActive, isDragReject } =
+    restProps;
+
+  const isSuccess = !!extractedData;
   const isActive = restProps.isDragActive;
+
+  const hasFileErrors = files.some((file) => file.errors.length > 0);
   const isInvalid =
-    (restProps.isDragActive && restProps.isDragReject) ||
-    (restProps.errors.length > 0 && !restProps.isSuccess) ||
-    restProps.files.some((file) => file.errors.length !== 0);
+    (isDragActive && isDragReject) ||
+    (errors.length > 0 && !extractedData) ||
+    hasFileErrors;
 
   return (
     <DropzoneContext.Provider value={{ ...restProps }}>
-      <div
-        {...getRootProps({
-          className: cn(
-            "border-2 border-gray-300 rounded-lg p-6 text-center bg-card transition-colors duration-300 text-foreground",
-            className,
-            isSuccess ? "border-solid" : "border-dashed",
-            isActive && "border-primary bg-primary/10",
-            isInvalid && "border-destructive bg-destructive/10"
-          ),
-        })}
-      >
-        <input {...getInputProps()} />
-        {children}
+      <div className="w-full md:w-1/2 px-4 md:px-0 h-full mx-auto flex items-center justify-center">
+        <div
+          {...getRootProps({
+            className: cn(
+              "flex-1 border-2 border-gray-300 rounded-lg p-6 text-center bg-card transition-colors duration-300 text-foreground",
+              className,
+              isSuccess ? "border-solid" : "border-dashed",
+              isActive && "border-primary bg-primary/10",
+              isInvalid && "border-destructive bg-destructive/10"
+            ),
+          })}
+        >
+          <input {...getInputProps()} />
+          {children}
+        </div>
       </div>
     </DropzoneContext.Provider>
   );
 };
 
 const DropzoneContent = ({ className }: { className?: string }) => {
-  const {
-    files,
-    setFiles,
-    onExtract,
-    loading,
-    errors,
-    maxFileSize,
-    maxFiles,
-    isSuccess,
-    result,
-  } = useDropzoneContext();
+  const { files, setFiles, onExtract, loading, errors, maxFileSize, maxFiles } =
+    useDropzoneContext();
 
   const exceedMaxFiles = files.length > maxFiles;
 
@@ -80,23 +82,6 @@ const DropzoneContent = ({ className }: { className?: string }) => {
     },
     [files, setFiles]
   );
-
-  if (isSuccess) {
-    return (
-      <div
-        className={cn(
-          "flex flex-row items-center gap-x-2 justify-center",
-          className
-        )}
-      >
-        <CheckCircle size={16} className="text-primary" />
-        <p className="text-primary text-sm">
-          Successfully extracted {files.length} file
-          {files.length > 1 ? "s" : ""}
-        </p>
-      </div>
-    );
-  }
 
   return (
     <div className={cn("flex flex-col", className)}>
@@ -108,7 +93,7 @@ const DropzoneContent = ({ className }: { className?: string }) => {
             key={`${file.name}-${idx}`}
             className="flex items-center gap-x-4 py-2 first:mt-4 last:mb-4 "
           >
-            {file.type.startsWith("image/") ? (
+            {file.type?.startsWith("image/") ? (
               <div className="h-10 w-10 rounded border overflow-hidden shrink-0 bg-muted flex items-center justify-center">
                 <Image
                   width={40}
@@ -198,23 +183,12 @@ const DropzoneContent = ({ className }: { className?: string }) => {
           </Button>
         </div>
       )}
-
-      {/* Debug output preview */}
-      {result?.success && (
-        <pre className="text-xs mt-4 bg-muted p-2 rounded max-h-64 overflow-auto">
-          {JSON.stringify(result.data, null, 2)}
-        </pre>
-      )}
     </div>
   );
 };
 
 const DropzoneEmptyState = ({ className }: { className?: string }) => {
-  const { maxFiles, maxFileSize, inputRef, isSuccess } = useDropzoneContext();
-
-  if (isSuccess) {
-    return null;
-  }
+  const { maxFiles, maxFileSize, inputRef } = useDropzoneContext();
 
   return (
     <div className={cn("flex flex-col items-center gap-y-2", className)}>

@@ -24,7 +24,7 @@ export const formatBytes = (
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
 };
 
-export const processApiData = (logs: ApiLogData[]): AttendanceData => {
+export const processInitialData = (logs: ApiLogData[]): AttendanceData => {
   const groupedData: AttendanceData = [];
 
   logs.forEach((log) => {

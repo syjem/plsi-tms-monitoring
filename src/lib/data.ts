@@ -1,4 +1,4 @@
-export const data = {
+export const sampleExtractedDataFromGemini = {
   employee: {
     id: "30489",
     name: "JEMUEL REPOYLO",
