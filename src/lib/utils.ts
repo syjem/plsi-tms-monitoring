@@ -24,15 +24,18 @@ export const formatBytes = (
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
 };
 
-export const processInitialData = (logs: ApiLogData[]): AttendanceData => {
+export const processData = (logs: ApiLogData[]): AttendanceData => {
   const groupedData: AttendanceData = [];
 
   logs.forEach((log) => {
-    // Check if it's a day off (Shift = "X") - create single row group
-    if (log.Shift === "X" || log.Remarks === "DAY OFF") {
+    const isDayOff = log.Shift === "X" || log.Remarks === "DAY OFF";
+    const hasRecords = isRowHasRecords(log);
+
+    // Check if it's a day off - create single row group
+    if (isDayOff && !hasRecords) {
       groupedData.push([
         {
-          date: log.Date,
+          date: formatDate(log.Date),
           day: log.Day,
           sched: log.Shift,
           timeIn: "",
@@ -48,11 +51,11 @@ export const processInitialData = (logs: ApiLogData[]): AttendanceData => {
       // Second row: "", "", "", BreakIn, TimeOut, Destination, Remarks, Signature
       groupedData.push([
         {
-          date: log.Date,
+          date: formatDate(log.Date),
           day: log.Day,
           sched: log.Shift,
-          timeIn: log.TimeIn,
-          timeOut: log.BreakOut,
+          timeIn: formatTimeTo12Hour(log.TimeIn),
+          timeOut: formatTimeTo12Hour(log.BreakOut),
           destination: "OFFICE",
           remarks: log.Remarks || "DUTY ON CALL",
           signature: "",
@@ -61,8 +64,8 @@ export const processInitialData = (logs: ApiLogData[]): AttendanceData => {
           date: "",
           day: "",
           sched: "",
-          timeIn: log.BreakIn,
-          timeOut: log.TimeOut,
+          timeIn: formatTimeTo12Hour(log.BreakIn),
+          timeOut: formatTimeTo12Hour(log.TimeOut),
           destination: "OFFICE",
           remarks: log.Remarks || "DUTY ON CALL",
           signature: "",
@@ -99,7 +102,7 @@ export function toTitleCase(str: string) {
 }
 
 export function formatDate(date: string) {
-  if (date === "") return date;
+  if (!date) return "";
 
   const [year, month, day] = date.split("-");
   return `${month}-${day}-${year}`;
@@ -118,3 +121,20 @@ export const isRowEmpty = (row: AttendanceRow): boolean => {
     row.signature === ""
   );
 };
+
+export const isRowHasRecords = (row: ApiLogData): boolean => {
+  return [row.TimeIn, row.TimeOut, row.BreakOut, row.BreakIn].some(
+    (val) => val && val.trim() !== ""
+  );
+};
+
+export function formatTimeTo12Hour(time: string): string {
+  if (!time) return "";
+
+  const [hoursStr, minutes] = time.split(":");
+  let hours = parseInt(hoursStr, 10);
+
+  hours = hours % 12 || 12;
+
+  return `${hours}:${minutes}`;
+}

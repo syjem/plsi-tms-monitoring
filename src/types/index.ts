@@ -45,10 +45,7 @@ export interface ApiLogData {
   TimeOut: string;
 }
 
-export interface AttendanceSheetProps {
-  initialData?: ApiLogData[];
-  employee: {
-    id: string;
-    name: string;
-  };
+export interface Employee {
+  id: string;
+  name: string;
 }

@@ -1,30 +1,23 @@
 "use client";
 
 import { toast } from "sonner";
-import { useState } from "react";
-import { Printer } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Printer, Save } from "lucide-react";
 import TableRow from "@/components/table-row";
 import { Button } from "@/components/ui/button";
 import TableHead from "@/components/table-head";
-import type {
-  AttendanceData,
-  AttendanceRow,
-  AttendanceSheetProps,
-} from "@/types";
-import { isRowEmpty, processInitialData, toTitleCase } from "@/lib/utils";
+import { cn, isRowEmpty, processData, toTitleCase } from "@/lib/utils";
+import type { AttendanceData, AttendanceRow, Employee } from "@/types";
 
-export default function AttendanceSheet({
-  initialData,
-  employee,
-}: AttendanceSheetProps) {
+export default function AttendanceSheet() {
   const [isEditable, setIsEditable] = useState(false);
   const [hoveredGroup, setHoveredGroup] = useState<number | null>(null);
 
+  const [employee, setEmployee] = useState<Employee>({
+    id: "",
+    name: "",
+  });
   const [attendanceData, setAttendanceData] = useState<AttendanceData>(() => {
-    if (initialData && initialData.length > 0) {
-      return processInitialData(initialData);
-    }
-
     // Default empty groups if no initial data - 40 single-row groups
     return Array.from({ length: 40 }, () => [
       {
@@ -58,6 +51,17 @@ export default function AttendanceSheet({
       )
     );
   };
+
+  useEffect(() => {
+    const savedAttendanceData = localStorage.getItem("attendanceData");
+    if (savedAttendanceData) {
+      const parsed = JSON.parse(savedAttendanceData);
+      const logs = parsed?.logs ?? [];
+      const parsedEmployee = parsed?.employee ?? {};
+      setEmployee(parsedEmployee);
+      setAttendanceData(processData(logs));
+    }
+  }, []);
 
   const saveSheet = () => {
     setIsEditable(false);
@@ -139,7 +143,8 @@ export default function AttendanceSheet({
 
       <div className="mt-4 mb-2 text-right print:hidden mx-auto max-w-4xl">
         {isEditable ? (
-          <Button onClick={saveSheet} className="w-[90px]">
+          <Button onClick={saveSheet} className="w-[90px] cursor-pointer">
+            <Save />
             Save
           </Button>
         ) : (
@@ -192,17 +197,47 @@ export default function AttendanceSheet({
 
       {/* Footer */}
       <footer className="flex justify-between items-end mx-auto max-w-4xl print:max-w-[700px]">
-        <div className="text-center px-4">
-          <p className="text-2xl font-semibold print:text-xl">
-            Ryan H. Batistil
-          </p>
-          <p className="text-sm text-gray-700">Systems Engineer</p>
+        <div className="flex flex-col items-center px-4">
+          <input
+            type="text"
+            defaultValue="Ryan H. Batistil"
+            readOnly={!isEditable}
+            className={cn(
+              "text-center text-2xl font-semibold print:text-xl",
+              !isEditable && "outline-0"
+            )}
+          />
+
+          <input
+            type="text"
+            defaultValue="Systems Engineer"
+            readOnly={!isEditable}
+            className={cn(
+              "text-center text-sm text-gray-700",
+              !isEditable && "outline-0"
+            )}
+          />
         </div>
-        <div className="text-center px-4">
-          <p className="text-2xl capitalize font-semibold print:text-xl">
-            {toTitleCase(employee.name)}
-          </p>
-          <p className="text-sm text-gray-700">Systems Engineer</p>
+        <div className="flex flex-col items-center px-4">
+          <input
+            type="text"
+            defaultValue={toTitleCase(employee.name)}
+            readOnly={!isEditable}
+            className={cn(
+              "text-center text-2xl font-semibold print:text-xl",
+              !isEditable && "outline-0"
+            )}
+          />
+
+          <input
+            type="text"
+            defaultValue="Systems Engineer"
+            readOnly={!isEditable}
+            className={cn(
+              "text-center text-sm text-gray-700",
+              !isEditable && "outline-0"
+            )}
+          />
         </div>
       </footer>
     </div>

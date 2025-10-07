@@ -9,8 +9,10 @@ import {
   type PropsWithChildren,
   useCallback,
   useContext,
+  useEffect,
 } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 /* --------------------------- Context Setup --------------------------- */
 
@@ -71,8 +73,17 @@ const Dropzone = ({
 };
 
 const DropzoneContent = ({ className }: { className?: string }) => {
-  const { files, setFiles, onExtract, loading, errors, maxFileSize, maxFiles } =
-    useDropzoneContext();
+  const {
+    files,
+    setFiles,
+    onExtract,
+    loading,
+    extractedData,
+    errors,
+    maxFileSize,
+    maxFiles,
+  } = useDropzoneContext();
+  const router = useRouter();
 
   const exceedMaxFiles = files.length > maxFiles;
 
@@ -82,6 +93,14 @@ const DropzoneContent = ({ className }: { className?: string }) => {
     },
     [files, setFiles]
   );
+
+  useEffect(() => {
+    if (extractedData) {
+      localStorage.setItem("attendanceData", JSON.stringify(extractedData));
+
+      router.push("/monitoring");
+    }
+  }, [extractedData, router]);
 
   return (
     <div className={cn("flex flex-col", className)}>
