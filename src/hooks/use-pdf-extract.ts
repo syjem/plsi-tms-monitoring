@@ -87,6 +87,9 @@ export const usePDFExtract = (options: UsePDFExtractOptions) => {
 
   const onExtract = useCallback(async () => {
     if (files.length === 0) return;
+    const localURL = "http://127.0.0.1:5000/api/extract";
+    // const productionURL =
+    //   "https://plsi-tms-monitoring-server.vercel.app/api/extract";
 
     setLoading(true);
     setErrors([]);
@@ -96,13 +99,10 @@ export const usePDFExtract = (options: UsePDFExtractOptions) => {
       const formData = new FormData();
       formData.append("file", files[0]);
 
-      const response = await fetch(
-        "https://plsi-tms-monitoring-server.vercel.app/api/extract",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const response = await fetch(localURL, {
+        method: "POST",
+        body: formData,
+      });
 
       const result = await response.json();
 

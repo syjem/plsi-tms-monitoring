@@ -1,9 +1,13 @@
 "use client";
 
-import { cn, formatBytes } from "@/lib/utils";
-import { type usePDFExtract } from "@/hooks/use-pdf-extract";
+import { toast } from "sonner";
+import Image from "next/image";
+import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { formatBytes } from "@/utils/format-bytes";
 import { File, Loader2, Upload, X } from "lucide-react";
+import type { usePDFExtract } from "@/hooks/use-pdf-extract";
 import {
   createContext,
   type PropsWithChildren,
@@ -11,8 +15,6 @@ import {
   useContext,
   useEffect,
 } from "react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
 
 /* --------------------------- Context Setup --------------------------- */
 
@@ -99,6 +101,7 @@ const DropzoneContent = ({ className }: { className?: string }) => {
       localStorage.setItem("attendanceData", JSON.stringify(extractedData));
 
       router.push("/monitoring");
+      toast.info("Data extracted successfully.");
     }
   }, [extractedData, router]);
 

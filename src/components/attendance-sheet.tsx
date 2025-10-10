@@ -1,12 +1,13 @@
 "use client";
 
 import { toast } from "sonner";
+import { Footer } from "@/components/footer";
 import { useEffect, useState } from "react";
-import { Printer, Save } from "lucide-react";
 import TableRow from "@/components/table-row";
-import { Button } from "@/components/ui/button";
 import TableHead from "@/components/table-head";
-import { cn, isRowEmpty, processData, toTitleCase } from "@/lib/utils";
+import { isRowEmpty } from "@/utils/is-row-empty";
+import { processData } from "@/utils/process-data";
+import { SheetControls } from "@/components/sheet-controls";
 import type { AttendanceData, AttendanceRow, Employee } from "@/types";
 
 export default function AttendanceSheet() {
@@ -65,15 +66,11 @@ export default function AttendanceSheet() {
 
   const saveSheet = () => {
     setIsEditable(false);
-    toast.success("Monitoring sheet saved successfully!");
+    toast.info("Saved");
   };
 
   const enableEditing = () => {
     setIsEditable(true);
-  };
-
-  const handlePrint = () => {
-    window.print();
   };
 
   const addRowToGroup = (groupIndex: number) => {
@@ -133,38 +130,20 @@ export default function AttendanceSheet() {
 
   return (
     <div className="bg-white px-8 py-16 shadow-lg print:shadow-none print:px-4 print:py-12">
-      {/* Header */}
-      <header className="text-center mb-2 print:mb-8">
+      <header className="text-center mb-10 print:mb-8">
         <h1 className="text-3xl font-bold">Phillogix Systems Inc.</h1>
         <h2 className="text-xl font-semibold">
           Employee Monitoring Attendance Sheet
         </h2>
       </header>
 
-      <div className="mt-4 mb-2 text-right print:hidden mx-auto max-w-4xl">
-        {isEditable ? (
-          <Button onClick={saveSheet} className="w-[90px] cursor-pointer">
-            <Save />
-            Save
-          </Button>
-        ) : (
-          <div className="flex items-center justify-end space-x-4">
-            <Button onClick={enableEditing} variant="link" className="">
-              Edit
-            </Button>
-            <Button
-              onClick={handlePrint}
-              className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600"
-            >
-              <Printer className="h-4 w-4" />
-              Print
-            </Button>
-          </div>
-        )}
-      </div>
+      <SheetControls
+        isEditable={isEditable}
+        saveSheet={saveSheet}
+        enableEditing={enableEditing}
+      />
 
-      {/* Table */}
-      <div className="mb-8 mx-auto max-w-4xl print:max-w-[700px]">
+      <div className="mb-4 mx-auto max-w-4xl print:max-w-[700px]">
         <table className="w-full border-collapse border border-black text-xs">
           <TableHead />
           <tbody>
@@ -195,51 +174,7 @@ export default function AttendanceSheet() {
         </table>
       </div>
 
-      {/* Footer */}
-      <footer className="flex justify-between items-end mx-auto max-w-4xl print:max-w-[700px]">
-        <div className="flex flex-col items-center px-4">
-          <input
-            type="text"
-            defaultValue="Ryan H. Batistil"
-            readOnly={!isEditable}
-            className={cn(
-              "text-center text-2xl font-semibold print:text-xl",
-              !isEditable && "outline-0"
-            )}
-          />
-
-          <input
-            type="text"
-            defaultValue="Systems Engineer"
-            readOnly={!isEditable}
-            className={cn(
-              "text-center text-sm text-gray-700",
-              !isEditable && "outline-0"
-            )}
-          />
-        </div>
-        <div className="flex flex-col items-center px-4">
-          <input
-            type="text"
-            defaultValue={toTitleCase(employee.name)}
-            readOnly={!isEditable}
-            className={cn(
-              "text-center text-2xl font-semibold print:text-xl",
-              !isEditable && "outline-0"
-            )}
-          />
-
-          <input
-            type="text"
-            defaultValue="Systems Engineer"
-            readOnly={!isEditable}
-            className={cn(
-              "text-center text-sm text-gray-700",
-              !isEditable && "outline-0"
-            )}
-          />
-        </div>
-      </footer>
+      <Footer isEditable={isEditable} employee={employee} />
     </div>
   );
 }

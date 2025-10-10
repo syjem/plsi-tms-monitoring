@@ -44,8 +44,3 @@ export interface ApiLogData {
   TimeIn: string;
   TimeOut: string;
 }
-
-export interface Employee {
-  id: string;
-  name: string;
-}
