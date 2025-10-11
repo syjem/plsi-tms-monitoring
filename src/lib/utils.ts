@@ -6,5 +6,6 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function toTitleCase(str: string) {
+  if (!str || str === "") return;
   return str.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
 }

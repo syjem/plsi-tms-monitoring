@@ -1,14 +1,15 @@
 "use client";
 
 import { toast } from "sonner";
-import { Footer } from "@/components/footer";
 import { useEffect, useState } from "react";
+import { Footer } from "@/components/footer";
 import TableRow from "@/components/table-row";
 import TableHead from "@/components/table-head";
 import { isRowEmpty } from "@/utils/is-row-empty";
 import { processData } from "@/utils/process-data";
 import { SheetControls } from "@/components/sheet-controls";
 import type { AttendanceData, AttendanceRow, Employee } from "@/types";
+import { Edit } from "lucide-react";
 
 export default function AttendanceSheet() {
   const [isEditable, setIsEditable] = useState(false);
@@ -66,11 +67,14 @@ export default function AttendanceSheet() {
 
   const saveSheet = () => {
     setIsEditable(false);
-    toast.info("Saved");
+    toast.success("Attendance sheet saved!");
   };
 
   const enableEditing = () => {
     setIsEditable(true);
+    toast.warning("Edit mode enabled.", {
+      icon: <Edit className="h-4 w-4" />,
+    });
   };
 
   const addRowToGroup = (groupIndex: number) => {
@@ -126,11 +130,12 @@ export default function AttendanceSheet() {
 
       return newData;
     });
+    toast.info("Row added..");
   };
 
   return (
     <div className="bg-white px-8 py-16 shadow-lg print:shadow-none print:px-4 print:py-12">
-      <header className="text-center mb-10 print:mb-8">
+      <header className="text-center mb-10 print:mb-8 space-y-2">
         <h1 className="text-3xl font-bold">Phillogix Systems Inc.</h1>
         <h2 className="text-xl font-semibold">
           Employee Monitoring Attendance Sheet
@@ -174,7 +179,7 @@ export default function AttendanceSheet() {
         </table>
       </div>
 
-      <Footer isEditable={isEditable} employee={employee} />
+      <Footer isEditable={isEditable} employeeName={employee.name} />
     </div>
   );
 }
