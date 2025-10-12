@@ -134,7 +134,7 @@ export default function AttendanceSheet() {
   };
 
   return (
-    <div className="bg-white px-8 py-16 shadow-lg print:shadow-none print:px-4 print:py-12">
+    <div className="bg-white px-8 py-8 md:py-16 shadow-lg print:shadow-none print:px-4 print:py-12">
       <header className="text-center mb-10 print:mb-8 space-y-2">
         <h1 className="text-3xl font-bold">Phillogix Systems Inc.</h1>
         <h2 className="text-xl font-semibold">
@@ -148,7 +148,7 @@ export default function AttendanceSheet() {
         enableEditing={enableEditing}
       />
 
-      <div className="mb-4 mx-auto max-w-4xl print:max-w-[700px]">
+      <div className="mb-4 mx-auto max-w-4xl print:max-w-[700px] overflow-auto">
         <table className="w-full border-collapse border border-black text-xs">
           <TableHead />
           <tbody>

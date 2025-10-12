@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { formatBytes } from "@/utils/format-bytes";
-import { File, Loader2, Upload, X } from "lucide-react";
+import { File, Loader2, CloudUpload, X } from "lucide-react";
 import type { usePDFExtract } from "@/hooks/use-pdf-extract";
 import {
   createContext,
@@ -54,7 +54,7 @@ const Dropzone = ({
 
   return (
     <DropzoneContext.Provider value={{ ...restProps }}>
-      <div className="w-full md:w-1/2 px-4 md:px-0 h-full mx-auto flex items-center justify-center">
+      <div className="w-full md:w-1/2 px-4 mx-auto flex items-center justify-center">
         <div
           {...getRootProps({
             className: cn(
@@ -214,8 +214,8 @@ const DropzoneEmptyState = ({ className }: { className?: string }) => {
 
   return (
     <div className={cn("flex flex-col items-center gap-y-2", className)}>
-      <Upload size={20} className="text-muted-foreground" />
-      <p className="text-base font-semibold">Upload PDF</p>
+      <CloudUpload size={40} className="text-muted-foreground" />
+      <p className="text-base font-semibold">Upload a PDF</p>
       <div className="flex flex-col items-center gap-y-1">
         <p className="text-sm text-muted-foreground">
           Drag and drop or{" "}
