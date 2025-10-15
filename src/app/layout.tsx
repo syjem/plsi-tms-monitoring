@@ -27,12 +27,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased h-dvh`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <BackgroundTop />
         <BackgroundBottom />
         {children}
-        <Toaster position="bottom-center" richColors className="w-20" />
+        <Toaster position="bottom-center" richColors />
       </body>
     </html>
   );

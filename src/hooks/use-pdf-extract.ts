@@ -1,3 +1,5 @@
+"use client";
+
 import { useCallback, useEffect, useState } from "react";
 import {
   type FileError,
@@ -88,13 +90,7 @@ export const usePDFExtract = (options: UsePDFExtractOptions) => {
   const onExtract = useCallback(async () => {
     if (files.length === 0) return;
 
-    let url = "";
-
-    if (process.env.NODE_ENV === "development") {
-      url = "http://127.0.0.1:5000/api/extract";
-    } else {
-      url = "https://plsi-tms-monitoring-server.vercel.app/api/extract";
-    }
+    const url = "https://plsi-tms-monitoring-server.vercel.app/api/extract";
 
     setLoading(true);
     setErrors([]);
