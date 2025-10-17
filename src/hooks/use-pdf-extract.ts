@@ -75,7 +75,13 @@ export const usePDFExtract = (options: UsePDFExtractOptions) => {
     [files]
   );
 
-  const dropzoneProps = useDropzone({
+  const {
+    getRootProps,
+    getInputProps,
+    inputRef,
+    isDragActive,
+    ...restDropzoneProps
+  } = useDropzone({
     onDrop,
     noClick: true,
     accept: allowedMimeTypes.reduce(
@@ -137,6 +143,10 @@ export const usePDFExtract = (options: UsePDFExtractOptions) => {
     onExtract,
     maxFileSize,
     maxFiles,
-    ...dropzoneProps,
+    getRootProps,
+    getInputProps,
+    inputRef,
+    isDragActive,
+    ...restDropzoneProps,
   };
 };
