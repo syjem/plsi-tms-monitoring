@@ -11,7 +11,7 @@ export const processData = (logs: ApiLogData[]): AttendanceData => {
     const hasRecords = isRowHasRecords(log);
 
     // Check if it's a day off - create single row group
-    if (isDayOff || !hasRecords) {
+    if (isDayOff && !hasRecords) {
       groupedData.push([
         {
           date: formatDate(log.Date),
