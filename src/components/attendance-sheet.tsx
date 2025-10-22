@@ -157,7 +157,7 @@ export default function AttendanceSheet({
         enableEditing={enableEditing}
       />
 
-      <div className="mb-4 mx-auto max-w-4xl print:max-w-[700px] overflow-auto">
+      <div className="mb-4 mx-auto max-w-4xl print:max-w-[700px] overflow-auto md:overflow-visible">
         <table className="w-full border-collapse border border-black text-xs">
           <TableHead />
           <tbody>
