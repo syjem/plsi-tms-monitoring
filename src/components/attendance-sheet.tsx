@@ -10,11 +10,13 @@ import { processData } from "@/utils/process-data";
 import { SheetControls } from "@/components/sheet-controls";
 import type { AttendanceData, AttendanceRow, Employee } from "@/types";
 import { Edit } from "lucide-react";
-import { useSearchParams } from "next/navigation";
 
-export default function AttendanceSheet() {
-  const searchParams = useSearchParams();
-  const key = searchParams.get("key");
+export default function AttendanceSheet({
+  searchParams,
+}: {
+  searchParams: { key: string };
+}) {
+  const key = searchParams.key;
 
   const [isEditable, setIsEditable] = useState(false);
   const [hoveredGroup, setHoveredGroup] = useState<number | null>(null);
