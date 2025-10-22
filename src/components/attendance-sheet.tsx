@@ -10,8 +10,12 @@ import { processData } from "@/utils/process-data";
 import { SheetControls } from "@/components/sheet-controls";
 import type { AttendanceData, AttendanceRow, Employee } from "@/types";
 import { Edit } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 
 export default function AttendanceSheet() {
+  const searchParams = useSearchParams();
+  const key = searchParams.get("key");
+
   const [isEditable, setIsEditable] = useState(false);
   const [hoveredGroup, setHoveredGroup] = useState<number | null>(null);
 
@@ -55,15 +59,18 @@ export default function AttendanceSheet() {
   };
 
   useEffect(() => {
-    const savedAttendanceData = localStorage.getItem("attendanceData");
-    if (savedAttendanceData) {
-      const parsed = JSON.parse(savedAttendanceData);
+    if (!key || key === "new") return;
+
+    const savedData = localStorage.getItem(key);
+    if (savedData) {
+      const parsed = JSON.parse(savedData);
       const logs = parsed?.logs ?? [];
       const parsedEmployee = parsed?.employee ?? {};
+
       setEmployee(parsedEmployee);
       setAttendanceData(processData(logs));
     }
-  }, []);
+  }, [key]);
 
   const saveSheet = () => {
     setIsEditable(false);

@@ -83,13 +83,15 @@ export function PdfExtractor() {
   }, [loading]);
 
   useEffect(() => {
+    const uuid = crypto.randomUUID();
+
     if (extractedData) {
       setCurrentStage("success");
-      localStorage.setItem("attendanceData", JSON.stringify(extractedData));
+      localStorage.setItem(uuid, JSON.stringify(extractedData));
 
       // Show success briefly before navigating
       setTimeout(() => {
-        router.push("/monitoring");
+        router.push(`/monitoring?key=${uuid}`);
         toast.info("Data extracted successfully.");
       }, 1500);
     }

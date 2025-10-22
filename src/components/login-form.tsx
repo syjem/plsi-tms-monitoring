@@ -70,7 +70,7 @@ export function LoginForm({
             >
               <Google />
               {loadingProvider === "google"
-                ? "Loggin in..."
+                ? "Logging in..."
                 : "Continue with Google"}
             </Button>
           </div>

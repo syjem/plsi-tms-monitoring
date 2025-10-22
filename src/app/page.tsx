@@ -3,15 +3,15 @@
 import React from "react";
 import { Header } from "@/components/header";
 import { PdfExtractor } from "@/components/dropzone";
-import { useCurrentUserName } from "@/hooks/use-current-user-name";
 import { AddBlankSheet } from "@/components/add-blank-sheet";
+import { useCurrentUserName } from "@/hooks/use-current-user-name";
 
 export default function Home() {
   return (
     <React.Fragment>
       <Header />
       <HeroSection />
-      <section className="mt-6 flex flex-col md:flex-row items-stretch justify-center gap-4 w-full max-w-4xl mx-auto">
+      <section className="mt-6 flex flex-col md:flex-row items-stretch justify-center gap-4 w-full max-w-4xl mx-auto px-4">
         <PdfExtractor />
         <AddBlankSheet />
       </section>
