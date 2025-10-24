@@ -255,16 +255,13 @@ function DropzoneEmptyState({
         <Upload className="h-8 w-8 text-gray-600" />
       </div>
       <div className="text-center">
-        <span className="text-xl font-semibold text-gray-900 mb-2">
-          Upload a PDF
-        </span>
         <p className="text-sm text-gray-600">
           Drag and drop or{" "}
           <button
             onClick={() => inputRef.current?.click()}
             className="text-blue-600 hover:text-blue-700 underline font-medium"
           >
-            select file
+            select a PDF file
           </button>{" "}
           to upload
         </p>

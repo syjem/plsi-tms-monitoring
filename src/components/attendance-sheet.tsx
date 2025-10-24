@@ -18,7 +18,7 @@ export default function AttendanceSheet({
 }) {
   const key = searchParams.key;
 
-  const [isEditable, setIsEditable] = useState(false);
+  const [isEditable, setIsEditable] = useState(true);
   const [hoveredGroup, setHoveredGroup] = useState<number | null>(null);
 
   const [employee, setEmployee] = useState<Employee>({
