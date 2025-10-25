@@ -1,16 +1,21 @@
-"use client";
-
 import React from "react";
+import { redirect } from "next/navigation";
 import { Header } from "@/components/header";
 import { PdfExtractor } from "@/components/dropzone";
+import { getCurrentUser } from "./data/get-current-user";
 import { AddBlankSheet } from "@/components/add-blank-sheet";
-import { useCurrentUserName } from "@/hooks/use-current-user-name";
 
-export default function Home() {
+export default async function Home() {
+  const userData = await getCurrentUser();
+
+  if (!userData) {
+    return redirect("/auth/login");
+  }
+
   return (
     <React.Fragment>
-      <Header />
-      <HeroSection />
+      <Header userData={userData} />
+      <HeroSection name={userData.userName} />
       <section className="mt-6 flex flex-col md:flex-row items-stretch justify-center gap-4 w-full max-w-4xl mx-auto px-4">
         <PdfExtractor />
         <AddBlankSheet />
@@ -19,8 +24,7 @@ export default function Home() {
   );
 }
 
-function HeroSection() {
-  const name = useCurrentUserName();
+function HeroSection({ name }: { name: string }) {
   return (
     <div className="w-full max-w-4xl mx-auto text-center py-8 md:pt-10 px-4 sm:px-6 lg:px-8">
       <p className="font-semibold text-base text-gray-700 mb-6 font-mono">

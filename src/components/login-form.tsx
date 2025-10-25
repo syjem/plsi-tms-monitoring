@@ -56,7 +56,7 @@ export function LoginForm({
                 className="border-gray-400"
               />
             </div>
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full shadow-sm">
               Login
             </Button>
           </div>

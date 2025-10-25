@@ -261,12 +261,12 @@ function DropzoneEmptyState({
             onClick={() => inputRef.current?.click()}
             className="text-blue-600 hover:text-blue-700 underline font-medium"
           >
-            select a PDF file
+            select pdf
           </button>{" "}
           to upload
         </p>
         <p className="text-xs text-gray-500 mt-1">
-          Maximum file size: {formatBytes(maxFileSize, 2)}
+          Max file size: {formatBytes(maxFileSize, 2)}
         </p>
       </div>
     </div>
