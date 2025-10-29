@@ -1,9 +1,9 @@
 import React from "react";
 import { redirect } from "next/navigation";
 import { Header } from "@/components/header";
-import { PdfExtractor } from "@/components/dropzone";
+import { Dropzone } from "@/components/dropzone";
+import { NewSheet } from "@/components/new-sheet";
 import { getCurrentUser } from "./data/get-current-user";
-import { AddBlankSheet } from "@/components/add-blank-sheet";
 
 export default async function Home() {
   const userData = await getCurrentUser();
@@ -16,10 +16,10 @@ export default async function Home() {
     <React.Fragment>
       <Header userData={userData} />
       <HeroSection name={userData.userName} />
-      <section className="mt-6 flex flex-col md:flex-row items-stretch justify-center gap-4 w-full max-w-4xl mx-auto px-4">
-        <PdfExtractor />
-        <AddBlankSheet />
-      </section>
+      <main className="mt-6 max-w-xl mx-auto px-4">
+        <Dropzone />
+      </main>
+      <NewSheet />
     </React.Fragment>
   );
 }

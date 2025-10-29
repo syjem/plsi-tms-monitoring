@@ -21,7 +21,7 @@ import { usePDFExtract } from "@/hooks/use-pdf-extract";
 
 type ExtractionStage = "reading" | "scanning" | "extracting" | "success";
 
-export function PdfExtractor() {
+export function Dropzone() {
   const router = useRouter();
 
   const {
@@ -89,7 +89,6 @@ export function PdfExtractor() {
       setCurrentStage("success");
       localStorage.setItem(uuid, JSON.stringify(extractedData));
 
-      // Show success briefly before navigating
       setTimeout(() => {
         router.push(`/monitoring?key=${uuid}`);
         toast.info("Data extracted successfully.");
@@ -110,7 +109,7 @@ export function PdfExtractor() {
     <div
       {...getRootProps({
         className: cn(
-          "flex-1 relative rounded-lg border-2 border-dashed bg-white p-8 transition-all duration-500",
+          "relative rounded-lg border-2 border-dashed bg-white p-8 transition-all duration-500",
           !file && "border-gray-300 hover:border-gray-400 hover:shadow-md",
           file && !hasErrors && !loading && !isSuccess && "border-gray-300",
           loading && "border-blue-400 bg-blue-50/50",
@@ -252,7 +251,7 @@ function DropzoneEmptyState({
       )}
     >
       <div className="rounded-full bg-gray-100 p-4">
-        <Upload className="h-8 w-8 text-gray-600" />
+        <Upload className="size-5 md:size-6 text-gray-600" />
       </div>
       <div className="text-center">
         <p className="text-sm text-gray-600">

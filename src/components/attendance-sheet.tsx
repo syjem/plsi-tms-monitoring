@@ -1,6 +1,7 @@
 "use client";
 
 import { toast } from "sonner";
+import { Edit } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Footer } from "@/components/footer";
 import TableRow from "@/components/table-row";
@@ -9,7 +10,6 @@ import { isRowEmpty } from "@/utils/is-row-empty";
 import { processData } from "@/utils/process-data";
 import { SheetControls } from "@/components/sheet-controls";
 import type { AttendanceData, AttendanceRow, Employee } from "@/types";
-import { Edit } from "lucide-react";
 
 export default function AttendanceSheet({
   searchParams,
@@ -23,10 +23,10 @@ export default function AttendanceSheet({
 
   const [employee, setEmployee] = useState<Employee>({
     id: "",
-    name: "",
+    name: "Jemuel M. Repoylo",
   });
   const [attendanceData, setAttendanceData] = useState<AttendanceData>(() => {
-    // Default empty groups if no initial data - 40 single-row groups
+    // Default empty groups if no initial data - 40 single-row
     return Array.from({ length: 40 }, () => [
       {
         date: "",
@@ -76,6 +76,7 @@ export default function AttendanceSheet({
 
   const saveSheet = () => {
     setIsEditable(false);
+    localStorage.setItem("updatedData", JSON.stringify(attendanceData));
     toast.success("Attendance sheet saved!");
   };
 

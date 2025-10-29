@@ -1,11 +1,11 @@
 "use client";
 import { toast } from "sonner";
 import { Plus } from "lucide-react";
+import React, { useState } from "react";
 import { cn, toTitleCase } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import React, { useEffect, useState } from "react";
 import {
   Empty,
   EmptyDescription,
@@ -49,19 +49,12 @@ export function Footer({ isEditable, employeeName }: FooterProps) {
     title: "",
   });
 
-  useEffect(() => {
-    setEmployee((prev) => ({
-      ...prev,
-      name: employeeName,
-    }));
-  }, [employeeName]);
-
   const openDialog = (mode: "employee" | "officer") => {
     if (!isEditable) return;
 
     // Load the correct data based on mode
     const data = mode === "employee" ? employee : officer;
-    setTempData({ ...data }); // Create a fresh copy
+    setTempData({ ...data });
     setDialogMode(mode);
   };
 
@@ -74,7 +67,7 @@ export function Footer({ isEditable, employeeName }: FooterProps) {
   };
 
   const handleSave = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault();
 
     if (dialogMode === "employee") {
       setEmployee({ ...tempData });
@@ -82,7 +75,7 @@ export function Footer({ isEditable, employeeName }: FooterProps) {
       setOfficer({ ...tempData });
     }
 
-    toast.success("Saved changes!");
+    toast.success("Changes saved!");
     setDialogMode(null);
   };
 
@@ -92,7 +85,7 @@ export function Footer({ isEditable, employeeName }: FooterProps) {
   };
 
   return (
-    <>
+    <React.Fragment>
       <FooterDialog
         open={dialogMode !== null}
         setOpen={(open) => {
@@ -152,7 +145,7 @@ export function Footer({ isEditable, employeeName }: FooterProps) {
           />
         )}
       </footer>
-    </>
+    </React.Fragment>
   );
 }
 
@@ -225,7 +218,7 @@ function EmptyComponent({
       {isEditable ? (
         <EmptyHeader className="gap-0">
           <EmptyMedia variant="icon" className="bg-gray-200">
-            <Plus />
+            <Plus className="size-5" />
           </EmptyMedia>
           <EmptyDescription>Add a new field</EmptyDescription>
         </EmptyHeader>

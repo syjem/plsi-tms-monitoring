@@ -1,8 +1,9 @@
 "use client";
 
-import { LogOut } from "lucide-react";
+import { Fragment, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AppLogo } from "@/components/icons";
+import { Loader, LogOut } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,21 +21,29 @@ export function Header({
   userData: {
     userName: string;
     userEmail: string | null;
-    avatarUrl: string | null;
+    avatarUrl: string | undefined;
   };
 }) {
   const { userName, userEmail, avatarUrl } = userData;
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const handleSignout = async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    router.push("/auth/login");
+    try {
+      setLoading(true);
+      const supabase = createClient();
+      await supabase.auth.signOut();
+      router.push("/auth/login");
+    } catch (error) {
+      console.error("Error signing out:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <header className="w-full mx-auto py-4 px-4 sm:px-6 lg:px-8">
-      <nav className="max-w-4xl mx-auto flex justify-between items-center py-3 px-4 rounded-md border-b">
+      <nav className="max-w-4xl mx-auto flex justify-between items-center py-3 px-4 rounded border-b">
         <div className="flex items-center gap-2">
           <AppLogo />
           <span className="font-medium">Phillogix Systems Inc.</span>
@@ -56,8 +65,17 @@ export function Header({
               onClick={handleSignout}
               className="font-semibold hover:bg-red-100"
             >
-              <LogOut />
-              Sign out
+              {loading ? (
+                <Fragment>
+                  <Loader className="animate-spin" />
+                  Signing out...
+                </Fragment>
+              ) : (
+                <Fragment>
+                  <LogOut />
+                  Sign out
+                </Fragment>
+              )}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

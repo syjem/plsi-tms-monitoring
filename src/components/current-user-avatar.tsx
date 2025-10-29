@@ -5,7 +5,7 @@ export const CurrentUserAvatar = ({
   avatarUrl,
 }: {
   userName: string;
-  avatarUrl: string | null;
+  avatarUrl: string | undefined;
 }) => {
   const initials = userName
     ?.split(" ")
@@ -15,7 +15,7 @@ export const CurrentUserAvatar = ({
 
   return (
     <Avatar>
-      {avatarUrl && <AvatarImage src={avatarUrl} alt={initials} />}
+      <AvatarImage src={avatarUrl} alt={initials} />
       <AvatarFallback>{initials}</AvatarFallback>
     </Avatar>
   );
