@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import {
   Tooltip,
@@ -48,7 +50,7 @@ export function SheetControls({
               </Button>
             </TooltipTrigger>
             <TooltipContent side="left" sideOffset={4}>
-              <p>Print</p>
+              Print
             </TooltipContent>
           </Tooltip>
           <Tooltip>
@@ -62,7 +64,7 @@ export function SheetControls({
               </Button>
             </TooltipTrigger>
             <TooltipContent side="left" sideOffset={4}>
-              <p>Edit</p>
+              Edit
             </TooltipContent>
           </Tooltip>
         </div>

@@ -2,8 +2,7 @@ import React from "react";
 import { redirect } from "next/navigation";
 import { Header } from "@/components/header";
 import { Dropzone } from "@/components/dropzone";
-import { NewSheet } from "@/components/new-sheet";
-import { getCurrentUser } from "./data/get-current-user";
+import { getCurrentUser } from "@/app/data/get-current-user";
 
 export default async function Home() {
   const userData = await getCurrentUser();
@@ -19,7 +18,6 @@ export default async function Home() {
       <main className="mt-6 max-w-xl mx-auto px-4">
         <Dropzone />
       </main>
-      <NewSheet />
     </React.Fragment>
   );
 }

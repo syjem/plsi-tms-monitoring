@@ -1,4 +1,5 @@
 "use client";
+
 import { toast } from "sonner";
 import { Plus } from "lucide-react";
 import React, { useState } from "react";
@@ -20,31 +21,37 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { FooterDataType } from "@/types";
 
 type FooterProps = {
   isEditable: boolean;
-  employeeName: string;
+  leftField: FooterDataType;
+  rightField: FooterDataType;
 };
 
 type EmployeeStats = {
+  id: number;
   name: string;
   title: string;
 };
 
 type DialogMode = "employee" | "officer" | null;
 
-export function Footer({ isEditable, employeeName }: FooterProps) {
+export function Footer({ isEditable, leftField, rightField }: FooterProps) {
   const [dialogMode, setDialogMode] = useState<DialogMode>(null);
   const [employee, setEmployee] = useState<EmployeeStats>({
-    name: employeeName,
-    title: "Systems Engineer",
+    id: rightField[0]?.id || 0,
+    name: rightField[0]?.name || "",
+    title: rightField[0]?.title || "",
   });
   const [officer, setOfficer] = useState<EmployeeStats>({
-    name: "",
-    title: "",
+    id: leftField[0]?.id || 0,
+    name: leftField[0]?.name || "",
+    title: leftField[0]?.title || "",
   });
 
   const [tempData, setTempData] = useState<EmployeeStats>({
+    id: 0,
     name: "",
     title: "",
   });
@@ -81,7 +88,7 @@ export function Footer({ isEditable, employeeName }: FooterProps) {
 
   const closeDialog = () => {
     setDialogMode(null);
-    setTempData({ name: "", title: "" });
+    setTempData({ id: 0, name: "", title: "" });
   };
 
   return (

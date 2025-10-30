@@ -1,3 +1,5 @@
+"use client";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const CurrentUserAvatar = ({
@@ -15,8 +17,11 @@ export const CurrentUserAvatar = ({
 
   return (
     <Avatar>
-      <AvatarImage src={avatarUrl} alt={initials} />
-      <AvatarFallback>{initials}</AvatarFallback>
+      {avatarUrl ? (
+        <AvatarImage src={avatarUrl} alt={initials} />
+      ) : (
+        <AvatarFallback>{initials ?? "?"}</AvatarFallback>
+      )}
     </Avatar>
   );
 };

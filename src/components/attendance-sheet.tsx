@@ -9,22 +9,22 @@ import TableHead from "@/components/table-head";
 import { isRowEmpty } from "@/utils/is-row-empty";
 import { processData } from "@/utils/process-data";
 import { SheetControls } from "@/components/sheet-controls";
-import type { AttendanceData, AttendanceRow, Employee } from "@/types";
+import type { AttendanceData, AttendanceRow, FooterDataType } from "@/types";
 
 export default function AttendanceSheet({
   searchParams,
+  footerData,
 }: {
   searchParams: { key: string };
+  footerData: FooterDataType;
 }) {
   const key = searchParams.key;
+  const leftField = footerData.filter((item) => item.position === "left");
+  const rightField = footerData.filter((item) => item.position === "right");
 
   const [isEditable, setIsEditable] = useState(true);
   const [hoveredGroup, setHoveredGroup] = useState<number | null>(null);
 
-  const [employee, setEmployee] = useState<Employee>({
-    id: "",
-    name: "Jemuel M. Repoylo",
-  });
   const [attendanceData, setAttendanceData] = useState<AttendanceData>(() => {
     // Default empty groups if no initial data - 40 single-row
     return Array.from({ length: 40 }, () => [
@@ -67,9 +67,7 @@ export default function AttendanceSheet({
     if (savedData) {
       const parsed = JSON.parse(savedData);
       const logs = parsed?.logs ?? [];
-      const parsedEmployee = parsed?.employee ?? {};
 
-      setEmployee(parsedEmployee);
       setAttendanceData(processData(logs));
     }
   }, [key]);
@@ -189,7 +187,11 @@ export default function AttendanceSheet({
         </table>
       </div>
 
-      <Footer isEditable={isEditable} employeeName={employee.name} />
+      <Footer
+        isEditable={isEditable}
+        leftField={leftField}
+        rightField={rightField}
+      />
     </div>
   );
 }

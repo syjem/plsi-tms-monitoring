@@ -44,3 +44,10 @@ export interface ApiLogData {
   TimeIn: string;
   TimeOut: string;
 }
+
+export type FooterDataType = {
+  id: number;
+  position: string;
+  name: string;
+  title: string;
+}[];

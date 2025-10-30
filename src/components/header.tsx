@@ -3,7 +3,7 @@
 import { Fragment, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AppLogo } from "@/components/icons";
-import { Loader, LogOut } from "lucide-react";
+import { FilePlus2, Loader, LogOut } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -50,7 +50,7 @@ export function Header({
         </div>
 
         <DropdownMenu>
-          <DropdownMenuTrigger className="rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+          <DropdownMenuTrigger className="rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary cursor-pointer">
             <CurrentUserAvatar userName={userName} avatarUrl={avatarUrl} />
           </DropdownMenuTrigger>
           <DropdownMenuContent>
@@ -62,8 +62,15 @@ export function Header({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem
+              className="font-medium"
+              onClick={() => router.push("/monitoring?key=new")}
+            >
+              <FilePlus2 />
+              Create New
+            </DropdownMenuItem>
+            <DropdownMenuItem
               onClick={handleSignout}
-              className="font-semibold hover:bg-red-100"
+              className="font-medium hover:bg-red-100"
             >
               {loading ? (
                 <Fragment>
