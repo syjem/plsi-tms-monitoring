@@ -43,20 +43,3 @@ It integrates with the **Flask PDF Extraction API** to parse PDF daily logs repo
 </div>
 
 ---
-
-## ⚙️ Prerequisites
-
-- Node.js 18+
-- npm or yarn
-- Flask backend running (see backend repo)
-
----
-
-## 🪜 Installation
-
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/your-username/employee-monitoring-frontend.git
-   cd employee-monitoring-frontend
-   ```

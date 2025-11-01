@@ -45,9 +45,9 @@ export interface ApiLogData {
   TimeOut: string;
 }
 
-export type FooterDataType = {
+export type SystemsEngineerDataType = {
   id: number;
-  position: string;
+  field_number: number;
   name: string;
   title: string;
 }[];

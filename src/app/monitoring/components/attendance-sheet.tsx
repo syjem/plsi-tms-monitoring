@@ -3,24 +3,26 @@
 import { toast } from "sonner";
 import { Edit } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Footer } from "@/components/footer";
-import TableRow from "@/components/table-row";
-import TableHead from "@/components/table-head";
 import { isRowEmpty } from "@/utils/is-row-empty";
 import { processData } from "@/utils/process-data";
-import { SheetControls } from "@/components/sheet-controls";
-import type { AttendanceData, AttendanceRow, FooterDataType } from "@/types";
+import TableRow from "@/app/monitoring//components/table-row";
+import TableHead from "@/app/monitoring//components/table-head";
+import { SheetFooter } from "@/app/monitoring/components/sheet-footer";
+import { SheetControls } from "@/app/monitoring/components/sheet-controls";
+import type {
+  AttendanceData,
+  AttendanceRow,
+  SystemsEngineerDataType,
+} from "@/types";
 
 export default function AttendanceSheet({
   searchParams,
-  footerData,
+  engineers,
 }: {
   searchParams: { key: string };
-  footerData: FooterDataType;
+  engineers: SystemsEngineerDataType;
 }) {
   const key = searchParams.key;
-  const leftField = footerData.filter((item) => item.position === "left");
-  const rightField = footerData.filter((item) => item.position === "right");
 
   const [isEditable, setIsEditable] = useState(true);
   const [hoveredGroup, setHoveredGroup] = useState<number | null>(null);
@@ -187,11 +189,7 @@ export default function AttendanceSheet({
         </table>
       </div>
 
-      <Footer
-        isEditable={isEditable}
-        leftField={leftField}
-        rightField={rightField}
-      />
+      <SheetFooter isEditable={isEditable} engineers={engineers} />
     </div>
   );
 }

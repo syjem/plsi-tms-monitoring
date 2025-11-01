@@ -56,7 +56,7 @@ export function LoginForm({
                 className="border-gray-400"
               />
             </div>
-            <Button type="submit" className="w-full shadow-sm">
+            <Button type="submit" className="w-full shadow-sm cursor-pointer">
               Login
             </Button>
           </div>
@@ -70,7 +70,7 @@ export function LoginForm({
               type="button"
               disabled={loadingProvider !== null}
               variant="outline"
-              className="w-full border-gray-300 shadow-sm"
+              className="w-full border-gray-300 shadow-sm cursor-pointer"
               onClick={() => handleSocialLogin("google")}
             >
               <Google />
