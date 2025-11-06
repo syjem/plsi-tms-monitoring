@@ -4,7 +4,6 @@ import { toast } from "sonner";
 import { Edit } from "lucide-react";
 import { useEffect, useState } from "react";
 import { isRowEmpty } from "@/utils/is-row-empty";
-import { processData } from "@/utils/process-data";
 import TableRow from "@/app/monitoring//components/table-row";
 import TableHead from "@/app/monitoring//components/table-head";
 import { SheetFooter } from "@/app/monitoring/components/sheet-footer";
@@ -67,16 +66,20 @@ export default function AttendanceSheet({
 
     const savedData = localStorage.getItem(key);
     if (savedData) {
-      const parsed = JSON.parse(savedData);
-      const logs = parsed?.logs ?? [];
+      const logs = JSON.parse(savedData) ?? [];
 
-      setAttendanceData(processData(logs));
+      setAttendanceData(logs);
     }
   }, [key]);
 
   const saveSheet = () => {
     setIsEditable(false);
-    localStorage.setItem("updatedData", JSON.stringify(attendanceData));
+    if (key !== "new") {
+      localStorage.setItem(key, JSON.stringify(attendanceData));
+    } else {
+      const newSheetKey = crypto.randomUUID();
+      localStorage.setItem(newSheetKey, JSON.stringify(attendanceData));
+    }
     toast.success("Attendance sheet saved!");
   };
 

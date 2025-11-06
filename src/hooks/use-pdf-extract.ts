@@ -22,7 +22,6 @@ type UsePDFExtractOptions = {
 };
 
 interface ExtractResponse {
-  employee: { id: string; name: string };
   logs: {
     Date: string;
     Day: string;
@@ -35,11 +34,6 @@ interface ExtractResponse {
   }[];
 }
 
-type ExtractResult = {
-  data?: ExtractResponse;
-  error?: string;
-};
-
 export const usePDFExtract = (options: UsePDFExtractOptions) => {
   const {
     allowedMimeTypes = ["application/pdf"],
@@ -50,7 +44,7 @@ export const usePDFExtract = (options: UsePDFExtractOptions) => {
   const [files, setFiles] = useState<FileWithPreview[]>([]);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{ name: string; message: string }[]>([]);
-  const [extractedData, setExtractedData] = useState<ExtractResult | null>(
+  const [extractedData, setExtractedData] = useState<ExtractResponse | null>(
     null
   );
 

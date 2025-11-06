@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { formatBytes } from "@/utils/format-bytes";
+import { processData } from "@/utils/process-data";
 import { usePDFExtract } from "@/hooks/use-pdf-extract";
 
 export function Dropzone() {
@@ -44,12 +45,13 @@ export function Dropzone() {
     const uuid = crypto.randomUUID();
 
     if (extractedData) {
-      localStorage.setItem(uuid, JSON.stringify(extractedData));
+      const processedData = processData(extractedData.logs);
+      localStorage.setItem(uuid, JSON.stringify(processedData));
 
       setTimeout(() => {
         router.push(`/monitoring?key=${uuid}`);
         toast.info("Data extracted successfully.");
-      }, 1500);
+      }, 500);
     }
   }, [extractedData, router]);
 
