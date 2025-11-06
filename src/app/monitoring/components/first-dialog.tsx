@@ -35,7 +35,12 @@ export function FirstFieldDialog({
           <div className="grid gap-4">
             <div className="grid gap-3">
               <Label htmlFor="name">Name</Label>
-              <Input id="name" name="name" defaultValue={firstFieldData.name} />
+              <Input
+                id="name"
+                name="name"
+                defaultValue={firstFieldData.name}
+                required
+              />
             </div>
             <div className="grid gap-3">
               <Label htmlFor="title">Job Title</Label>
@@ -43,6 +48,7 @@ export function FirstFieldDialog({
                 id="title"
                 name="title"
                 defaultValue={firstFieldData.title}
+                required
               />
             </div>
           </div>

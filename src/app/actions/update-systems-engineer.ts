@@ -20,10 +20,9 @@ export async function updateSystemsEngineer(
     .single();
 
   if (error) {
-    throw new Error(error.message);
+    console.error("Error fetching data: ", error);
+    return null;
   }
-
-  console.log("Updated engineer:", data);
 
   return data;
 }

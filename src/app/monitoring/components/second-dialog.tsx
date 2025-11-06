@@ -39,6 +39,7 @@ export function SecondFieldDialog({
                 id="name"
                 name="name"
                 defaultValue={secondFieldData.name}
+                required
               />
             </div>
             <div className="grid gap-3">
@@ -47,6 +48,7 @@ export function SecondFieldDialog({
                 id="title"
                 name="title"
                 defaultValue={secondFieldData.title}
+                required
               />
             </div>
           </div>

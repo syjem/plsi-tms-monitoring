@@ -8,9 +8,7 @@ import {
   X,
   Loader2,
   CheckCircle2,
-  FileSearch,
   ScanLine,
-  FileOutput,
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -18,8 +16,6 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { formatBytes } from "@/utils/format-bytes";
 import { usePDFExtract } from "@/hooks/use-pdf-extract";
-
-type ExtractionStage = "reading" | "scanning" | "extracting" | "success";
 
 export function Dropzone() {
   const router = useRouter();
@@ -44,49 +40,10 @@ export function Dropzone() {
   const file = files[0];
   const hasErrors = file?.errors && file.errors.length > 0;
 
-  const [currentStage, setCurrentStage] = useState<ExtractionStage>("reading");
-
-  const stages: Record<
-    ExtractionStage,
-    { label: string; icon: React.ReactNode }
-  > = {
-    reading: {
-      label: "Reading your file...",
-      icon: <FileSearch className="h-5 w-5" />,
-    },
-    scanning: {
-      label: "Scanning content...",
-      icon: <ScanLine className="h-5 w-5" />,
-    },
-    extracting: {
-      label: "Extracting your files...",
-      icon: <FileOutput className="h-5 w-5" />,
-    },
-    success: {
-      label: "Extraction complete!",
-      icon: <CheckCircle2 className="h-5 w-5" />,
-    },
-  };
-
-  useEffect(() => {
-    if (!loading) return;
-
-    const stageOrder: ExtractionStage[] = ["reading", "scanning", "extracting"];
-    let currentIndex = 0;
-
-    const interval = setInterval(() => {
-      currentIndex = (currentIndex + 1) % stageOrder.length;
-      setCurrentStage(stageOrder[currentIndex]);
-    }, 4000);
-
-    return () => clearInterval(interval);
-  }, [loading]);
-
   useEffect(() => {
     const uuid = crypto.randomUUID();
 
     if (extractedData) {
-      setCurrentStage("success");
       localStorage.setItem(uuid, JSON.stringify(extractedData));
 
       setTimeout(() => {
@@ -132,8 +89,8 @@ export function Dropzone() {
           <div className="flex flex-col items-center gap-6">
             <div className="w-full flex items-center justify-between bg-gray-50 rounded-lg p-4 border border-gray-200">
               <div className="flex items-center gap-3">
-                <div className="rounded bg-red-100 p-2">
-                  <FileText className="h-5 w-5 text-red-600" />
+                <div className="rounded bg-green-100 p-2">
+                  <FileText className="h-5 w-5 text-green-600" />
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-900">
@@ -171,7 +128,7 @@ export function Dropzone() {
               )}
               {loading && (
                 <div className="text-blue-600 animate-pulse">
-                  {stages[currentStage].icon}
+                  <ScanLine className="h-5 w-5" />
                 </div>
               )}
               {isSuccess && (
@@ -186,15 +143,10 @@ export function Dropzone() {
                   <div className="h-full bg-gradient-to-r from-blue-500 via-blue-600 to-blue-500 animate-pulse bg-[length:200%_100%] w-full" />
                 </div>
                 <div className="flex items-center justify-center gap-2 mt-3">
-                  <div className="text-blue-600 animate-spin">
-                    <Loader2 className="h-4 w-4" />
-                  </div>
-                  <p className="text-sm text-gray-700 font-medium transition-all duration-500">
-                    {stages[currentStage].label}
-                  </p>
+                  <Loader2 className="h-4 w-4 text-blue-600 animate-spin" />
                 </div>
                 <p className="text-xs text-center text-gray-500 mt-1">
-                  This may take 30-40 seconds
+                  Extracting file...
                 </p>
               </div>
             )}

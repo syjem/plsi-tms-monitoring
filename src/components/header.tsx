@@ -20,7 +20,7 @@ export function Header({
 }: {
   userData: {
     userName: string;
-    userEmail: string | null;
+    userEmail: string;
     avatarUrl: string | undefined;
   };
 }) {

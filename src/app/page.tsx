@@ -2,7 +2,7 @@ import React from "react";
 import { redirect } from "next/navigation";
 import { Header } from "@/components/header";
 import { Dropzone } from "@/components/dropzone";
-import { getCurrentUser } from "@/app/data/get-current-user";
+import { getCurrentUser } from "@/app/actions/get-current-user";
 
 export default async function Home() {
   const userData = await getCurrentUser();

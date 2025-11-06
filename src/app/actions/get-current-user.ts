@@ -18,8 +18,8 @@ export const getCurrentUser = async () => {
     return null;
   }
 
-  const userName = (user.user_metadata.full_name ?? "User") as string;
-  const userEmail = (user.email ?? null) as string | null;
+  const userName = user.user_metadata.full_name as string;
+  const userEmail = (user.email) as string;
   const avatarUrl = (user.user_metadata.avatar_url ?? undefined) as
     | string
     | undefined;

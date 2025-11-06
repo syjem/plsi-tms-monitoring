@@ -30,7 +30,8 @@ export async function insertSystemsEngineer(
     .single();
 
   if (error) {
-    throw new Error(error.message);
+    console.error("Error fetching data: ", error);
+    return null;
   }
 
   return data;

@@ -72,7 +72,7 @@ export const SheetFooter = ({
       const title = formData.get("title") as string;
 
       if (!name || !title) {
-        throw new Error("Fields are required");
+        return;
       }
 
       if (id && Number(id) !== 0) {
