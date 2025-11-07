@@ -74,11 +74,11 @@ export default function AttendanceSheet({
 
   const saveSheet = () => {
     setIsEditable(false);
-    if (key !== "new") {
-      localStorage.setItem(key, JSON.stringify(attendanceData));
-    } else {
+    if (!key || key === "new") {
       const newSheetKey = crypto.randomUUID();
       localStorage.setItem(newSheetKey, JSON.stringify(attendanceData));
+    } else {
+      localStorage.setItem(key, JSON.stringify(attendanceData));
     }
     toast.success("Attendance sheet saved!");
   };

@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { createClient } from "@/lib/supabase/client";
-import { CurrentUserAvatar } from "@/components/current-user-avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function Header({
   userData,
@@ -24,9 +24,16 @@ export function Header({
     avatarUrl: string | undefined;
   };
 }) {
-  const { userName, userEmail, avatarUrl } = userData;
   const router = useRouter();
+
   const [loading, setLoading] = useState(false);
+  const { userName, userEmail, avatarUrl } = userData;
+
+  const initials = userName
+    ?.split(" ")
+    ?.map((word) => word[0])
+    ?.join("")
+    ?.toUpperCase();
 
   const handleSignout = async () => {
     try {
@@ -51,7 +58,10 @@ export function Header({
 
         <DropdownMenu>
           <DropdownMenuTrigger className="rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary cursor-pointer">
-            <CurrentUserAvatar userName={userName} avatarUrl={avatarUrl} />
+            <Avatar>
+              <AvatarImage src={avatarUrl} alt={initials} />
+              <AvatarFallback>{initials}</AvatarFallback>
+            </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuLabel>
