@@ -12,8 +12,7 @@ import {
 } from "@/components/ui/empty";
 import { FirstFieldDialog } from "@/app/monitoring/components/first-dialog";
 import { SecondFieldDialog } from "@/app/monitoring/components/second-dialog";
-import { insertSystemsEngineer } from "@/app/actions/insert-systems-engineer";
-import { updateSystemsEngineer } from "@/app/actions/update-systems-engineer";
+import { upsertSystemsEngineer } from "@/app/actions/upsert-systems-engineer";
 
 type FieldValueType = {
   id?: number;
@@ -43,7 +42,7 @@ export const SheetFooter = ({
   });
 
   const [secondFieldData, setSecondFieldData] = useState<FieldValueType>({
-    id: secondField[0]?.id || 0,
+    id: secondField[0]?.id || undefined,
     name: secondField[0]?.name || "",
     title: secondField[0]?.title || "",
   });
@@ -67,7 +66,7 @@ export const SheetFooter = ({
 
     try {
       const formData = new FormData(e.currentTarget);
-      const id = formData.get("id") as string;
+      const id = Number(formData.get("id"));
       const name = formData.get("name") as string;
       const title = formData.get("title") as string;
 
@@ -75,46 +74,26 @@ export const SheetFooter = ({
         return;
       }
 
-      if (id && Number(id) !== 0) {
-        const data = await updateSystemsEngineer(Number(id), name, title);
-        if (field_number === 1) {
-          setFirstFieldData({
-            id: data.id,
-            name: data.name,
-            title: data.title,
-          });
-        } else if (field_number === 2) {
-          setSecondFieldData({
-            id: data.id,
-            name: data.name,
-            title: data.title,
-          });
-        }
-      } else {
-        const data = await insertSystemsEngineer(name, title, field_number);
+      const data = await upsertSystemsEngineer(
+        id ? id : undefined,
+        name,
+        title,
+        field_number
+      );
 
-        if (field_number === 1) {
-          setFirstFieldData({
-            id: data.id,
-            name: data.name,
-            title: data.title,
-          });
-        } else if (field_number === 2) {
-          setSecondFieldData({
-            id: data.id,
-            name: data.name,
-            title: data.title,
-          });
-        }
+      if (!data) return;
+
+      if (field_number === 1) {
+        setFirstFieldData({ id: data.id, name: data.name, title: data.title });
+      } else if (field_number === 2) {
+        setSecondFieldData({ id: data.id, name: data.name, title: data.title });
       }
     } catch (error) {
       console.error("Error submitting form:", error);
     } finally {
-      if (field_number === 1) {
-        setIsFirstDialogOpen(false);
-      } else if (field_number === 2) {
-        setIsSecondDialogOpen(false);
-      }
+      if (field_number === 1) setIsFirstDialogOpen(false);
+      else if (field_number === 2) setIsSecondDialogOpen(false);
+
       setIsSubmitting(false);
     }
   };

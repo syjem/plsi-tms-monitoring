@@ -12,9 +12,7 @@ function TableHead() {
         <th className="font-semibold border border-black p-2 print:p-1 w-8">
           Day
         </th>
-        <th className="font-semibold border border-black p-2 print:p-1 w-4">
-          Sched
-        </th>
+        <th className="font-semibold border border-black p-1 w-4">Sched</th>
         <th className="font-semibold border border-black p-2 print:p-1 w-24">
           Time-in
         </th>
@@ -24,10 +22,10 @@ function TableHead() {
         <th className="font-semibold border border-black p-2 print:p-1 w-44">
           Destination
         </th>
-        <th className="font-semibold border border-black p-2 print:p-1 w-32">
+        <th className="font-semibold border border-black p-2 print:p-1 w-40">
           Remarks
         </th>
-        <th className="font-semibold border border-black p-2 print:p-1 w-16">
+        <th className="font-semibold border border-black p-2 print:p-1 w-12">
           Signature
         </th>
       </tr>

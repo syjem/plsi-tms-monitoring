@@ -2,30 +2,17 @@
 
 import { useState, useEffect } from "react";
 
-import {
-  Upload,
-  FileText,
-  X,
-  Loader2,
-  CheckCircle2,
-  ScanLine,
-} from "lucide-react";
-import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { formatBytes } from "@/utils/format-bytes";
-import { processData } from "@/utils/process-data";
 import { usePDFExtract } from "@/hooks/use-pdf-extract";
+import { Upload, FileText, X, Loader2, ScanLine } from "lucide-react";
 
 export function Dropzone() {
-  const router = useRouter();
-
   const {
     files,
     setFiles,
     loading,
-    extractedData,
     onExtract,
     maxFileSize,
     getRootProps,
@@ -41,20 +28,6 @@ export function Dropzone() {
   const file = files[0];
   const hasErrors = file?.errors && file.errors.length > 0;
 
-  useEffect(() => {
-    const uuid = crypto.randomUUID();
-
-    if (extractedData) {
-      const processedData = processData(extractedData.logs);
-      localStorage.setItem(uuid, JSON.stringify(processedData));
-
-      setTimeout(() => {
-        router.push(`/monitoring?key=${uuid}`);
-        toast.info("Data extracted successfully.");
-      }, 500);
-    }
-  }, [extractedData, router]);
-
   const handleRemoveFile = () => {
     setFiles([]);
     if (inputRef.current) {
@@ -62,17 +35,14 @@ export function Dropzone() {
     }
   };
 
-  const isSuccess = !!extractedData;
-
   return (
     <div
       {...getRootProps({
         className: cn(
           "relative rounded-lg border-2 border-dashed bg-white p-8 transition-all duration-500",
           !file && "border-gray-300 hover:border-gray-400 hover:shadow-md",
-          file && !hasErrors && !loading && !isSuccess && "border-gray-300",
+          file && !hasErrors && !loading && "border-gray-300",
           loading && "border-blue-400 bg-blue-50/50",
-          isSuccess && "border-green-400 bg-green-50/50",
           hasErrors && "border-red-400 bg-red-50/50",
           isDragActive && "border-blue-400 bg-blue-50"
         ),
@@ -120,7 +90,7 @@ export function Dropzone() {
                   )}
                 </div>
               </div>
-              {!loading && !isSuccess && (
+              {!loading && (
                 <button
                   onClick={handleRemoveFile}
                   className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -132,9 +102,6 @@ export function Dropzone() {
                 <div className="text-blue-600 animate-pulse">
                   <ScanLine className="h-5 w-5" />
                 </div>
-              )}
-              {isSuccess && (
-                <CheckCircle2 className="h-5 w-5 text-green-600 animate-in zoom-in duration-300" />
               )}
             </div>
 
@@ -153,20 +120,8 @@ export function Dropzone() {
               </div>
             )}
 
-            {/* Success Message */}
-            {isSuccess && (
-              <div className="w-full text-center animate-in fade-in slide-in-from-bottom-2 duration-500">
-                <p className="text-sm font-medium text-green-700">
-                  Extraction complete!
-                </p>
-                <p className="text-xs text-gray-600 mt-1">
-                  Redirecting to monitoring page...
-                </p>
-              </div>
-            )}
-
             {/* Extract Button */}
-            {!loading && !isSuccess && !hasErrors && (
+            {!loading && !hasErrors && (
               <Button
                 onClick={onExtract}
                 className="animate-in fade-in slide-in-from-bottom-2 duration-500"

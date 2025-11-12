@@ -1,12 +1,14 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
 import {
   type FileError,
   type FileRejection,
   useDropzone,
 } from "react-dropzone";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import { extractAndSave } from "@/app/actions/extract-and-save";
 
 /* ------------------------- Types & Interfaces ------------------------- */
 
@@ -21,20 +23,8 @@ type UsePDFExtractOptions = {
   maxFiles?: number;
 };
 
-interface ExtractResponse {
-  logs: {
-    Date: string;
-    Day: string;
-    Shift: string;
-    TimeIn: string;
-    BreakOut: string;
-    BreakIn: string;
-    TimeOut: string;
-    Remarks: string;
-  }[];
-}
-
 export const usePDFExtract = (options: UsePDFExtractOptions) => {
+  const router = useRouter();
   const {
     allowedMimeTypes = ["application/pdf"],
     maxFileSize = Number.POSITIVE_INFINITY,
@@ -44,9 +34,6 @@ export const usePDFExtract = (options: UsePDFExtractOptions) => {
   const [files, setFiles] = useState<FileWithPreview[]>([]);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{ name: string; message: string }[]>([]);
-  const [extractedData, setExtractedData] = useState<ExtractResponse | null>(
-    null
-  );
 
   const onDrop = useCallback(
     (acceptedFiles: File[], fileRejections: FileRejection[]) => {
@@ -90,37 +77,19 @@ export const usePDFExtract = (options: UsePDFExtractOptions) => {
   const onExtract = useCallback(async () => {
     if (files.length === 0) return;
 
-    const url = "https://plsi-tms-monitoring-server.vercel.app/api/extract";
-
     setLoading(true);
     setErrors([]);
-    setExtractedData(null);
 
-    try {
-      const formData = new FormData();
-      formData.append("file", files[0]);
-
-      const response = await fetch(url, {
-        method: "POST",
-        body: formData,
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        toast.error(result?.error || "Extraction failed");
-        return;
-      }
-
-      setExtractedData(result);
-    } catch (error) {
-      console.error("Extraction error:", error);
-      setErrors([{ name: "extract", message: "Failed to extract PDF data" }]);
-      toast.error("Failed to extract PDF data");
-    } finally {
-      setLoading(false);
+    const result = await extractAndSave(files[0]);
+    if (!result.success) {
+      toast.error(result.error);
+    } else {
+      toast.success("PDF extracted and data saved successfully!");
+      router.push(`/monitoring?date=${result.date}`);
     }
-  }, [files]);
+
+    setLoading(false);
+  }, [files, router]);
 
   useEffect(() => {
     if (files.length === 0) {
@@ -133,7 +102,6 @@ export const usePDFExtract = (options: UsePDFExtractOptions) => {
     setFiles,
     loading,
     errors,
-    extractedData,
     onExtract,
     maxFileSize,
     maxFiles,

@@ -1,32 +1,35 @@
 "use client";
 
-import { toast } from "sonner";
-import { Edit } from "lucide-react";
-import { useEffect, useState } from "react";
-import { isRowEmpty } from "@/utils/is-row-empty";
-import TableRow from "@/app/monitoring//components/table-row";
-import TableHead from "@/app/monitoring//components/table-head";
-import { SheetFooter } from "@/app/monitoring/components/sheet-footer";
-import { SheetControls } from "@/app/monitoring/components/sheet-controls";
 import type {
   AttendanceData,
   AttendanceRow,
   SystemsEngineerDataType,
+  WorkLogs,
 } from "@/types";
+import { toast } from "sonner";
+import { useState } from "react";
+import { Edit } from "lucide-react";
+import { isRowEmpty } from "@/utils/is-row-empty";
+import TableRow from "@/app/monitoring//components/table-row";
+import TableHead from "@/app/monitoring//components/table-head";
+import { updateWorkLogs } from "@/app/actions/update-work-logs";
+import { SheetFooter } from "@/app/monitoring/components/sheet-footer";
+import { SheetControls } from "@/app/monitoring/components/sheet-controls";
 
 export default function AttendanceSheet({
-  searchParams,
   engineers,
+  workLogs,
 }: {
-  searchParams: { key: string };
   engineers: SystemsEngineerDataType;
+  workLogs: WorkLogs | null;
 }) {
-  const key = searchParams.key;
-
   const [isEditable, setIsEditable] = useState(true);
   const [hoveredGroup, setHoveredGroup] = useState<number | null>(null);
 
   const [attendanceData, setAttendanceData] = useState<AttendanceData>(() => {
+    if (workLogs?.logs && workLogs.logs.length > 0) {
+      return workLogs.logs;
+    }
     // Default empty groups if no initial data - 40 single-row
     return Array.from({ length: 40 }, () => [
       {
@@ -61,31 +64,26 @@ export default function AttendanceSheet({
     );
   };
 
-  useEffect(() => {
-    if (!key || key === "new") return;
+  const saveSheet = async () => {
+    const toastId = toast.loading("Saving attendance sheet...");
 
-    const savedData = localStorage.getItem(key);
-    if (savedData) {
-      const logs = JSON.parse(savedData) ?? [];
-
-      setAttendanceData(logs);
+    try {
+      if (workLogs) {
+        await updateWorkLogs(workLogs.id, attendanceData);
+      }
+      toast.success("Attendance sheet saved!", { id: toastId });
+      setIsEditable(false);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to save attendance sheet.", { id: toastId });
+    } finally {
+      setTimeout(() => toast.dismiss(toastId), 1500);
     }
-  }, [key]);
-
-  const saveSheet = () => {
-    setIsEditable(false);
-    if (!key || key === "new") {
-      const newSheetKey = crypto.randomUUID();
-      localStorage.setItem(newSheetKey, JSON.stringify(attendanceData));
-    } else {
-      localStorage.setItem(key, JSON.stringify(attendanceData));
-    }
-    toast.success("Attendance sheet saved!");
   };
 
   const enableEditing = () => {
     setIsEditable(true);
-    toast.warning("Edit mode enabled.", {
+    toast.warning("Edit mode enabled", {
       icon: <Edit className="h-4 w-4" />,
     });
   };
@@ -120,6 +118,10 @@ export default function AttendanceSheet({
       return;
     }
 
+    // copy of previous data for undo
+    const prevData = structuredClone(attendanceData);
+
+    // update the state
     setAttendanceData((prev) => {
       const newData = [...prev];
 
@@ -143,7 +145,15 @@ export default function AttendanceSheet({
 
       return newData;
     });
-    toast.info("Row added..");
+    toast.warning("You added a row..", {
+      action: {
+        label: "Undo",
+        onClick: () => {
+          setAttendanceData(prevData);
+          toast.success("You removed the added row");
+        },
+      },
+    });
   };
 
   return (
@@ -161,8 +171,8 @@ export default function AttendanceSheet({
         enableEditing={enableEditing}
       />
 
-      <div className="mb-4 mx-auto max-w-4xl print:max-w-[700px] overflow-auto md:overflow-visible">
-        <table className="w-full border-collapse border border-black text-xs">
+      <div className="mb-4 mx-auto max-w-4xl print:max-w-[700px]">
+        <table className="w-full border-collapse border border-black text-xs overflow-auto">
           <TableHead />
           <tbody>
             {attendanceData.map((group, groupIndex) =>

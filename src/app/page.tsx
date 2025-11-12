@@ -2,12 +2,13 @@ import React from "react";
 import { redirect } from "next/navigation";
 import { Header } from "@/components/header";
 import { Dropzone } from "@/components/dropzone";
+import FileManager from "@/components/file-manager";
+import { getWorkLogs } from "@/app/actions/get-work-logs";
 import { getCurrentUser } from "@/app/actions/get-current-user";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Files } from "lucide-react";
 
 export default async function Home() {
-  const userData = await getCurrentUser();
+  const [userData, logs] = await Promise.all([getCurrentUser(), getWorkLogs()]);
 
   if (!userData) {
     return redirect("/auth/login");
@@ -27,10 +28,7 @@ export default async function Home() {
             <Dropzone />
           </TabsContent>
           <TabsContent value="files">
-            <section className="flex items-center gap-2 5">
-              <h3>Manage your files</h3>
-              <Files className="size-4 text-muted-foreground" />
-            </section>
+            <FileManager logs={logs} />
           </TabsContent>
         </Tabs>
       </main>

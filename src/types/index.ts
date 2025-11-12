@@ -51,3 +51,11 @@ export type SystemsEngineerDataType = {
   name: string;
   title: string;
 }[];
+
+export type WorkLogs = {
+  id: string;
+  date: string;
+  logs: AttendanceData;
+  created_at: string;
+  updated_at: string;
+};
