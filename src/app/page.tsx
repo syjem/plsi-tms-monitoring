@@ -1,11 +1,9 @@
 import React from "react";
 import { redirect } from "next/navigation";
 import { Header } from "@/components/header";
-import { Dropzone } from "@/components/dropzone";
-import FileManager from "@/components/file-manager";
+import MainSection from "@/components/main-tabs";
 import { getWorkLogs } from "@/app/actions/get-work-logs";
 import { getCurrentUser } from "@/app/actions/get-current-user";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default async function Home() {
   const [userData, logs] = await Promise.all([getCurrentUser(), getWorkLogs()]);
@@ -18,20 +16,7 @@ export default async function Home() {
     <React.Fragment>
       <Header userData={userData} />
       <HeroSection name={userData.userName} />
-      <main className="mt-6 max-w-xl mx-auto px-4">
-        <Tabs defaultValue="dropzone">
-          <TabsList>
-            <TabsTrigger value="dropzone">Upload</TabsTrigger>
-            <TabsTrigger value="files">Files</TabsTrigger>
-          </TabsList>
-          <TabsContent value="dropzone">
-            <Dropzone />
-          </TabsContent>
-          <TabsContent value="files">
-            <FileManager logs={logs} />
-          </TabsContent>
-        </Tabs>
-      </main>
+      <MainSection logs={logs} />
     </React.Fragment>
   );
 }

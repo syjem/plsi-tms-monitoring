@@ -1,9 +1,5 @@
 "use client";
 
-import { Fragment, useState } from "react";
-import { useRouter } from "next/navigation";
-import { AppLogo } from "@/components/icons";
-import { FilePlus2, Loader, LogOut } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,6 +8,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Fragment, useState } from "react";
+import { useRouter } from "next/navigation";
+import { AppLogo } from "@/components/icons";
+import { Loader, LogOut } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -71,13 +71,6 @@ export function Header({
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem
-              className="font-medium"
-              onClick={() => router.push("/monitoring?key=new")}
-            >
-              <FilePlus2 />
-              Create New
-            </DropdownMenuItem>
             <DropdownMenuItem
               onClick={handleSignout}
               className="font-medium hover:bg-red-100"

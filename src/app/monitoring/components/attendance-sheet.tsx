@@ -23,7 +23,7 @@ export default function AttendanceSheet({
   engineers: SystemsEngineerDataType;
   workLogs: WorkLogs | null;
 }) {
-  const [isEditable, setIsEditable] = useState(true);
+  const [isEditable, setIsEditable] = useState(false);
   const [hoveredGroup, setHoveredGroup] = useState<number | null>(null);
 
   const [attendanceData, setAttendanceData] = useState<AttendanceData>(() => {
