@@ -3,9 +3,9 @@
 import { WorkLogs } from "@/types";
 import { Dropzone } from "@/components/dropzone";
 import FileManager from "@/components/file-manager";
+import { useEffect, useState, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useEffect, useState } from "react";
 
 function MainSection({ logs }: { logs: WorkLogs[] }) {
   const router = useRouter();
@@ -15,25 +15,35 @@ function MainSection({ logs }: { logs: WorkLogs[] }) {
   const currentTab = searchParams.get("tab") || "dropzone";
 
   const [tab, setTab] = useState(currentTab);
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     setTab(currentTab);
   }, [currentTab]);
 
   const handleTabChange = (value: string) => {
-    const params = new URLSearchParams(searchParams);
-    params.set("tab", value);
-    router.replace(`${pathname}?${params.toString()}`);
+    setTab(value);
+
+    startTransition(() => {
+      const params = new URLSearchParams(searchParams);
+      params.set("tab", value);
+      const newUrl = `${pathname}?${params.toString()}`;
+      router.push(newUrl, { scroll: false });
+    });
   };
 
   return (
     <main className="mt-6 max-w-xl mx-auto px-4">
       <Tabs value={tab} onValueChange={handleTabChange}>
         <TabsList>
-          <TabsTrigger value="dropzone" className="px-4 py-2">
+          <TabsTrigger
+            value="dropzone"
+            className="px-4 py-2"
+            disabled={isPending}
+          >
             Upload
           </TabsTrigger>
-          <TabsTrigger value="files" className="px-4 py-2">
+          <TabsTrigger value="files" className="px-4 py-2" disabled={isPending}>
             Files
           </TabsTrigger>
         </TabsList>
