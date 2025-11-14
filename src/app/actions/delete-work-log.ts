@@ -1,9 +1,9 @@
 "use server";
 
-import { AttendanceData } from "@/types";
+import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 
-export async function updateWorkLogs(id: string, logs: AttendanceData) {
+export async function deleteWorkLog(id: string) {
   const supabase = await createClient();
 
   const {
@@ -17,20 +17,21 @@ export async function updateWorkLogs(id: string, logs: AttendanceData) {
 
   const { error } = await supabase
     .from("work_logs")
-    .update({ logs: logs, updated_at: new Date().toISOString() })
+    .delete()
     .eq("user_id", user.id)
-    .eq("id", id)
-    .single();
+    .eq("id", id);
 
   if (error) {
     return {
       success: false,
-      error: "Failed to update the log, please try again.",
+      error: "Failed to delete the log, please try again.",
     };
   }
 
+  revalidatePath("/");
+
   return {
     success: true,
-    message: "Log updated successfully",
+    message: "Log deleted successfully",
   };
 }

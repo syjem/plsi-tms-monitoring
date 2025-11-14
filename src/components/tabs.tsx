@@ -7,12 +7,12 @@ import { useEffect, useState, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-function MainSection({ logs }: { logs: WorkLogs[] }) {
+function TabSection({ logs }: { logs: WorkLogs[] }) {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  const currentTab = searchParams.get("tab") || "dropzone";
+  const currentTab = searchParams.get("tab") || "upload";
 
   const [tab, setTab] = useState(currentTab);
   const [isPending, startTransition] = useTransition();
@@ -27,8 +27,9 @@ function MainSection({ logs }: { logs: WorkLogs[] }) {
     startTransition(() => {
       const params = new URLSearchParams(searchParams);
       params.set("tab", value);
+
       const newUrl = `${pathname}?${params.toString()}`;
-      router.push(newUrl, { scroll: false });
+      router.push(newUrl);
     });
   };
 
@@ -37,7 +38,7 @@ function MainSection({ logs }: { logs: WorkLogs[] }) {
       <Tabs value={tab} onValueChange={handleTabChange}>
         <TabsList>
           <TabsTrigger
-            value="dropzone"
+            value="upload"
             className="px-4 py-2"
             disabled={isPending}
           >
@@ -48,7 +49,7 @@ function MainSection({ logs }: { logs: WorkLogs[] }) {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="dropzone">
+        <TabsContent value="upload">
           <Dropzone />
         </TabsContent>
 
@@ -60,4 +61,4 @@ function MainSection({ logs }: { logs: WorkLogs[] }) {
   );
 }
 
-export default MainSection;
+export default TabSection;

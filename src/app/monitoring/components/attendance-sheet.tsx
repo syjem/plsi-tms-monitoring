@@ -8,7 +8,7 @@ import type {
 } from "@/types";
 import { toast } from "sonner";
 import { useState } from "react";
-import { Edit } from "lucide-react";
+import { CheckCheck, Edit } from "lucide-react";
 import { isRowEmpty } from "@/utils/is-row-empty";
 import TableRow from "@/app/monitoring//components/table-row";
 import TableHead from "@/app/monitoring//components/table-head";
@@ -69,9 +69,18 @@ export default function AttendanceSheet({
 
     try {
       if (workLogs) {
-        await updateWorkLogs(workLogs.id, attendanceData);
+        const result = await updateWorkLogs(workLogs.id, attendanceData);
+
+        if (!result.success) {
+          toast.error(result.error);
+          return;
+        }
+
+        toast.success("Attendance sheet saved!", {
+          id: toastId,
+          icon: <CheckCheck className="h-4 w-4" />,
+        });
       }
-      toast.success("Attendance sheet saved!", { id: toastId });
       setIsEditable(false);
     } catch (error) {
       console.error(error);

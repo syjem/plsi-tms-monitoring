@@ -1,7 +1,7 @@
 import React from "react";
 import { redirect } from "next/navigation";
+import TabSection from "@/components/tabs";
 import { Header } from "@/components/header";
-import MainSection from "@/components/main-tabs";
 import { getWorkLogs } from "@/app/actions/get-work-logs";
 import { getCurrentUser } from "@/app/actions/get-current-user";
 
@@ -16,7 +16,7 @@ export default async function Home() {
     <React.Fragment>
       <Header userData={userData} />
       <HeroSection name={userData.userName} />
-      <MainSection logs={logs} />
+      <TabSection key={logs.length} logs={logs} />
     </React.Fragment>
   );
 }

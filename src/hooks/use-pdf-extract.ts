@@ -80,15 +80,21 @@ export const usePDFExtract = (options: UsePDFExtractOptions) => {
     setLoading(true);
     setErrors([]);
 
-    const result = await extractAndSave(files[0]);
-    if (!result.success) {
-      toast.error(result.error);
-    } else {
+    try {
+      const result = await extractAndSave(files[0]);
+      if (!result.success) {
+        toast.error(result.error);
+        return;
+      }
+
       toast.success("PDF extracted and data saved successfully!");
       router.push(`/monitoring?date=${result.date}`);
+    } catch (error) {
+      console.error(error);
+      toast.error("An error has occurred, please try again!");
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   }, [files, router]);
 
   useEffect(() => {
