@@ -88,7 +88,7 @@ export const usePDFExtract = (options: UsePDFExtractOptions) => {
       }
 
       toast.success("PDF extracted and data saved successfully!");
-      router.push(`/monitoring?date=${result.date}`);
+      router.push(`/monitoring/${result.id}`);
     } catch (error) {
       console.error(error);
       toast.error("An error has occurred, please try again!");

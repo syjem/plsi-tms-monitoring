@@ -1,8 +1,9 @@
 "use server";
 
+import { WorkLogs } from "@/types";
 import { createClient } from "@/lib/supabase/server";
 
-export async function getWorkLogs() {
+export async function getWorkLogs(): Promise<WorkLogs> {
   const supabase = await createClient();
 
   const {
@@ -21,9 +22,8 @@ export async function getWorkLogs() {
     .order("created_at", { ascending: false });
 
   if (error) {
-    console.error(error.message);
-    return [];
+    return { data: null, error: error.message };
   }
 
-  return data ?? [];
+  return { data };
 }

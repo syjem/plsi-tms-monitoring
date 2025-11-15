@@ -1,13 +1,13 @@
 "use client";
 
-import { WorkLogs } from "@/types";
+import { Logs } from "@/types";
 import { Dropzone } from "@/components/dropzone";
 import FileManager from "@/components/file-manager";
 import { useEffect, useState, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-function TabSection({ logs }: { logs: WorkLogs[] }) {
+function TabSection({ logs }: { logs: Logs[] }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();

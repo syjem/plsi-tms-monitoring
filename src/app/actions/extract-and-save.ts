@@ -5,7 +5,7 @@ import { saveWorkLogs } from "@/app/actions/save-work-logs";
 import { extractTextFromPDF } from "@/app/actions/extract-pdf";
 
 export async function extractAndSave(file: File) {
-  const result = await extractTextFromPDF(file);
+  const result = await extractTextFromPDF(file); // python api
   if (!result.success) {
     return { success: false, error: result.error };
   }
@@ -18,5 +18,5 @@ export async function extractAndSave(file: File) {
     return { success: false, error: res.error || "Failed to save work logs" };
   }
 
-  return { success: true, date };
+  return { success: true, id: res.data.id };
 }
