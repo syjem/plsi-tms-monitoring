@@ -3,8 +3,8 @@
 import type {
   AttendanceData,
   AttendanceRow,
+  Logs,
   SystemsEngineerDataType,
-  WorkLogs,
 } from "@/types";
 import { toast } from "sonner";
 import { useState } from "react";
@@ -21,7 +21,7 @@ export default function AttendanceSheet({
   workLogs,
 }: {
   engineers: SystemsEngineerDataType;
-  workLogs: WorkLogs | null;
+  workLogs: Logs | null;
 }) {
   const [isEditable, setIsEditable] = useState(false);
   const [hoveredGroup, setHoveredGroup] = useState<number | null>(null);

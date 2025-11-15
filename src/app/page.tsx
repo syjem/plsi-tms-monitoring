@@ -1,22 +1,29 @@
 import React from "react";
-import { redirect } from "next/navigation";
 import TabSection from "@/components/tabs";
 import { Header } from "@/components/header";
+import { notFound, redirect } from "next/navigation";
 import { getWorkLogs } from "@/app/actions/get-work-logs";
 import { getCurrentUser } from "@/app/actions/get-current-user";
 
 export default async function Home() {
-  const [userData, logs] = await Promise.all([getCurrentUser(), getWorkLogs()]);
+  const [userData, { data, error }] = await Promise.all([
+    getCurrentUser(),
+    getWorkLogs(),
+  ]);
 
   if (!userData) {
     return redirect("/auth/login");
+  }
+
+  if (error) {
+    notFound();
   }
 
   return (
     <React.Fragment>
       <Header userData={userData} />
       <HeroSection name={userData.userName} />
-      <TabSection key={logs.length} logs={logs} />
+      <TabSection logs={data ?? []} />
     </React.Fragment>
   );
 }

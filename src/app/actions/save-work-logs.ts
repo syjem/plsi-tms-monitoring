@@ -15,13 +15,15 @@ export async function saveWorkLogs(date: string, logs: AttendanceData) {
     throw new Error("User not authenticated");
   }
 
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("work_logs")
-    .insert({ user_id: user.id, logs, date });
+    .insert({ user_id: user.id, logs, date })
+    .select()
+    .single();
 
   if (error) {
     return { success: false, error: error.message };
   }
 
-  return { success: true };
+  return { success: true, data };
 }

@@ -18,8 +18,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { toast } from "sonner";
+import { Logs } from "@/types";
 import { cn } from "@/lib/utils";
-import { WorkLogs } from "@/types";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,7 +34,7 @@ import { formatISODate } from "@/utils/format-date";
 import { deleteWorkLog } from "@/app/actions/delete-work-log";
 import { EmptyFileManager } from "@/components/file-manager-empty";
 
-function FileManager({ logs }: { logs: WorkLogs[] }) {
+function FileManager({ logs }: { logs: Logs[] }) {
   const router = useRouter();
   const [visible, setVisible] = useState(false);
 
@@ -108,9 +108,7 @@ function FileManager({ logs }: { logs: WorkLogs[] }) {
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
-                          onClick={() =>
-                            router.push(`/monitoring?date=${log.date}`)
-                          }
+                          onClick={() => router.push(`/monitoring/${log.id}`)}
                         >
                           <FolderKanban />
                           View
