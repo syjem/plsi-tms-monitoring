@@ -43,3 +43,48 @@ It integrates with the **Flask PDF Extraction API** to parse PDF daily logs repo
 </div>
 
 ---
+
+## TODO — Email-Based Sign-In & Sign-Up Flow (Intended for Yahoo users)
+
+### 1. Implement Email Authentication
+
+#### Proposed Flow (subject to change)
+
+### A. User Enters Email
+
+1. Check if the email exists in the Supabase `users` table.
+
+   - **If YES (existing user):**
+
+     - Send a **Supabase Magic Link** to the email.
+     - Magic link should include an **auth redirect URL** back to the authenticated page.
+
+   - **If NO (new user):**
+     - Send a **verification code (OTP)** to the email.
+     - Display an **Onboarding Form** with the following fields:
+       - Verification Code
+       - First Name
+       - Last Name
+       - Avatar Upload (optional)
+     - After successful verification and form submission:
+       - Create a new user record in the database.
+       - Redirect user to the authenticated page.
+
+### 2. Implement Dark Mode (just a switch for simplicity)
+
+### 3. Implement Extracting animation with stages (uploading, extracting, redirecting)
+
+#### Example Flow (subject to change)
+
+```js
+setStage("Uploading…");
+await uploadFile();
+
+await delay(500);
+
+setStage("Extracting data…");
+const result = await extractAPI();
+
+setStage("Done.");
+setStage("Redirecting...");
+```

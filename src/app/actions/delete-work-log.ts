@@ -12,7 +12,7 @@ export async function deleteWorkLog(id: string) {
   } = await supabase.auth.getUser();
 
   if (userError || !user) {
-    throw new Error("User not authenticated");
+    return { success: false, error: "User not authenticated" };
   }
 
   const { error } = await supabase

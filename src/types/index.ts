@@ -45,12 +45,22 @@ export interface ApiLogData {
   TimeOut: string;
 }
 
-export type SystemsEngineerDataType = {
+type SystemsEngineerSchema = {
   id: number;
   field_number: number;
   name: string;
   title: string;
-}[];
+};
+
+export type SystemsEngineerSingle = {
+  data: SystemsEngineerSchema | null;
+  error?: string;
+};
+
+export type SystemsEngineerDataType = {
+  data: SystemsEngineerSchema[];
+  error?: string;
+};
 
 export type Logs = {
   id: string;

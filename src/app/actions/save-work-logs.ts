@@ -12,7 +12,7 @@ export async function saveWorkLogs(date: string, logs: AttendanceData) {
   } = await supabase.auth.getUser();
 
   if (userError || !user) {
-    throw new Error("User not authenticated");
+    return { success: false, error: "User not authenticated" };
   }
 
   const { data, error } = await supabase

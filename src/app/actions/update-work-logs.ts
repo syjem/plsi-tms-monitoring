@@ -12,7 +12,7 @@ export async function updateWorkLogs(id: string, logs: AttendanceData) {
   } = await supabase.auth.getUser();
 
   if (userError || !user) {
-    throw new Error("User not authenticated");
+    return { success: false, error: "User not authenticated" };
   }
 
   const { error } = await supabase
@@ -31,6 +31,5 @@ export async function updateWorkLogs(id: string, logs: AttendanceData) {
 
   return {
     success: true,
-    message: "Log updated successfully",
   };
 }

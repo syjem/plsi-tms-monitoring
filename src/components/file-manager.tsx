@@ -21,6 +21,16 @@ import { toast } from "sonner";
 import { Logs } from "@/types";
 import { cn } from "@/lib/utils";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -36,7 +46,9 @@ import { EmptyFileManager } from "@/components/file-manager-empty";
 
 function FileManager({ logs }: { logs: Logs[] }) {
   const router = useRouter();
+  const [open, setOpen] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   useEffect(() => {
     const timeout = setTimeout(() => setVisible(true), 100);
@@ -49,17 +61,17 @@ function FileManager({ logs }: { logs: Logs[] }) {
     });
 
     try {
-      const response = await deleteWorkLog(id);
+      const { success, message, error } = await deleteWorkLog(id);
 
-      if (!response.success) {
-        toast.error(response.error, {
+      if (!success) {
+        toast.error(error, {
           id: toastId,
           icon: <CircleAlert className="h-4 w-4" />,
         });
         return;
       }
 
-      toast.success(response.message, {
+      toast.success(message, {
         id: toastId,
         icon: <CheckCheck className="h-4 w-4" />,
       });
@@ -73,8 +85,19 @@ function FileManager({ logs }: { logs: Logs[] }) {
     }
   };
 
+  const alertHandler = (value: boolean) => {
+    setOpen(value);
+  };
+
   return (
     <section className="rounded-lg border-2 border-dashed bg-white transition-all duration-500 border-gray-300 hover:border-gray-400 hover:shadow-md">
+      <DeleteAlertDialog
+        open={open}
+        setOpen={alertHandler}
+        id={selectedId}
+        deleteLogHandler={deleteLogHandler}
+      />
+
       {logs && logs.length === 0 ? (
         <EmptyFileManager visible={visible} />
       ) : (
@@ -114,7 +137,10 @@ function FileManager({ logs }: { logs: Logs[] }) {
                           View
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          onClick={() => deleteLogHandler(log.id)}
+                          onClick={() => {
+                            setSelectedId(log.id);
+                            alertHandler(true);
+                          }}
                         >
                           <FolderX />
                           Delete
@@ -133,3 +159,41 @@ function FileManager({ logs }: { logs: Logs[] }) {
 }
 
 export default FileManager;
+
+function DeleteAlertDialog({
+  open,
+  setOpen,
+  id,
+  deleteLogHandler,
+}: {
+  open: boolean;
+  setOpen: (value: boolean) => void;
+  id: string | null;
+  deleteLogHandler: (id: string) => Promise<void>;
+}) {
+  return (
+    <AlertDialog open={open} onOpenChange={setOpen}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This action cannot be undone. This will permanently delete your data
+            from our servers.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            className="bg-red-500 hover:bg-red-600"
+            onClick={async () => {
+              if (id) await deleteLogHandler(id);
+              setOpen(false);
+            }}
+          >
+            Continue
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+}

@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
-import { SystemsEngineerDataType } from "@/types";
+import React, { useState } from "react";
 import {
   Empty,
   EmptyDescription,
@@ -24,7 +24,12 @@ export const SheetFooter = ({
   engineers,
   isEditable,
 }: {
-  engineers: SystemsEngineerDataType;
+  engineers: {
+    id: number;
+    field_number: number;
+    name: string;
+    title: string;
+  }[];
   isEditable: boolean;
 }) => {
   const firstField = engineers.filter((item) => item.field_number === 1);
@@ -74,14 +79,17 @@ export const SheetFooter = ({
         return;
       }
 
-      const data = await upsertSystemsEngineer(
+      const { data, error } = await upsertSystemsEngineer(
         id ? id : undefined,
         name,
         title,
         field_number
       );
 
-      if (!data) return;
+      if (!data || error) {
+        toast.error(error || "Failed to save");
+        return;
+      }
 
       if (field_number === 1) {
         setFirstFieldData({ id: data.id, name: data.name, title: data.title });

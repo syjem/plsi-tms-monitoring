@@ -12,6 +12,8 @@ import { Fragment, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AppLogo } from "@/components/icons";
 import { Loader, LogOut } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import { createClient } from "@/lib/supabase/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -68,6 +70,13 @@ export function Header({
               <div className="flex flex-col space-y-1">
                 <span>{userName}</span>
                 <address className="text-muted-foreground">{userEmail}</address>
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuLabel>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="dark-mode">Dark Mode</Label>
+                <Switch id="dark-mode" />
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />

@@ -17,7 +17,7 @@ async function Page({ params }: { params: Promise<{ id: string }> }) {
     notFound();
   }
 
-  return <AttendanceSheet engineers={engineers} workLogs={data} />;
+  return <AttendanceSheet engineers={engineers.data} workLogs={data} />;
 }
 
 export default Page;

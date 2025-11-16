@@ -1,11 +1,6 @@
 "use client";
 
-import type {
-  AttendanceData,
-  AttendanceRow,
-  Logs,
-  SystemsEngineerDataType,
-} from "@/types";
+import type { AttendanceData, AttendanceRow, Logs } from "@/types";
 import { toast } from "sonner";
 import { useState } from "react";
 import { CheckCheck, Edit } from "lucide-react";
@@ -20,7 +15,12 @@ export default function AttendanceSheet({
   engineers,
   workLogs,
 }: {
-  engineers: SystemsEngineerDataType;
+  engineers: {
+    id: number;
+    field_number: number;
+    name: string;
+    title: string;
+  }[];
   workLogs: Logs | null;
 }) {
   const [isEditable, setIsEditable] = useState(false);
@@ -69,10 +69,13 @@ export default function AttendanceSheet({
 
     try {
       if (workLogs) {
-        const result = await updateWorkLogs(workLogs.id, attendanceData);
+        const { success, error } = await updateWorkLogs(
+          workLogs.id,
+          attendanceData
+        );
 
-        if (!result.success) {
-          toast.error(result.error);
+        if (!success) {
+          toast.error(error);
           return;
         }
 

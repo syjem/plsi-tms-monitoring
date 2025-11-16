@@ -6,7 +6,6 @@ import {
   useDropzone,
 } from "react-dropzone";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { extractAndSave } from "@/app/actions/extract-and-save";
 
@@ -24,7 +23,6 @@ type UsePDFExtractOptions = {
 };
 
 export const usePDFExtract = (options: UsePDFExtractOptions) => {
-  const router = useRouter();
   const {
     allowedMimeTypes = ["application/pdf"],
     maxFileSize = Number.POSITIVE_INFINITY,
@@ -81,21 +79,21 @@ export const usePDFExtract = (options: UsePDFExtractOptions) => {
     setErrors([]);
 
     try {
-      const result = await extractAndSave(files[0]);
-      if (!result.success) {
-        toast.error(result.error);
+      const { success, error } = await extractAndSave(files[0]);
+
+      if (!success) {
+        toast.error(error || "Failed to save work logs");
         return;
       }
 
       toast.success("PDF extracted and data saved successfully!");
-      router.push(`/monitoring/${result.id}`);
     } catch (error) {
       console.error(error);
       toast.error("An error has occurred, please try again!");
     } finally {
       setLoading(false);
     }
-  }, [files, router]);
+  }, [files]);
 
   useEffect(() => {
     if (files.length === 0) {

@@ -1,5 +1,6 @@
 "use server";
 
+import { SystemsEngineerSingle } from "@/types";
 import { createClient } from "@/lib/supabase/server";
 
 export async function upsertSystemsEngineer(
@@ -7,7 +8,7 @@ export async function upsertSystemsEngineer(
   name: string,
   title: string,
   field_number: number
-) {
+): Promise<SystemsEngineerSingle> {
   const supabase = await createClient();
 
   const {
@@ -16,7 +17,7 @@ export async function upsertSystemsEngineer(
   } = await supabase.auth.getUser();
 
   if (userError || !user) {
-    throw new Error("User not authenticated");
+    return { data: null, error: "User not authenticated" };
   }
 
   const payload: Record<string, number | string> = {
@@ -37,9 +38,8 @@ export async function upsertSystemsEngineer(
     .single();
 
   if (error) {
-    console.error("Error upserting data:", error.message);
-    return null;
+    return { data: null, error: error.message };
   }
 
-  return data;
+  return { data };
 }
