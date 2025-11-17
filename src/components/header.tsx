@@ -8,28 +8,25 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useTheme } from "next-themes";
 import { Fragment, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AppLogo } from "@/components/icons";
 import { Loader, LogOut } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { JwtPayload } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export function Header({
-  userData,
-}: {
-  userData: {
-    userName: string;
-    userEmail: string;
-    avatarUrl: string | undefined;
-  };
-}) {
+export function Header({ user }: { user: JwtPayload }) {
   const router = useRouter();
-
+  const { theme, setTheme } = useTheme();
   const [loading, setLoading] = useState(false);
-  const { userName, userEmail, avatarUrl } = userData;
+
+  const userName = user.user_metadata.full_name as string;
+  const email = user.email;
+  const avatarUrl = user.user_metadata.avatar_url;
 
   const initials = userName
     ?.split(" ")
@@ -38,8 +35,8 @@ export function Header({
     ?.toUpperCase();
 
   const handleSignout = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
       const supabase = createClient();
       await supabase.auth.signOut();
       router.push("/auth/login");
@@ -69,14 +66,20 @@ export function Header({
             <DropdownMenuLabel>
               <div className="flex flex-col space-y-1">
                 <span>{userName}</span>
-                <address className="text-muted-foreground">{userEmail}</address>
+                <address className="text-muted-foreground">{email}</address>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuLabel>
               <div className="flex items-center justify-between">
-                <Label htmlFor="dark-mode">Dark Mode</Label>
-                <Switch id="dark-mode" />
+                <Label htmlFor="dark-mode">Dark mode</Label>
+                <Switch
+                  id="dark-mode"
+                  checked={theme === "dark"}
+                  onCheckedChange={(checked) =>
+                    setTheme(checked ? "dark" : "light")
+                  }
+                />
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />

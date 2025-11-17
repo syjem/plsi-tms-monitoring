@@ -137,7 +137,7 @@ export const SheetFooter = ({
             <h5 className="text-center text-base md:text-2xl font-semibold print:text-xl">
               {firstFieldData.name}
             </h5>
-            <p className="text-center text-xs md:text-sm text-gray-700">
+            <p className="text-center text-xs md:text-sm text-gray-700 dark:text-gray-400 dark:print:text-gray-700">
               {firstFieldData.title}
             </p>
           </div>
@@ -169,7 +169,7 @@ export const SheetFooter = ({
             <h5 className="text-center text-base md:text-2xl font-semibold print:text-xl">
               {secondFieldData.name}
             </h5>
-            <p className="text-center text-xs md:text-sm text-gray-700">
+            <p className="text-center text-xs md:text-sm text-gray-700 dark:text-gray-400 dark:print:text-gray-700">
               {secondFieldData.title}
             </p>
           </div>

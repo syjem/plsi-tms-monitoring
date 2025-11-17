@@ -7,8 +7,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
-import { Printer, Save, SquarePen, Upload } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Printer, Save, SquarePen } from "lucide-react";
 
 type ButtonActionsProps = {
   isEditable: boolean;
@@ -21,8 +20,6 @@ export function SheetControls({
   saveSheet,
   enableEditing,
 }: ButtonActionsProps) {
-  const router = useRouter();
-
   const handlePrint = () => {
     window.print();
   };
@@ -35,22 +32,8 @@ export function SheetControls({
             <TooltipTrigger asChild>
               <Button
                 size="icon"
-                onClick={() => router.push("/")}
-                className="cursor-pointer bg-blue-500 hover:bg-blue-600"
-              >
-                <Upload className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="left" sideOffset={4}>
-              Upload
-            </TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                size="icon"
                 onClick={saveSheet}
-                className="cursor-pointer"
+                className="cursor-pointer dark:text-white"
               >
                 <Save className="h-4 w-4" />
               </Button>
@@ -67,7 +50,7 @@ export function SheetControls({
               <Button
                 size="icon"
                 onClick={handlePrint}
-                className="cursor-pointer bg-blue-500 hover:bg-blue-600"
+                className="cursor-pointer bg-blue-500 hover:bg-blue-600 dark:text-white"
               >
                 <Printer className="h-4 w-4" />
               </Button>
@@ -81,7 +64,7 @@ export function SheetControls({
               <Button
                 size="icon"
                 onClick={enableEditing}
-                className="cursor-pointer"
+                className="cursor-pointer dark:text-white"
               >
                 <SquarePen className="h-4 w-4" />
               </Button>

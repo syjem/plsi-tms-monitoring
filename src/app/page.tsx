@@ -1,28 +1,24 @@
 import React from "react";
 import TabSection from "@/components/tabs";
+import { notFound } from "next/navigation";
 import { Header } from "@/components/header";
-import { notFound, redirect } from "next/navigation";
+import { getClaims } from "@/app/actions/get-claims";
 import { getWorkLogs } from "@/app/actions/get-work-logs";
-import { getCurrentUser } from "@/app/actions/get-current-user";
 
 export default async function Home() {
-  const [userData, { data, error }] = await Promise.all([
-    getCurrentUser(),
+  const [{ user }, { data, error: logError }] = await Promise.all([
+    getClaims(),
     getWorkLogs(),
   ]);
 
-  if (!userData) {
-    return redirect("/auth/login");
-  }
-
-  if (error) {
+  if (logError) {
     notFound();
   }
 
   return (
     <React.Fragment>
-      <Header userData={userData} />
-      <HeroSection name={userData.userName} />
+      <Header user={user} />
+      <HeroSection name={user.user_metadata.full_name} />
       <TabSection logs={data ?? []} />
     </React.Fragment>
   );
@@ -31,10 +27,10 @@ export default async function Home() {
 function HeroSection({ name }: { name: string }) {
   return (
     <div className="w-full max-w-4xl mx-auto text-center py-8 md:pt-10 px-4 sm:px-6 lg:px-8">
-      <p className="font-semibold text-base text-gray-700 mb-6 font-mono">
-        Welcome, <span className="text-blue-500">{name}~</span>
+      <p className="font-semibold text-base text-gray-700 dark:text-gray-300 mb-6 font-mono">
+        Welcome, <span className="text-primary">{name}~</span>
       </p>
-      <h1 className="text-2xl font-extrabold text-gray-900 font-sans">
+      <h1 className="text-2xl font-extrabold text-gray-900 dark:text-gray-100 font-sans">
         Phillogix Systems Employee <br /> Monitoring
       </h1>
     </div>

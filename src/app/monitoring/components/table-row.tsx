@@ -40,12 +40,12 @@ function TableRow({
     <tr
       className={cn(
         "h-8 print:h-4.5 transition-colors duration-150",
-        isEditable && isHighlighted && "bg-blue-100"
+        isEditable && isHighlighted && "bg-blue-100 dark:bg-slate-800"
       )}
       onMouseEnter={() => setHoveredGroup(groupIndex)}
       onMouseLeave={() => setHoveredGroup(null)}
     >
-      <td className="relative border border-black px-1">
+      <td className="relative border border-black dark:border-gray-500 px-1">
         {isEditable && isHighlighted && isFirstRowInGroup && isRowNotEmpty && (
           <Button
             size="icon"
@@ -68,7 +68,7 @@ function TableRow({
           readOnly={!isEditable}
         />
       </td>
-      <td className="border border-black px-1">
+      <td className="border border-black dark:border-gray-500 px-1">
         <input
           type="text"
           value={row.day}
@@ -82,7 +82,7 @@ function TableRow({
           readOnly={!isEditable}
         />
       </td>
-      <td className="border border-black px-1">
+      <td className="border border-black dark:border-gray-500 px-1">
         <input
           type="text"
           value={row.sched}
@@ -96,7 +96,7 @@ function TableRow({
           readOnly={!isEditable}
         />
       </td>
-      <td className="border border-black px-1">
+      <td className="border border-black dark:border-gray-500 px-1">
         <input
           type="text"
           value={row.timeIn}
@@ -110,7 +110,7 @@ function TableRow({
           readOnly={!isEditable}
         />
       </td>
-      <td className="border border-black px-1">
+      <td className="border border-black dark:border-gray-500 px-1">
         <input
           type="text"
           value={row.timeOut}
@@ -124,7 +124,7 @@ function TableRow({
           readOnly={!isEditable}
         />
       </td>
-      <td className="border border-black px-1">
+      <td className="border border-black dark:border-gray-500 px-1">
         <input
           type="text"
           value={row.destination}
@@ -138,7 +138,7 @@ function TableRow({
           readOnly={!isEditable}
         />
       </td>
-      <td className="border border-black px-1">
+      <td className="border border-black dark:border-gray-500 px-1">
         <input
           type="text"
           value={row.remarks}
@@ -152,7 +152,7 @@ function TableRow({
           readOnly={!isEditable}
         />
       </td>
-      <td className="border border-black px-1">
+      <td className="border border-black dark:border-gray-500 px-1">
         <input
           type="text"
           value={row.signature}

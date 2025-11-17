@@ -58,7 +58,11 @@ export function SecondFieldDialog({
                 Cancel
               </Button>
             </DialogClose>
-            <Button type="submit" disabled={isSubmitting}>
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="dark:text-gray-100"
+            >
               {isSubmitting ? (
                 <>
                   <Loader className="size-4 animate-spin" />

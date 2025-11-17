@@ -1,14 +1,6 @@
 "use client";
 
 import {
-  CheckCheck,
-  CircleAlert,
-  Ellipsis,
-  FolderKanban,
-  FolderX,
-  Loader,
-} from "lucide-react";
-import {
   Table,
   TableBody,
   TableCaption,
@@ -43,6 +35,7 @@ import { useRouter } from "next/navigation";
 import { formatISODate } from "@/utils/format-date";
 import { deleteWorkLog } from "@/app/actions/delete-work-log";
 import { EmptyFileManager } from "@/components/file-manager-empty";
+import { CheckCheck, CircleAlert, Ellipsis, Loader } from "lucide-react";
 
 function FileManager({ logs }: { logs: Logs[] }) {
   const router = useRouter();
@@ -90,7 +83,7 @@ function FileManager({ logs }: { logs: Logs[] }) {
   };
 
   return (
-    <section className="rounded-lg border-2 border-dashed bg-white transition-all duration-500 border-gray-300 hover:border-gray-400 hover:shadow-md">
+    <section className="rounded-lg border-2 border-dashed bg-white dark:bg-slate-900 transition-all duration-500 border-gray-300 dark:border-slate-800 hover:border-gray-400 dark:hover:border-gray-700 hover:shadow-md">
       <DeleteAlertDialog
         open={open}
         setOpen={alertHandler}
@@ -110,15 +103,15 @@ function FileManager({ logs }: { logs: Logs[] }) {
           <Table>
             <TableCaption>Your recent logs</TableCaption>
             <TableHeader>
-              <TableRow>
+              <TableRow className="dark:hover:bg-slate-800">
                 <TableHead className="w-[200px]">Date</TableHead>
                 <TableHead>Last modified</TableHead>
-                <TableHead></TableHead>
+                <TableHead className="sr-only">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {logs.map((log) => (
-                <TableRow key={log.id}>
+                <TableRow key={log.id} className="dark:hover:bg-slate-800">
                   <TableCell className="font-medium">{log.date}</TableCell>
                   <TableCell>{formatISODate(log.updated_at)}</TableCell>
 
@@ -133,7 +126,6 @@ function FileManager({ logs }: { logs: Logs[] }) {
                         <DropdownMenuItem
                           onClick={() => router.push(`/monitoring/${log.id}`)}
                         >
-                          <FolderKanban />
                           View
                         </DropdownMenuItem>
                         <DropdownMenuItem
@@ -142,7 +134,6 @@ function FileManager({ logs }: { logs: Logs[] }) {
                             alertHandler(true);
                           }}
                         >
-                          <FolderX />
                           Delete
                         </DropdownMenuItem>
                       </DropdownMenuContent>
@@ -184,7 +175,7 @@ function DeleteAlertDialog({
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
-            className="bg-red-500 hover:bg-red-600"
+            className="bg-red-500 hover:bg-red-600 dark:text-gray-200"
             onClick={async () => {
               if (id) await deleteLogHandler(id);
               setOpen(false);

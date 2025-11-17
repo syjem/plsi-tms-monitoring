@@ -2,6 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/sonner";
 import { Geist, Geist_Mono } from "next/font/google";
+import { ThemeProvider } from "@/components/theme-provider";
 import { BackgroundBottom, BackgroundTop } from "@/components/backgrounds";
 
 const geistSans = Geist({
@@ -25,14 +26,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <BackgroundTop />
         <BackgroundBottom />
-        {children}
-        <Toaster position="bottom-center" richColors className="print:hidden" />
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+          {children}
+          <Toaster
+            position="bottom-center"
+            richColors
+            className="print:hidden"
+          />
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -44,11 +44,11 @@ It integrates with the **Flask PDF Extraction API** to parse PDF daily logs repo
 
 ---
 
-## TODO — Email-Based Sign-In & Sign-Up Flow (Intended for Yahoo users)
+## TODO
 
-### 1. Implement Email Authentication
+### 1. Email Authentication — Passwordless Sign-In & Sign-Up Flow (Intended for Yahoo users)
 
-#### Proposed Flow (subject to change)
+#### Proposed Flow (subject for change)
 
 ### A. User Enters Email
 
@@ -70,21 +70,20 @@ It integrates with the **Flask PDF Extraction API** to parse PDF daily logs repo
        - Create a new user record in the database.
        - Redirect user to the authenticated page.
 
-### 2. Implement Dark Mode (just a switch for simplicity)
+### 2. [Done ✔] Implement Dark Mode (just a switch for simplicity)
 
 ### 3. Implement Extracting animation with stages (uploading, extracting, redirecting)
 
-#### Example Flow (subject to change)
+#### Example Flow (subject for change)
 
 ```js
 setStage("Uploading…");
-await uploadFile();
 
 await delay(500);
 
 setStage("Extracting data…");
 const result = await extractAPI();
 
-setStage("Done.");
+// success
 setStage("Redirecting...");
 ```

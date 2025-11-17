@@ -1,6 +1,7 @@
 "use client";
 
 import { Logs } from "@/types";
+import { cn } from "@/lib/utils";
 import { Dropzone } from "@/components/dropzone";
 import FileManager from "@/components/file-manager";
 import { useEffect, useState, useTransition } from "react";
@@ -39,12 +40,22 @@ function TabSection({ logs }: { logs: Logs[] }) {
         <TabsList>
           <TabsTrigger
             value="upload"
-            className="px-4 py-2"
+            className={cn(
+              "px-4 py-2",
+              tab === "upload" && "dark:data-[state=active]:bg-primary"
+            )}
             disabled={isPending}
           >
             Upload
           </TabsTrigger>
-          <TabsTrigger value="files" className="px-4 py-2" disabled={isPending}>
+          <TabsTrigger
+            value="files"
+            className={cn(
+              "px-4 py-2",
+              tab === "files" && "dark:data-[state=active]:bg-primary"
+            )}
+            disabled={isPending}
+          >
             Files
           </TabsTrigger>
         </TabsList>
