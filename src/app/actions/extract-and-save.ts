@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { processData } from "@/utils/process-data";
+import { processLogs } from "@/utils/process-logs";
 import { saveWorkLogs } from "@/app/actions/save-work-logs";
 import { extractTextFromPDF } from "@/app/actions/extract-pdf";
 
@@ -13,7 +13,7 @@ export async function extractAndSave(file: File) {
   }
 
   const date = `${result.data.from}-${result.data.to}`;
-  const processedData = processData(result.data.logs);
+  const processedData = processLogs(result.data.logs);
 
   const { success, data, error } = await saveWorkLogs(date, processedData);
 

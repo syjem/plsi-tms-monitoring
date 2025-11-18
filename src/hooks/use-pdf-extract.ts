@@ -78,21 +78,13 @@ export const usePDFExtract = (options: UsePDFExtractOptions) => {
     setLoading(true);
     setErrors([]);
 
-    try {
-      const { success, error } = await extractAndSave(files[0]);
+    const { success, error } = await extractAndSave(files[0]);
 
-      if (!success) {
-        toast.error(error || "Failed to save work logs");
-        return;
-      }
-
-      toast.success("PDF extracted and data saved successfully!");
-    } catch (error) {
-      console.error(error);
-      toast.error("An error has occurred, please try again!");
-    } finally {
-      setLoading(false);
+    if (!success) {
+      toast.error(error || "Failed to save work logs");
     }
+
+    setLoading(false);
   }, [files]);
 
   useEffect(() => {

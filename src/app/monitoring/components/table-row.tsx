@@ -49,7 +49,7 @@ function TableRow({
         {isEditable && isHighlighted && isFirstRowInGroup && isRowNotEmpty && (
           <Button
             size="icon"
-            className="absolute -left-[37px] -top-1"
+            className="absolute -left-[37px] -top-1 dark:text-slate-50"
             onClick={() => addRowToGroup(groupIndex)}
           >
             <Plus />

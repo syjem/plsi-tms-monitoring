@@ -37,7 +37,7 @@ function TabSection({ logs }: { logs: Logs[] }) {
   return (
     <main className="mt-6 max-w-xl mx-auto px-4">
       <Tabs value={tab} onValueChange={handleTabChange}>
-        <TabsList>
+        <TabsList className="dark:bg-slate-800/80">
           <TabsTrigger
             value="upload"
             className={cn(

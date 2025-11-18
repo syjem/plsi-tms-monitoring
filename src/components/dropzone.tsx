@@ -7,6 +7,12 @@ import { Button } from "@/components/ui/button";
 import { formatBytes } from "@/utils/format-bytes";
 import { usePDFExtract } from "@/hooks/use-pdf-extract";
 import { Upload, FileText, X, Loader2, ScanLine } from "lucide-react";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+} from "@/components/ui/empty";
 
 export function Dropzone() {
   const {
@@ -153,30 +159,34 @@ function DropzoneEmptyState({
   }, []);
 
   return (
-    <div
+    <Empty
       className={cn(
-        "flex flex-col items-center gap-4 transition-all duration-500 ease-out",
+        "transition-all duration-500 ease-out",
         visible ? "opacity-100 scale-100" : "opacity-0 scale-95"
       )}
     >
-      <div className="rounded-full bg-gray-100 dark:bg-gray-700 p-4">
-        <Upload className="size-5 md:size-6 text-gray-600 dark:text-gray-200" />
-      </div>
-      <div className="text-center">
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-          Drag and drop or{" "}
-          <button
-            onClick={() => inputRef.current?.click()}
-            className="text-blue-600 hover:text-blue-700 underline font-medium"
-          >
-            select pdf
-          </button>{" "}
-          to upload
-        </p>
-        <p className="text-xs text-gray-700 dark:text-gray-200 mt-1">
-          Max file size: {formatBytes(maxFileSize, 2)}
-        </p>
-      </div>
-    </div>
+      <EmptyHeader className="space-y-2">
+        <EmptyMedia variant="icon" className="dark:bg-slate-800">
+          <Upload className="size-4" />
+        </EmptyMedia>
+        <EmptyDescription>
+          <div className="text-center">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Drag and drop or{" "}
+              <button
+                onClick={() => inputRef.current?.click()}
+                className="text-blue-600 hover:text-blue-700 underline font-medium"
+              >
+                select pdf
+              </button>{" "}
+              to upload
+            </p>
+            <p className="text-xs text-gray-700 dark:text-gray-200 mt-1">
+              Max file size: {formatBytes(maxFileSize, 2)}
+            </p>
+          </div>
+        </EmptyDescription>
+      </EmptyHeader>
+    </Empty>
   );
 }

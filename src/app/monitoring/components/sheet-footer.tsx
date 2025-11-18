@@ -144,12 +144,20 @@ export const SheetFooter = ({
         ) : (
           <Empty
             onClick={handleAddFirstField}
-            className="transition-all rounded-sm gap-0 py-2 border-2 border-dashed border-gray-400  active:border-primary active:scale-95"
+            className={cn(
+              "transition-all rounded-sm gap-0 py-2 border-2 border-dashed active:scale-95",
+              isEditable
+                ? "border-slate-700  active:border-primary"
+                : "border-transparent active:border-transparent"
+            )}
           >
             {isEditable ? (
               <EmptyHeader className="gap-0">
-                <EmptyMedia variant="icon" className="bg-gray-200">
-                  <Plus className="size-5" />
+                <EmptyMedia
+                  variant="icon"
+                  className="bg-gray-200 dark:bg-slate-800"
+                >
+                  <Plus className="size-4" />
                 </EmptyMedia>
                 <EmptyDescription>Add a new field</EmptyDescription>
               </EmptyHeader>
@@ -176,12 +184,20 @@ export const SheetFooter = ({
         ) : (
           <Empty
             onClick={handleAddSecondField}
-            className="transition-all rounded-sm gap-0 py-2 border-2 border-dashed border-gray-400  active:border-primary active:scale-95"
+            className={cn(
+              "transition-all rounded-sm gap-0 py-2 border-2 border-dashed active:scale-95",
+              isEditable
+                ? "border-slate-700  active:border-primary"
+                : "border-transparent active:border-transparent"
+            )}
           >
             {isEditable ? (
               <EmptyHeader className="gap-0">
-                <EmptyMedia variant="icon" className="bg-gray-200">
-                  <Plus className="size-5" />
+                <EmptyMedia
+                  variant="icon"
+                  className="bg-gray-200 dark:bg-slate-800"
+                >
+                  <Plus className="size-4" />
                 </EmptyMedia>
                 <EmptyDescription>Add a new field</EmptyDescription>
               </EmptyHeader>

@@ -3,7 +3,7 @@ import { formatTimeTo12Hour } from "@/utils/format-time";
 import type { ApiLogData, AttendanceData } from "@/types";
 import { isRowHasRecords } from "@/utils/is-row-has-records";
 
-export const processData = (logs: ApiLogData[]): AttendanceData => {
+export const processLogs = (logs: ApiLogData[]): AttendanceData => {
   const groupedData: AttendanceData = [];
 
   logs.forEach((log) => {
