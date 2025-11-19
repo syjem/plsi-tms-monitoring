@@ -72,18 +72,4 @@ It integrates with the **Flask PDF Extraction API** to parse PDF daily logs repo
 
 ### 2. [Done ✔] Implement Dark Mode (just a switch for simplicity)
 
-### 3. Implement Extracting animation with stages (uploading, extracting, redirecting)
-
-#### Example Flow (subject for change)
-
-```js
-setStage("Uploading…");
-
-await delay(500);
-
-setStage("Extracting data…");
-const result = await extractAPI();
-
-// success
-setStage("Redirecting...");
-```
+### 3. Customized 404, loading, and error pages
