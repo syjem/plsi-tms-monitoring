@@ -111,7 +111,7 @@ export function Dropzone() {
               )}
             </div>
 
-            {/* Extraction Progress */}
+            {/* Uploading Progress */}
             {loading && (
               <div className="w-full animate-in fade-in slide-in-from-bottom-2 duration-500">
                 <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -121,18 +121,19 @@ export function Dropzone() {
                   <Loader2 className="h-4 w-4 text-blue-600 animate-spin" />
                 </div>
                 <p className="text-xs text-center text-gray-500 mt-1">
-                  Extracting file...
+                  Uploading file
+                  <span className="animate-ping">...</span>
                 </p>
               </div>
             )}
 
-            {/* Extract Button */}
+            {/* Upload Button */}
             {!loading && !hasErrors && (
               <Button
                 onClick={onExtract}
                 className="animate-in fade-in slide-in-from-bottom-2 duration-500 dark:text-gray-200"
               >
-                Extract
+                Upload
               </Button>
             )}
           </div>

@@ -7,7 +7,7 @@ import { CheckCheck, Edit } from "lucide-react";
 import { isRowEmpty } from "@/utils/is-row-empty";
 import TableRow from "@/app/monitoring//components/table-row";
 import TableHead from "@/app/monitoring//components/table-head";
-import { updateWorkLogs } from "@/app/actions/update-work-logs";
+import { updateWorkLog } from "@/app/actions/logs/update-work-log";
 import { SheetFooter } from "@/app/monitoring/components/sheet-footer";
 import { SheetControls } from "@/app/monitoring/components/sheet-controls";
 
@@ -69,7 +69,7 @@ export default function AttendanceSheet({
 
     try {
       if (workLogs) {
-        const { success, error } = await updateWorkLogs(
+        const { success, error } = await updateWorkLog(
           workLogs.id,
           attendanceData
         );

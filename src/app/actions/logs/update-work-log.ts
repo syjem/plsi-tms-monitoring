@@ -3,7 +3,7 @@
 import { AttendanceData } from "@/types";
 import { createClient } from "@/lib/supabase/server";
 
-export async function updateWorkLogs(id: string, logs: AttendanceData) {
+export async function updateWorkLog(id: string, logs: AttendanceData) {
   const supabase = await createClient();
 
   const {

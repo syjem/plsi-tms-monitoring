@@ -33,7 +33,7 @@ import {
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { formatISODate } from "@/utils/format-date";
-import { deleteWorkLog } from "@/app/actions/delete-work-log";
+import { deleteWorkLog } from "@/app/actions/logs/delete-work-log";
 import { EmptyFileManager } from "@/components/file-manager-empty";
 import { CheckCheck, CircleAlert, Ellipsis, Loader } from "lucide-react";
 

@@ -3,7 +3,7 @@ import TabSection from "@/components/tabs";
 import { notFound } from "next/navigation";
 import { Header } from "@/components/header";
 import { getClaims } from "@/app/actions/get-claims";
-import { getWorkLogs } from "@/app/actions/get-work-logs";
+import { getWorkLogs } from "@/app/actions/logs/get-work-logs";
 
 export default async function Home() {
   const [{ user }, { data, error: logError }] = await Promise.all([

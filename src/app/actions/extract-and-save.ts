@@ -2,8 +2,8 @@
 
 import { redirect } from "next/navigation";
 import { processLogs } from "@/utils/process-logs";
-import { saveWorkLogs } from "@/app/actions/save-work-logs";
 import { extractTextFromPDF } from "@/app/actions/extract-pdf";
+import { saveExtractedLogs } from "@/app/actions/save-extracted-logs";
 
 export async function extractAndSave(file: File) {
   const result = await extractTextFromPDF(file);
@@ -13,9 +13,9 @@ export async function extractAndSave(file: File) {
   }
 
   const date = `${result.data.from}-${result.data.to}`;
-  const processedData = processLogs(result.data.logs);
+  const processedLogs = processLogs(result.data.logs);
 
-  const { success, data, error } = await saveWorkLogs(date, processedData);
+  const { success, data, error } = await saveExtractedLogs(date, processedLogs);
 
   if (!success) {
     return { success: false, error: error || "Failed to save work logs" };
