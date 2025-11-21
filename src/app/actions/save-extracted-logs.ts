@@ -2,6 +2,7 @@
 
 import { AttendanceData } from "@/types";
 import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 
 export async function saveExtractedLogs(date: string, logs: AttendanceData) {
   const supabase = await createClient();
@@ -25,5 +26,5 @@ export async function saveExtractedLogs(date: string, logs: AttendanceData) {
     return { success: false, error: error.message };
   }
 
-  return { success: true, data };
+  redirect(`/monitoring/${data.id}`);
 }

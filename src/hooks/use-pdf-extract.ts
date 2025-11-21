@@ -6,8 +6,11 @@ import {
   useDropzone,
 } from "react-dropzone";
 import { toast } from "sonner";
+import { processLogs } from "@/utils/process-logs";
 import { useCallback, useEffect, useState } from "react";
-import { extractAndSave } from "@/app/actions/extract-and-save";
+import { extractTextFromPDF } from "@/app/actions/extract-pdf";
+import { isNextRedirectError } from "@/utils/is-next-redirect-error";
+import { saveExtractedLogs } from "@/app/actions/save-extracted-logs";
 
 /* ------------------------- Types & Interfaces ------------------------- */
 
@@ -22,6 +25,8 @@ type UsePDFExtractOptions = {
   maxFiles?: number;
 };
 
+type ExtractionStage = "uploading" | "extracting" | "saving" | null;
+
 export const usePDFExtract = (options: UsePDFExtractOptions) => {
   const {
     allowedMimeTypes = ["application/pdf"],
@@ -32,6 +37,7 @@ export const usePDFExtract = (options: UsePDFExtractOptions) => {
   const [files, setFiles] = useState<FileWithPreview[]>([]);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{ name: string; message: string }[]>([]);
+  const [stage, setStage] = useState<ExtractionStage>(null);
 
   const onDrop = useCallback(
     (acceptedFiles: File[], fileRejections: FileRejection[]) => {
@@ -78,13 +84,35 @@ export const usePDFExtract = (options: UsePDFExtractOptions) => {
     setLoading(true);
     setErrors([]);
 
-    const { success, error } = await extractAndSave(files[0]);
+    setStage("uploading");
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    if (!success) {
-      toast.error(error || "Failed to save work logs");
+    setStage("extracting");
+
+    try {
+      const result = await extractTextFromPDF(files[0]);
+
+      if (!result.success) {
+        toast.error(result.error || "Extraction failed");
+        return;
+      }
+
+      const date = `${result.data.from}-${result.data.to}`;
+      const processedLogs = processLogs(result.data.logs);
+
+      setStage("saving");
+      const { success, error } = await saveExtractedLogs(date, processedLogs);
+
+      if (!success) {
+        toast.error(error || "Failed to save extracted data");
+      }
+    } catch (error: unknown) {
+      if (isNextRedirectError(error)) return;
+
+      toast.error("Something went wrong during PDF processing");
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   }, [files]);
 
   useEffect(() => {
@@ -97,6 +125,7 @@ export const usePDFExtract = (options: UsePDFExtractOptions) => {
     files,
     setFiles,
     loading,
+    stage,
     errors,
     onExtract,
     maxFileSize,

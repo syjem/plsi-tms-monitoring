@@ -6,19 +6,21 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { formatBytes } from "@/utils/format-bytes";
 import { usePDFExtract } from "@/hooks/use-pdf-extract";
-import { Upload, FileText, X, Loader2, ScanLine } from "lucide-react";
+import { Upload, FileText, X, ScanLine } from "lucide-react";
 import {
   Empty,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
 } from "@/components/ui/empty";
+import { ExtractionAnimation } from "@/components/extraction-animation";
 
 export function Dropzone() {
   const {
     files,
     setFiles,
     loading,
+    stage,
     onExtract,
     maxFileSize,
     getRootProps,
@@ -55,6 +57,9 @@ export function Dropzone() {
       })}
     >
       <input {...getInputProps()} />
+
+      {/* Uploading Progress */}
+      {loading && stage && <ExtractionAnimation stage={stage} />}
 
       {/* File Display */}
       {file ? (
@@ -111,27 +116,11 @@ export function Dropzone() {
               )}
             </div>
 
-            {/* Uploading Progress */}
-            {loading && (
-              <div className="w-full animate-in fade-in slide-in-from-bottom-2 duration-500">
-                <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-blue-500 via-blue-600 to-blue-500 animate-pulse bg-[length:200%_100%] w-full" />
-                </div>
-                <div className="flex items-center justify-center gap-2 mt-3">
-                  <Loader2 className="h-4 w-4 text-blue-600 animate-spin" />
-                </div>
-                <p className="text-xs text-center text-gray-500 mt-1">
-                  Uploading file
-                  <span className="animate-ping">...</span>
-                </p>
-              </div>
-            )}
-
             {/* Upload Button */}
             {!loading && !hasErrors && (
               <Button
                 onClick={onExtract}
-                className="animate-in fade-in slide-in-from-bottom-2 duration-500 dark:text-gray-200"
+                className="w-full text-white animate-in fade-in slide-in-from-bottom-2 duration-500"
               >
                 Upload
               </Button>
