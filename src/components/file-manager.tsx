@@ -83,7 +83,7 @@ function FileManager({ logs }: { logs: Logs[] }) {
   };
 
   return (
-    <section className="rounded-lg border-2 border-dashed bg-white dark:bg-slate-900 transition-all duration-500 border-gray-300 dark:border-slate-800 hover:border-gray-400 dark:hover:border-gray-700 hover:shadow-md max-h-[212px] overflow-y-auto">
+    <section className="rounded-lg border-2 border-dashed bg-white dark:bg-slate-900 transition-all duration-500 border-gray-300 dark:border-slate-800 hover:border-gray-400 dark:hover:border-gray-700 hover:shadow-md">
       <DeleteAlertDialog
         open={open}
         setOpen={alertHandler}

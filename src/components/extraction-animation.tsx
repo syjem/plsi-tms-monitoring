@@ -15,13 +15,25 @@ export function ExtractionAnimation({ stage }: ExtractionAnimationProps) {
 
   useEffect(() => {
     setProgress(0);
+    let max = 100;
+    let speed = 5;
+
+    if (stage === "extracting") {
+      max = 99;
+      speed = 200;
+    }
+
+    if (stage === "saving") {
+      max = 100;
+      speed = 30;
+    }
 
     const interval = setInterval(() => {
       setProgress((prev) => {
-        if (prev >= 100) return 100;
+        if (prev >= max) return prev;
         return prev + 1;
       });
-    }, 30);
+    }, speed);
 
     return () => clearInterval(interval);
   }, [stage]);
@@ -92,7 +104,7 @@ export function ExtractionAnimation({ stage }: ExtractionAnimationProps) {
                       isCompleted
                         ? "bg-primary text-white"
                         : isActive
-                        ? "animate-pulse bg-primary text-white shadow-lg shadow-primary/50"
+                        ? "animate-in bg-primary text-white shadow-lg shadow-primary/50"
                         : "bg-muted text-muted-foreground"
                     )}
                   >
