@@ -169,8 +169,8 @@ export default function AttendanceSheet({
   };
 
   return (
-    <div className="bg-white dark:print:bg-white dark:print:text-black dark:bg-slate-900 dark:text-gray-200 px-8 py-8 md:py-16 shadow-lg print:shadow-none print:px-4 print:py-12">
-      <header className="text-center mb-10 print:mb-8 space-y-2 dark:text-gray-50">
+    <div className="min-h-screen bg-white dark:print:bg-white dark:print:text-black dark:bg-slate-900 dark:text-gray-200 px-8 py-8 md:py-16 shadow-lg print:shadow-none print:px-4 print:py-12">
+      <header className="text-center mb-10 print:mb-8 space-y-2 dark:text-gray-50 dark:print:text-gray-950">
         <h1 className="text-3xl font-bold">Phillogix Systems Inc.</h1>
         <h2 className="text-xl font-semibold">
           Employee Monitoring Attendance Sheet
