@@ -62,20 +62,9 @@ Goal: Render static UI instantly and stream dynamic data afterward—whatever bl
 
 **Action Items:**
 
+- SSR to PPR
 - Wrap every dynamic data fetch in a `<Suspense>` boundary.
 - Provide lightweight fallback UI.
-
-Example:
-
-```jsx
-<p className="font-semibold text-base text-gray-700 dark:text-gray-300 mb-6 font-mono">
-  Welcome, <span className="text-primary">{name}~</span>
-</p>
-
-<Suspense fallback={<FallbackUi />}>
-  <span className="text-primary">{name}~</span>
-</Suspense>
-```
 
 ---
 
