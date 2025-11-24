@@ -6,12 +6,12 @@ import { getClaims } from "@/app/actions/get-claims";
 import { getWorkLogs } from "@/app/actions/logs/get-work-logs";
 
 export default async function Home() {
-  const [{ user }, { data, error: logError }] = await Promise.all([
+  const [{ user }, { data, error }] = await Promise.all([
     getClaims(),
     getWorkLogs(),
   ]);
 
-  if (logError) {
+  if (error) {
     notFound();
   }
 
