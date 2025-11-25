@@ -1,19 +1,14 @@
-import React from "react";
-import TabSection from "@/components/tabs";
-import { notFound } from "next/navigation";
-import { Header } from "@/components/header";
-import { getClaims } from "@/app/actions/get-claims";
-import { getWorkLogs } from "@/app/actions/logs/get-work-logs";
+import { getClaims } from '@/app/actions/get-claims';
+import { getWorkLogs } from '@/app/actions/logs/get-work-logs';
+import { Header } from '@/components/header';
+import TabSection from '@/components/tabs';
+import React from 'react';
 
 export default async function Home() {
   const [{ user }, { data, error }] = await Promise.all([
     getClaims(),
     getWorkLogs(),
   ]);
-
-  if (error) {
-    notFound();
-  }
 
   return (
     <React.Fragment>
