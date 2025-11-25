@@ -4,14 +4,14 @@ import { jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 export const workLogs = pgTable('work_logs', {
   id: uuid().primaryKey().defaultRandom(),
-  createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
-  updatedAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+  created_at: timestamp({ withTimezone: true }).notNull().defaultNow(),
+  updated_at: timestamp({ withTimezone: true }).notNull().defaultNow(),
   date: text().notNull(),
   logs: jsonb().notNull(),
   user_id: uuid('id')
     .primaryKey()
     .references(() => users.id, {
-      onDelete: 'no action', // keep record even the user is deleted
+      onDelete: 'cascade',
     })
     .notNull(),
 });

@@ -14,13 +14,14 @@ export const engineers = pgTable(
   'engineers',
   {
     id: bigint({ mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
-    createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+    created_at: timestamp({ withTimezone: true }).notNull().defaultNow(),
+    updated_at: timestamp({ withTimezone: true }).notNull().defaultNow(),
     name: text(),
     title: text(),
     userId: uuid('id')
       .primaryKey()
       .references(() => users.id, {
-        onDelete: 'no action', // keep record even the user is deleted
+        onDelete: 'cascade',
       })
       .notNull(),
     fieldNumber: smallint(),
