@@ -1,0 +1,45 @@
+import { users } from '@/lib/supabase/schema/auth';
+import { relations, sql } from 'drizzle-orm';
+import {
+  bigint,
+  check,
+  pgTable,
+  smallint,
+  text,
+  timestamp,
+  uuid,
+} from 'drizzle-orm/pg-core';
+
+export const engineers = pgTable(
+  'engineers',
+  {
+    id: bigint({ mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
+    createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+    name: text(),
+    title: text(),
+    userId: uuid('id')
+      .primaryKey()
+      .references(() => users.id, {
+        onDelete: 'no action', // keep record even the user is deleted
+      })
+      .notNull(),
+    fieldNumber: smallint(),
+  },
+  (table) => [check('field_number_check', sql`${table.fieldNumber} > 0`)],
+);
+
+// Type inference
+export type Engineer = typeof engineers.$inferSelect;
+export type NewEngineer = typeof engineers.$inferInsert;
+
+// Relations
+export const engineersRelations = relations(engineers, ({ one }) => ({
+  user: one(users, {
+    fields: [engineers.userId],
+    references: [users.id],
+  }),
+}));
+
+export const usersRelations = relations(users, ({ many }) => ({
+  engineers: many(engineers),
+}));
