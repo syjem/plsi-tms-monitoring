@@ -27,6 +27,6 @@ export const workLogsRelations = relations(workLogs, ({ one }) => ({
   }),
 }));
 
-export const usersRelations = relations(users, ({ many }) => ({
+export const usersWorklogRelations = relations(users, ({ many }) => ({
   workLogs: many(workLogs),
 }));
