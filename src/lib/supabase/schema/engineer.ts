@@ -8,6 +8,7 @@ import {
   text,
   timestamp,
   uuid,
+  varchar,
 } from 'drizzle-orm/pg-core';
 
 export const engineers = pgTable(
@@ -18,6 +19,8 @@ export const engineers = pgTable(
     updated_at: timestamp({ withTimezone: true }).notNull().defaultNow(),
     name: text(),
     title: text(),
+    signature: text(), // Store base64 string
+    phone: varchar({ length: 50 }),
     userId: uuid('id')
       .primaryKey()
       .references(() => users.id, {
