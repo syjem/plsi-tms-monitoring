@@ -1,4 +1,4 @@
-import { users } from '@/lib/supabase/schema/auth';
+import { users } from '@/lib/supabase/auth-reference';
 import { relations, sql } from 'drizzle-orm';
 import {
   bigint,

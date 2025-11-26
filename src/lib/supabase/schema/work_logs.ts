@@ -1,4 +1,4 @@
-import { users } from '@/lib/supabase/schema/auth';
+import { users } from '@/lib/supabase/auth-reference';
 import { relations } from 'drizzle-orm';
 import { jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
