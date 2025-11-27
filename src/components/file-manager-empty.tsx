@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Empty,
@@ -6,17 +6,17 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@/components/ui/empty";
-import { cn } from "@/lib/utils";
-import { CloudUpload } from "lucide-react";
+} from '@/components/ui/empty';
+import { cn } from '@/lib/utils';
+import { CloudUpload } from 'lucide-react';
 
-export function EmptyFileManager({ visible }: { visible: boolean }) {
+export function EmptyFileManager({ visible }: { visible?: boolean }) {
   return (
     <div className="p-4.5">
       <Empty
         className={cn(
-          "transition-all duration-500 ease-out",
-          visible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+          'transition-all duration-500 ease-out',
+          visible ? 'opacity-100 scale-100' : 'opacity-0 scale-95',
         )}
       >
         <EmptyHeader className="space-y-2">

@@ -1,7 +1,7 @@
-"use server";
+'use server';
 
-import { WorkLogs } from "@/types";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from '@/lib/supabase/server';
+import { WorkLogs } from '@/types';
 
 export async function getWorkLogs(): Promise<WorkLogs> {
   const supabase = await createClient();
@@ -12,14 +12,14 @@ export async function getWorkLogs(): Promise<WorkLogs> {
   } = await supabase.auth.getUser();
 
   if (userError || !user) {
-    throw new Error("User not authenticated");
+    return { data: null, error: 'User not authenticated' };
   }
 
   const { data, error } = await supabase
-    .from("work_logs")
-    .select("*")
-    .eq("user_id", user.id)
-    .order("created_at", { ascending: false });
+    .from('work_logs')
+    .select('*')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false });
 
   if (error) {
     return { data: null, error: error.message };

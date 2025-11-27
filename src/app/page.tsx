@@ -1,23 +1,23 @@
 import { getClaims } from '@/app/actions/get-claims';
-import { getWorkLogs } from '@/app/actions/logs/get-work-logs';
 import { Header } from '@/components/header';
-import TabSection from '@/components/tabs';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertCircleIcon } from 'lucide-react';
-import React from 'react';
+import { HeaderSkeleton } from '@/components/skeletons/header-skeleton';
+import { HeroSectionSkeleton } from '@/components/skeletons/hero-section';
+import { TabSectionSkeleton } from '@/components/skeletons/tab-section-skeleton';
+import TabSection from '@/components/tab-section';
+import React, { Suspense } from 'react';
 
 export default async function Home() {
-  const [{ user }, { data, error }] = await Promise.all([
-    getClaims(),
-    getWorkLogs(),
-  ]);
-
   return (
     <React.Fragment>
-      <Header user={user} />
-      <HeroSection name={user.user_metadata.full_name} />
-      {error && <ErrorAlert error={error} />}
-      <TabSection logs={data ?? []} />
+      <Suspense fallback={<HeaderSkeleton />}>
+        <Header />
+      </Suspense>
+      <Suspense fallback={<HeroSectionSkeleton />}>
+        <HeroSection />
+      </Suspense>
+      <Suspense fallback={<TabSectionSkeleton />}>
+        <TabSection />
+      </Suspense>
     </React.Fragment>
   );
 }
@@ -34,18 +34,6 @@ async function HeroSection() {
       <h1 className="text-2xl font-extrabold text-gray-900 dark:text-gray-100 font-sans">
         Phillogix Systems Employee <br /> Monitoring
       </h1>
-    </div>
-  );
-}
-
-function ErrorAlert({ error }: { error: string }) {
-  return (
-    <div className="flex items-center justify-center">
-      <Alert variant="destructive" className="max-w-fit">
-        <AlertCircleIcon />
-        <AlertTitle>Internal Server Error</AlertTitle>
-        <AlertDescription>{error}</AlertDescription>
-      </Alert>
     </div>
   );
 }

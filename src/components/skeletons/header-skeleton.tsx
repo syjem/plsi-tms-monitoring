@@ -1,10 +1,7 @@
-import { getClaims } from '@/app/actions/get-claims';
-import { CurrentUserAvatar } from '@/components/current-user-avatar';
 import { AppLogo } from '@/components/icons';
+import { Skeleton } from '@/components/ui/skeleton';
 
-export async function Header() {
-  const { user } = await getClaims();
-
+export function HeaderSkeleton() {
   return (
     <header className="w-full mx-auto py-4 px-4 sm:px-6 lg:px-8">
       <nav className="max-w-4xl mx-auto flex justify-between items-center py-3 px-4 rounded border-b">
@@ -12,7 +9,7 @@ export async function Header() {
           <AppLogo />
           <span className="font-medium">Phillogix Systems Inc.</span>
         </div>
-        <CurrentUserAvatar user={user} />
+        <Skeleton className="h-8 w-8 rounded-full" />
       </nav>
     </header>
   );
