@@ -8,8 +8,7 @@ export const workLogs = pgTable('work_logs', {
   updated_at: timestamp({ withTimezone: true }).notNull().defaultNow(),
   date: text().notNull(),
   logs: jsonb().notNull(),
-  user_id: uuid('id')
-    .primaryKey()
+  user_id: uuid()
     .references(() => users.id, {
       onDelete: 'cascade',
     })
