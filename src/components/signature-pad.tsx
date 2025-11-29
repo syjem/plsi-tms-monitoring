@@ -12,6 +12,7 @@ class Signature {
     strokeColor: '#fff',
     fillColor: '#000',
   };
+
   constructor(settings: SignatureSettings) {
     // apply settings update
     Object.entries(settings).forEach(([key, value]) => {
@@ -41,6 +42,8 @@ class Signature {
     // apply stroke color style
     this.context.strokeStyle = this.settings.strokeColor!;
 
+    this.context.lineCap = 'round';
+
     // set canvas color style
     this.context.fillStyle = this.settings.fillColor!;
 
@@ -51,15 +54,38 @@ class Signature {
     this.attachEventListeners();
   }
 
-  attachEventListeners() {}
+  attachEventListeners() {
+    document.addEventListener('mouseup', this.mouseUp);
+    document.addEventListener('mousemove', this.pointerMove);
+    document.addEventListener('mousedown', this.mouseDown);
+  }
 
-  removeEventListeners() {}
+  removeEventListeners() {
+    document.removeEventListener('mousemove', this.pointerMove);
+    document.removeEventListener('mousedown', this.mouseDown);
+    document.removeEventListener('mouseup', this.mouseUp);
+  }
 
-  mouseUp() {}
+  mouseUp(e: MouseEvent) {}
 
-  mouseDown() {}
+  mouseDown(e: MouseEvent) {
+    // const { x, y } = this.getXYPosition(e);
+    this.context.beginPath();
+    this.context.moveTo(50, 140);
+    this.context.lineTo(150, 60);
+    this.context.lineTo(250, 140);
+    this.context.closePath();
+    this.context.stroke();
+  }
 
-  pointerMove() {}
+  getXYPosition(e: MouseEvent) {
+    return {
+      x: e.x,
+      y: e.y,
+    };
+  }
+
+  pointerMove(e: MouseEvent) {}
 }
 
 function SignaturePad(props: SignatureSettings) {
