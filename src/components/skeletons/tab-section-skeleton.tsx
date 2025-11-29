@@ -9,7 +9,7 @@ export function TabSectionSkeleton() {
         <TabsList className="dark:bg-slate-800/80">
           <TabsTrigger
             value="upload"
-            className="px-4 py-2 dark:data-[state=active]:bg-primary"
+            className="px-4 py-2 data-[state=active]:text-muted-foreground dark:data-[state=active]:text-muted-foreground data-[state=active]:border-transparent dark:data-[state=active]:border-transparent data-[state=active]:bg-transparent dark:data-[state=active]:bg-transparent"
           >
             Upload
           </TabsTrigger>
