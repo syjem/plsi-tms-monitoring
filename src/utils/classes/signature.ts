@@ -52,8 +52,8 @@ export class Signature {
   private context!: CanvasRenderingContext2D;
   private settings: SignatureSettings = {
     strokeWidth: 0.5,
-    strokeColor: '#fff',
-    fillColor: '#000',
+    strokeColor: '#000',
+    fillColor: '#fff',
     width: 300,
     height: 300,
   };
