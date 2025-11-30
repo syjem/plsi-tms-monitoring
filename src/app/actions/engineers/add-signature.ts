@@ -1,6 +1,6 @@
 'use server';
 
-import { EnginerController } from '@/lib/controller/engineer.controller';
+import { EngineerController } from '@/lib/controller/engineer.controller';
 import { db } from '@/lib/supabase';
 import { withErrorHandler } from '@/utils/with-error-handler';
 
@@ -10,7 +10,7 @@ export const addEngineerSignature = async (
 ) => {
   const result = await withErrorHandler(() => {
     // initialize controller
-    const controller = new EnginerController(db);
+    const controller = new EngineerController(db);
 
     return controller.addSignature(id, signatureData);
   });

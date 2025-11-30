@@ -2,7 +2,7 @@ import { engineers, NewEngineer } from '@/lib/supabase/schema';
 import { eq } from 'drizzle-orm';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 
-export class EnginerController {
+export class EngineerController {
   db: PostgresJsDatabase<Record<string, never>>;
   constructor(db: PostgresJsDatabase<Record<string, never>>) {
     this.db = db;
@@ -69,7 +69,7 @@ export class EnginerController {
     } catch (e) {
       if (e instanceof Error) {
         throw new Error(
-          `[${EnginerController.name}:${this.addSignature.name}] Error: ` +
+          `[${EngineerController.name}:${this.addSignature.name}] Error: ` +
             e?.message,
         );
       }
@@ -147,7 +147,7 @@ export class EnginerController {
     } catch (e) {
       if (e instanceof Error) {
         throw new Error(
-          `[${EnginerController.name}:${this.create.name}] Error: ` +
+          `[${EngineerController.name}:${this.create.name}] Error: ` +
             e?.message,
         );
       }
