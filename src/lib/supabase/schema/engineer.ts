@@ -21,6 +21,7 @@ export const engineers = pgTable(
     title: text(),
     signature: text(), // Store base64 string
     phone: varchar({ length: 50 }),
+    email: text(),
     userId: uuid('id')
       .primaryKey()
       .references(() => users.id, {

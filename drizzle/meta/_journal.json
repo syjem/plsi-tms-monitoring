@@ -8,6 +8,13 @@
       "when": 1764198451555,
       "tag": "0000_special_black_cat",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1764491817590,
+      "tag": "0001_overconfident_thena",
+      "breakpoints": true
     }
   ]
 }
