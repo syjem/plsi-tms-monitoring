@@ -1,7 +1,5 @@
 import { BackgroundBottom, BackgroundTop } from '@/components/backgrounds';
-import { ThemeProvider } from '@/components/theme-provider';
-import { Toaster } from '@/components/ui/sonner';
-import { AuthUserProvider } from '@/provider/auth-user.provider';
+import AppProvider from '@/provider';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
@@ -33,14 +31,7 @@ export default function RootLayout({
       >
         <BackgroundTop />
         <BackgroundBottom />
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-          <AuthUserProvider>{children}</AuthUserProvider>
-          <Toaster
-            position="bottom-center"
-            richColors
-            className="print:hidden"
-          />
-        </ThemeProvider>
+        <AppProvider>{children}</AppProvider>
       </body>
     </html>
   );
