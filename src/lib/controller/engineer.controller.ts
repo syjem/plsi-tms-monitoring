@@ -39,7 +39,7 @@ export class EngineerController {
         const engineer = await txs
           .select()
           .from(engineers)
-          .where(eq(engineers.userId, user_id));
+          .where(eq(engineers.user_id, user_id));
 
         // check if user is existed
         if (engineer.length > 0) {
@@ -47,7 +47,7 @@ export class EngineerController {
           const update_result = await txs
             .update(engineers)
             .set({ signature: data })
-            .where(eq(engineers.userId, user_id))
+            .where(eq(engineers.user_id, user_id))
             .returning({ updated_at: engineers.updated_at, id: engineers.id });
 
           return update_result;
@@ -56,7 +56,7 @@ export class EngineerController {
         // add new entry to the database
         const create_result = await this.db
           .insert(engineers)
-          .values({ userId: user_id, signature: data })
+          .values({ user_id: user_id, signature: data })
           .returning({
             created_at: engineers.created_at,
             id: engineers.id,
