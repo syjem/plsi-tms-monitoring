@@ -130,7 +130,7 @@ export class Signature {
     if (typeof document === 'undefined') return;
 
     this.canvas!.addEventListener('mouseup', this.boundMouseUp);
-    this.canvas!.addEventListener('mousemove', this.boundPointerMove);
+    document.addEventListener('mousemove', this.boundPointerMove);
     this.canvas!.addEventListener('mousedown', this.boundMouseDown);
   }
 
@@ -140,7 +140,7 @@ export class Signature {
   removeEventListeners() {
     if (typeof document === 'undefined') return;
 
-    this.canvas!.removeEventListener('mousemove', this.boundPointerMove);
+    document.removeEventListener('mousemove', this.boundPointerMove);
     this.canvas!.removeEventListener('mousedown', this.boundMouseDown);
     this.canvas!.removeEventListener('mouseup', this.boundMouseUp);
   }
@@ -150,7 +150,6 @@ export class Signature {
    */
   private mouseUp(e: MouseEvent) {
     this.setDrawing(false);
-    this.context.closePath();
   }
 
   /**
@@ -204,6 +203,11 @@ export class Signature {
     this.context.stroke();
 
     this.setLastPosition({ x, y });
+
+    // check if the position is out of the canvas
+    if (this.isOutOfCanvasBounds(e)) {
+      this.setDrawing(false);
+    }
   }
 
   /**
@@ -236,6 +240,21 @@ export class Signature {
       default:
         this.context.lineTo(x, y);
     }
+  }
+
+  /**
+   * Check if cursor is inside the canvas bounding rect
+   * @param {MouseEvent} event - The mouse event
+   * @returns {boolean} True if cursor is within canvas bounds
+   */
+  isOutOfCanvasBounds(event: MouseEvent): boolean {
+    const { x, y } = this.getXYPosition(event);
+    const rect = this.canvas!.getBoundingClientRect();
+
+    // Check if x and y are within the canvas boundaries
+    const isInside = x >= 0 && x <= rect.width && y >= 0 && y <= rect.height;
+
+    return !isInside;
   }
 
   /**
