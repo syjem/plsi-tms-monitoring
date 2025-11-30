@@ -1,4 +1,4 @@
-import { engineers } from '@/lib/supabase/schema';
+import { engineers, NewEngineer } from '@/lib/supabase/schema';
 import { eq } from 'drizzle-orm';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 
@@ -70,6 +70,35 @@ export class EnginerController {
       if (e instanceof Error) {
         throw new Error(
           `[${EnginerController.name}:${this.addSignature.name}] Error: ` +
+            e?.message,
+        );
+      }
+    }
+  }
+
+  async create(data: NewEngineer) {
+    try {
+      const result = await this.db.transaction(async (txs) => {
+        const existingUser = await txs
+          .select({ id: engineers.id })
+          .from(engineers)
+          .where(eq(engineers.name, data.name || ''));
+
+        if (existingUser) throw new Error('User already exists!');
+
+        const newUser = await txs
+          .insert(engineers)
+          .values(data)
+          .returning({ id: engineers.id, created_at: engineers.created_at });
+
+        return newUser[0];
+      });
+
+      return result;
+    } catch (e) {
+      if (e instanceof Error) {
+        throw new Error(
+          `[${EnginerController.name}:${this.create.name}] Error: ` +
             e?.message,
         );
       }
