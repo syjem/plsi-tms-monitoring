@@ -276,6 +276,39 @@ export class Signature {
   }
 
   /**
+   * Get  image size in bytes
+   * @returns {number} Size in bytes
+   */
+  private getImageSize(): number {
+    const dataUrl = this.canvas?.toDataURL('image/png') || '';
+    // Data URL format: "data:image/png;base64,<base64string>"
+    // Remove the data URL prefix to get actual base64 string
+    const base64String = dataUrl.split(',')[1];
+
+    if (!base64String) return 0;
+
+    // Calculate bytes: base64 string length * 0.75
+    // (base64 uses 4 characters to encode 3 bytes)
+    const bytes = Math.ceil(base64String.length * 0.75);
+    return bytes;
+  }
+
+  /**
+   * Get exported image size in KB
+   * @returns {number} Size in kilobytes
+   */
+  getExportedImageSize(format: 'kb' | 'mb' | 'b'): number {
+    switch (format) {
+      case 'mb':
+        return this.getImageSize() / (1024 * 1024);
+      case 'kb':
+        return this.getImageSize() / 1024;
+      default:
+        return this.getImageSize();
+    }
+  }
+
+  /**
    * Checks if the canvas has any drawn content
    *
    * @public
