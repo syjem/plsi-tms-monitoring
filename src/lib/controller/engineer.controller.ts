@@ -42,7 +42,7 @@ export class EngineerController {
           .where(eq(engineers.userId, user_id));
 
         // check if user is existed
-        if (engineer) {
+        if (engineer.length > 0) {
           // apply update
           const update_result = await txs
             .update(engineers)

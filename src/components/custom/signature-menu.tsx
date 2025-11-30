@@ -20,6 +20,11 @@ function SignatureMenu({ children }: { children: ReactNode }) {
 
       toast.promise(() => addEngineerSignature(user.id, signatureData), {
         loading: 'Saving signature...',
+        success: (data) => {
+          if (!data.success) throw new Error(data.error.message);
+
+          return 'Signature saved successfully!';
+        },
         error: (e) =>
           e?.message || 'Something went wrong while tyring to save signature!',
       });

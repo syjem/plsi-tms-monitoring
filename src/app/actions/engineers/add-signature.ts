@@ -17,9 +17,5 @@ export const addEngineerSignature = async (
     return controller.addSignature(userId, signatureData);
   });
 
-  if (result.success) {
-    return result.data;
-  } else {
-    return result.error;
-  }
+  return result;
 };
