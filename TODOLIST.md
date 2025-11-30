@@ -81,7 +81,7 @@ Prompt user to draw their signature using an HTML Canvas, then store it into a d
 
 **Action Items**
 
-- Create a reusable SignaturePad component.
+- Create a reusable SignaturePad component. - DONE
 - Add clear/reset functionality.
 - Export canvas content as PNG (base64 string).
 - Create a server action to save the signature.
