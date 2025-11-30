@@ -1,7 +1,7 @@
-"use server";
+'use server';
 
-import { SystemsEngineerDataType } from "@/types";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from '@/lib/supabase/server';
+import { SystemsEngineerDataType } from '@/types';
 
 export async function getSystemsEngineers(): Promise<SystemsEngineerDataType> {
   const supabase = await createClient();
@@ -12,13 +12,13 @@ export async function getSystemsEngineers(): Promise<SystemsEngineerDataType> {
   } = await supabase.auth.getUser();
 
   if (userError || !user) {
-    return { data: [], error: "User not authenticated" };
+    return { data: [], error: 'User not authenticated' };
   }
 
   const { data, error } = await supabase
-    .from("engineers")
-    .select("id, field_number, name, title")
-    .eq("user_id", user.id);
+    .from('engineers')
+    .select('id, field_number, name, title')
+    .eq('user_id', user.id);
 
   if (error) {
     return { data: [], error: error.message };

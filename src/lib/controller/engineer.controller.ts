@@ -153,4 +153,37 @@ export class EngineerController {
       }
     }
   }
+  /**
+   * Retrieve engineer record by the provided id
+   * @param id - engineer unique id
+   * @throws {Error} Throws an error with context if:
+   *   - The id is missing or empty
+   *   - A database operation fails
+   */
+  async getEngineerById(id: string) {
+    try {
+      if (!id) throw new Error('Missing parameter id!');
+
+      const result = await this.db
+        .select({
+          id: engineers.id,
+          field_number: engineers.field_number,
+          name: engineers.name,
+          title: engineers.title,
+          email: engineers.email,
+          signature: engineers.signature,
+        })
+        .from(engineers)
+        .where(eq(engineers.id, id));
+
+      return result[0];
+    } catch (e) {
+      if (e instanceof Error) {
+        throw new Error(
+          `[${EngineerController.name}:${this.getEngineerById.name}] Error: ` +
+            e?.message,
+        );
+      }
+    }
+  }
 }
