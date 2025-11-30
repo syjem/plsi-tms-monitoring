@@ -22,8 +22,7 @@ export const engineers = pgTable(
     signature: text(), // Store base64 string
     phone: varchar({ length: 50 }),
     email: text(),
-    userId: uuid('id')
-      .primaryKey()
+    userId: uuid()
       .references(() => users.id, {
         onDelete: 'cascade',
       })

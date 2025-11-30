@@ -1,5 +1,5 @@
 {
-  "id": "f822548e-46a3-4ad1-8bf7-f9a369332ea9",
+  "id": "171ca5ef-5a6b-4e70-9319-60099cf6007f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -10,9 +10,20 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "uuid",
+          "type": "bigint",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "identity": {
+            "type": "byDefault",
+            "name": "engineers_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "9223372036854775807",
+            "cache": "1",
+            "cycle": false
+          }
         },
         "created_at": {
           "name": "created_at",
@@ -52,6 +63,18 @@
           "primaryKey": false,
           "notNull": false
         },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "userId": {
+          "name": "userId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
         "fieldNumber": {
           "name": "fieldNumber",
           "type": "smallint",
@@ -61,13 +84,13 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "engineers_id_users_id_fk": {
-          "name": "engineers_id_users_id_fk",
+        "engineers_userId_users_id_fk": {
+          "name": "engineers_userId_users_id_fk",
           "tableFrom": "engineers",
           "tableTo": "users",
           "schemaTo": "auth",
           "columnsFrom": [
-            "id"
+            "userId"
           ],
           "columnsTo": [
             "id"
@@ -95,7 +118,8 @@
           "name": "id",
           "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
         "created_at": {
           "name": "created_at",
@@ -122,17 +146,23 @@
           "type": "jsonb",
           "primaryKey": false,
           "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "work_logs_id_users_id_fk": {
-          "name": "work_logs_id_users_id_fk",
+        "work_logs_user_id_users_id_fk": {
+          "name": "work_logs_user_id_users_id_fk",
           "tableFrom": "work_logs",
           "tableTo": "users",
           "schemaTo": "auth",
           "columnsFrom": [
-            "id"
+            "user_id"
           ],
           "columnsTo": [
             "id"
