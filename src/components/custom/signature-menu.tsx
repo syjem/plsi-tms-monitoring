@@ -1,3 +1,4 @@
+import { addEngineerSignature } from '@/app/actions/engineers/add-signature';
 import SignaturePad from '@/components/signature-pad';
 import {
   Dialog,
@@ -9,13 +10,23 @@ import {
 import { useAuthUser } from '@/provider/auth-user.provider';
 import { DialogTitle } from '@radix-ui/react-dialog';
 import { ReactNode } from 'react';
+import { toast } from 'sonner';
 
 function SignatureMenu({ children }: { children: ReactNode }) {
   const { user } = useAuthUser();
   const handleSaveSignature = (signatureData: string) => {
     try {
+      if (!user) throw new Error('user not found!');
+
+      toast.promise(() => addEngineerSignature(user.id, signatureData), {
+        loading: 'Saving signature...',
+        error: (e) =>
+          e?.message || 'Something went wrong while tyring to save signature!',
+      });
     } catch (e) {
-      console.warn(e);
+      if (e instanceof Error) {
+        toast.error(e?.message || 'Something went wrong!');
+      }
     }
   };
 
