@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Signature, SignatureSettings } from '@/utils/classes/signature';
 import { Loader } from 'lucide-react';
+import { useTheme } from 'next-themes';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -96,18 +97,43 @@ function SignaturePad({
   onSaveSignature?: (signatureData: string) => unknown | Promise<unknown>;
 }) {
   const signatureRef = useRef<Signature | null>(null);
+  const [color, setColor] = useState({
+    background: '',
+    foreground: '',
+  });
+
   const [saving, setSaving] = useState(false);
+  const { theme } = useTheme();
+
+  useEffect(() => {
+    // Get the value of a CSS variable
+    const background = getComputedStyle(
+      document.documentElement,
+    ).getPropertyValue('--muted');
+    const foreground = getComputedStyle(
+      document.documentElement,
+    ).getPropertyValue('--foreground');
+
+    setColor({
+      background,
+      foreground,
+    });
+  }, [theme]);
 
   useEffect(() => {
     // Create the Signature instance AFTER the canvas is mounted
-    signatureRef.current = new Signature({ ...rest });
+    signatureRef.current = new Signature({
+      ...rest,
+      fillColor: color.background,
+      strokeColor: color.foreground,
+    });
 
     return () => {
       // Cleanup when component unmounts
       signatureRef.current?.removeEventListeners();
       signatureRef.current = null;
     };
-  }, []);
+  }, [theme, color.background, color.foreground]);
 
   /**
    * Clear the canvas to start new signature
