@@ -1,34 +1,37 @@
 'use client';
 
-import { MagicLinkSent } from '@/app/auth/_components/magic-link-sent';
+import { sendOtpToNewUser } from '@/app/actions/auth/send-otp-to-new-user';
 import { OnboardingForm } from '@/app/auth/_components/onboarding-form';
 import { AppLogo } from '@/components/icons';
 import { LoginForm } from '@/components/login-form';
 import React, { useState } from 'react';
+import { toast } from 'sonner';
 
-export type AuthStep = 'email' | 'magic-link-sent' | 'onboarding';
+export type AuthStep = 'email' | 'onboarding';
 
 export default function Page() {
   const [step, setStep] = useState<AuthStep>('email');
   const [email, setEmail] = useState('');
 
-  const handleEmailSubmit = (submittedEmail: string, existingUser: boolean) => {
+  const handleEmailSubmit = async (submittedEmail: string) => {
     setEmail(submittedEmail);
 
-    if (existingUser) {
-      setStep('magic-link-sent');
+    const { success, message } = await sendOtpToNewUser(submittedEmail);
+
+    if (!success) {
+      toast.error(message || 'Failed to send verification code.');
     } else {
+      toast.success(message);
       setStep('onboarding');
     }
   };
 
   const handleBack = () => {
     setStep('email');
-    setEmail('');
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center p-4">
+    <main className="min-h-svh flex items-center justify-center p-6 md:p-10">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-xl md:text-2xl font-bold text-center mb-6">
@@ -40,15 +43,12 @@ export default function Page() {
                 Phillogix Systems Employee <br /> Monitoring
               </React.Fragment>
             )}
-            {step === 'magic-link-sent' && 'Check your email'}
-            {step === 'onboarding' && 'Complete your profile'}
+            {step === 'onboarding' && 'Verify and complete your profile'}
           </h1>
         </div>
 
         {step === 'email' && <LoginForm onSubmit={handleEmailSubmit} />}
-        {step === 'magic-link-sent' && (
-          <MagicLinkSent email={email} onBack={handleBack} />
-        )}
+
         {step === 'onboarding' && (
           <OnboardingForm email={email} onBack={handleBack} />
         )}

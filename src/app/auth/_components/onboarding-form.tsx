@@ -2,6 +2,7 @@
 
 import type React from 'react';
 
+import { verifyOtpAndCreateUser } from '@/app/actions/auth/verify-otp-and-create-user';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,9 +13,11 @@ import {
 } from '@/components/ui/input-otp';
 import { Label } from '@/components/ui/label';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ArrowLeft, Camera, Loader2, User } from 'lucide-react';
+import { Camera, Loader2, User } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 const onboardingSchema = z.object({
@@ -37,6 +40,7 @@ interface OnboardingFormProps {
 }
 
 export function OnboardingForm({ email, onBack }: OnboardingFormProps) {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const [isResending, setIsResending] = useState(false);
@@ -81,12 +85,20 @@ export function OnboardingForm({ email, onBack }: OnboardingFormProps) {
   const onFormSubmit = async (data: OnboardingFormData) => {
     setIsLoading(true);
 
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    const { success, message } = await verifyOtpAndCreateUser({
+      email,
+      otp: data.verificationCode,
+      firstName: data.firstName,
+      lastName: data.lastName,
+    });
 
-    console.log('Form submitted:', { ...data, email, avatar: avatarPreview });
-
+    if (!success) {
+      toast.error(message || 'Failed to verify code and create account.');
+    } else {
+      toast.success('Account created successfully!');
+      router.push('/');
+    }
     setIsLoading(false);
-    alert('Account created successfully! (Demo)');
   };
 
   const getInitials = () => {
@@ -96,7 +108,7 @@ export function OnboardingForm({ email, onBack }: OnboardingFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-4">
       {/* Verification Code */}
       <div className="space-y-3">
         <div className="text-center space-y-1">
@@ -243,12 +255,11 @@ export function OnboardingForm({ email, onBack }: OnboardingFormProps) {
 
         <Button
           type="button"
-          variant="ghost"
+          variant="link"
           className="w-full"
           onClick={onBack}
           disabled={isLoading}
         >
-          <ArrowLeft className="mr-2 h-4 w-4" />
           Use a different email
         </Button>
       </div>
