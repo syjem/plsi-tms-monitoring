@@ -76,6 +76,53 @@ export class EnginerController {
     }
   }
 
+  /**
+   * Creates a new engineer record with the provided data.
+   *
+   * Validates required fields, checks for duplicate emails, and inserts a new engineer
+   * record into the database within a transaction. Returns the created engineer's id
+   * and creation timestamp.
+   *
+   * @param {NewEngineer} data - The engineer data to create
+   * @param {string} data.email - The engineer's email address (required, must be unique)
+   * @param {string} [data.name] - The engineer's full name
+   * @param {string} [data.phone] - The engineer's phone number
+   * @param {string} [data.signature] - The engineer's signature (optional, can be added later)
+   *
+   * @returns {Promise<{id: string, created_at: Date}>}
+   *   The newly created engineer record containing the id and creation timestamp
+   *
+   * @throws {Error} Throws an error with context if:
+   *   - The email field is missing or empty
+   *   - An engineer with the same email already exists
+   *   - A database operation fails
+   *
+   * @example
+   * // Create a new engineer
+   * try {
+   *   const newEngineer = await engineerController.create({
+   *     email: 'john.doe@example.com',
+   *     name: 'John Doe',
+   *     phone: '555-0123'
+   *   });
+   *   console.log('Engineer created:', newEngineer.id);
+   * } catch (error) {
+   *   console.error('Failed to create engineer:', error.message);
+   * }
+   *
+   * @example
+   * // Using with withErrorHandler for structured error responses
+   * const result = await withErrorHandler(
+   *   () => engineerController.create({ email: 'jane@example.com' }),
+   *   { errorCode: 'ENGINEER_CREATE_FAILED' }
+   * );
+   *
+   * if (result.success) {
+   *   console.log('Created engineer:', result.data.id);
+   * } else {
+   *   console.error(result.error.message);
+   * }
+   */
   async create(data: NewEngineer) {
     try {
       if (!data.email) throw new Error('Missing engineer email!');
