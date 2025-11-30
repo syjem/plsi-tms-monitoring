@@ -199,12 +199,43 @@ export class Signature {
     // get mouse coordinates
     const { x, y } = this.getXYPosition(e);
 
-    // Draw line from last position to current position
-    this.context.lineTo(x, y);
+    this.drawLine({ x, y, type: 'quadratic' });
 
     this.context.stroke();
 
     this.setLastPosition({ x, y });
+  }
+
+  /**
+   * Draw line to the newly set position
+   */
+  drawLine({
+    x,
+    y,
+    type = 'quadratic',
+  }: {
+    x: number;
+    y: number;
+    type: 'line' | 'quadratic';
+  }) {
+    switch (type) {
+      case 'quadratic':
+        // Quadratic Bezier smoothing
+        const midX = (this.lastPosition.x + x) / 2;
+        const midY = (this.lastPosition.y + y) / 2;
+
+        this.context.quadraticCurveTo(
+          this.lastPosition.x,
+          this.lastPosition.y,
+          midX,
+          midY,
+        );
+
+        break;
+
+      default:
+        this.context.lineTo(x, y);
+    }
   }
 
   /**
