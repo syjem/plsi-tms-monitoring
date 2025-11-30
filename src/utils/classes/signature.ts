@@ -213,7 +213,7 @@ export class Signature {
   /**
    * Draw line to the newly set position
    */
-  drawLine({
+  private drawLine({
     x,
     y,
     type = 'quadratic',
@@ -247,7 +247,7 @@ export class Signature {
    * @param {MouseEvent} event - The mouse event
    * @returns {boolean} True if cursor is within canvas bounds
    */
-  isOutOfCanvasBounds(event: MouseEvent): boolean {
+  private isOutOfCanvasBounds(event: MouseEvent): boolean {
     const { x, y } = this.getXYPosition(event);
     const rect = this.canvas!.getBoundingClientRect();
 
