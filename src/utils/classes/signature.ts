@@ -129,8 +129,8 @@ export class Signature {
   private attachEventListeners() {
     if (typeof document === 'undefined') return;
 
-    document.addEventListener('mouseup', this.boundMouseUp);
-    document.addEventListener('mousemove', this.boundPointerMove);
+    this.canvas!.addEventListener('mouseup', this.boundMouseUp);
+    this.canvas!.addEventListener('mousemove', this.boundPointerMove);
     this.canvas!.addEventListener('mousedown', this.boundMouseDown);
   }
 
@@ -141,8 +141,8 @@ export class Signature {
     if (typeof document === 'undefined') return;
 
     this.canvas!.removeEventListener('mousemove', this.boundPointerMove);
-    document.removeEventListener('mousedown', this.boundMouseDown);
-    document.removeEventListener('mouseup', this.boundMouseUp);
+    this.canvas!.removeEventListener('mousedown', this.boundMouseDown);
+    this.canvas!.removeEventListener('mouseup', this.boundMouseUp);
   }
 
   /**
