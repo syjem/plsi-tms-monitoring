@@ -49,6 +49,7 @@ function SignatureMenu({ children }: { children: ReactNode }) {
               width={500}
               height={300}
               onSaveSignature={handleSaveSignature}
+              strokeWidth={1.2}
             />
           </div>
         </DialogContent>
