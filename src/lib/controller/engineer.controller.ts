@@ -78,11 +78,13 @@ export class EnginerController {
 
   async create(data: NewEngineer) {
     try {
+      if (!data.email) throw new Error('Missing engineer email!');
+
       const result = await this.db.transaction(async (txs) => {
         const existingUser = await txs
           .select({ id: engineers.id })
           .from(engineers)
-          .where(eq(engineers.name, data.name || ''));
+          .where(eq(engineers.email, data.email!));
 
         if (existingUser) throw new Error('User already exists!');
 
