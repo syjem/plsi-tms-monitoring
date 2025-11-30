@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Signature, SignatureSettings } from '@/utils/classes/signature';
 import { Loader } from 'lucide-react';
-import { useTheme } from 'next-themes';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -99,21 +98,14 @@ function SignaturePad({
   maxSize?: number;
 }) {
   const signatureRef = useRef<Signature | null>(null);
-  const [color, setColor] = useState({
-    background: '',
-    foreground: '',
-  });
 
   const [saving, setSaving] = useState(false);
-  const { theme } = useTheme();
 
   // Initialization
   useEffect(() => {
     // Create the Signature instance AFTER the canvas is mounted
     signatureRef.current = new Signature({
       ...rest,
-      fillColor: color.background,
-      strokeColor: color.foreground,
     });
 
     return () => {
@@ -121,23 +113,7 @@ function SignaturePad({
       signatureRef.current?.removeEventListeners();
       signatureRef.current = null;
     };
-  }, [theme, color.background, color.foreground]);
-
-  // Updating CSS variables for dynamic theme support
-  useEffect(() => {
-    // Get the value of a CSS variable
-    const background = getComputedStyle(
-      document.documentElement,
-    ).getPropertyValue('--muted');
-    const foreground = getComputedStyle(
-      document.documentElement,
-    ).getPropertyValue('--foreground');
-
-    setColor({
-      background,
-      foreground,
-    });
-  }, [theme]);
+  }, []);
 
   /**
    * Clear the canvas to start new signature
