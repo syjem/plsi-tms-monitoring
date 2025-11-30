@@ -1,7 +1,6 @@
 import { users } from '@/lib/supabase/auth-reference';
 import { relations, sql } from 'drizzle-orm';
 import {
-  bigint,
   check,
   pgTable,
   smallint,
@@ -14,7 +13,7 @@ import {
 export const engineers = pgTable(
   'engineers',
   {
-    id: bigint({ mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
+    id: uuid().primaryKey().defaultRandom(),
     created_at: timestamp({ withTimezone: true }).notNull().defaultNow(),
     updated_at: timestamp({ withTimezone: true }).notNull().defaultNow(),
     name: text(),
