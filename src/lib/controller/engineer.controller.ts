@@ -35,7 +35,7 @@ export class EngineerController {
   async addSignature(user_id: string, data: string) {
     try {
       // update engineer signature if present otherwise add new entry
-      const result = this.db.transaction(async (txs) => {
+      const result = await this.db.transaction(async (txs) => {
         const engineer = await txs
           .select()
           .from(engineers)
@@ -65,7 +65,7 @@ export class EngineerController {
         return create_result;
       });
 
-      return result;
+      return result[0];
     } catch (e) {
       if (e instanceof Error) {
         throw new Error(
