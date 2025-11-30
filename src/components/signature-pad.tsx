@@ -1,4 +1,7 @@
-import { useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Loader } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { toast } from 'sonner';
 
 /**
  * Configuration object for signature canvas settings
@@ -213,7 +216,7 @@ class Signature {
    * Clears the canvas and resets to the background color
    */
   clearCanvas() {
-    if (!this.canvas) return;
+    if (!this.canvas) return console.warn('Unable to get canvas!');
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
@@ -226,28 +229,88 @@ class Signature {
   exportSignature(): string {
     return this.canvas?.toDataURL('image/png') || '';
   }
+
+  /**
+   * Checks if the canvas has any drawn content
+   *
+   * @public
+   * @returns {boolean} True if canvas contains drawn signatures
+   */
+  isEmpty(): boolean {
+    if (!this.canvas) return true;
+    const imageData = this.context.getImageData(
+      0,
+      0,
+      this.canvas.width,
+      this.canvas.height,
+    );
+    return !imageData.data.some((channel, i) => i % 4 === 3 && channel !== 0);
+  }
 }
 
 function SignaturePad({
   width = 300,
   height = 300,
+  onSaveSignature = () => {},
   ...rest
-}: SignatureSettings) {
-  useEffect(() => {
-    const signature = new Signature(rest);
+}: SignatureSettings & {
+  onSaveSignature?: (signatureData: string) => unknown | Promise<unknown>;
+}) {
+  const signatureRef = useRef(new Signature(rest));
+  const [saving, setSaving] = useState(false);
 
+  useEffect(() => {
+    const signatureCurrent = signatureRef.current;
     return () => {
-      signature.removeEventListeners();
+      signatureCurrent.removeEventListeners();
     };
-  }, [rest]);
+  }, [signatureRef]);
+
+  /**
+   * Clear the canvas to start new signature
+   */
+  const onClear = () => {
+    signatureRef.current.clearCanvas();
+  };
+
+  /**
+   * Callback to manage the save functionality e.g. saving to database or reading signature value
+   */
+  const handleSave = () => {
+    const signatureData = signatureRef.current.exportSignature();
+    setSaving(true);
+    return Promise.resolve(onSaveSignature(signatureData))
+      .then(() => {})
+      .catch((e) => {
+        toast.error(e?.message || 'Saving signature has thrown an error!');
+      })
+      .finally(() => {
+        setSaving(false);
+      });
+  };
 
   return (
-    <canvas
-      id="signature-canvas"
-      className="bg-card border border-border"
-      width={width}
-      height={height}
-    ></canvas>
+    <div className="space-y-2">
+      <canvas
+        id="signature-canvas"
+        className="bg-card border border-border"
+        width={width}
+        height={height}
+      ></canvas>
+      <div className="flex items-center justify-between">
+        <Button variant="outline" onClick={onClear}>
+          Clear
+        </Button>
+        <Button onClick={handleSave} disabled={saving}>
+          {saving && (
+            <span className="animate-spin">
+              <Loader />
+            </span>
+          )}
+          {saving ? 'Saving...' : 'Save'}
+        </Button>
+      </div>
+    </div>
   );
 }
 
