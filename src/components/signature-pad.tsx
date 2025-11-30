@@ -12,37 +12,56 @@ function SignaturePad({
 }: SignatureSettings & {
   onSaveSignature?: (signatureData: string) => unknown | Promise<unknown>;
 }) {
-  const signatureRef = useRef(new Signature(rest));
+  const signatureRef = useRef<Signature | null>(null);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    const signatureCurrent = signatureRef.current;
+    // Create the Signature instance AFTER the canvas is mounted
+    signatureRef.current = new Signature({ ...rest });
+
     return () => {
-      signatureCurrent.removeEventListeners();
+      // Cleanup when component unmounts
+      signatureRef.current?.removeEventListeners();
+      signatureRef.current = null;
     };
-  }, [signatureRef]);
+  }, []);
 
   /**
    * Clear the canvas to start new signature
    */
   const onClear = () => {
-    signatureRef.current.clearCanvas();
+    signatureRef.current?.clearCanvas();
   };
 
   /**
    * Callback to manage the save functionality e.g. saving to database or reading signature value
    */
-  const handleSave = () => {
+  const handleSave = async () => {
+    if (!signatureRef.current) {
+      toast.error('Signature pad not initialized');
+      return;
+    }
+
     const signatureData = signatureRef.current.exportSignature();
+
+    if (!signatureData) {
+      toast.error('Failed to export signature');
+      return;
+    }
+
     setSaving(true);
-    return Promise.resolve(onSaveSignature(signatureData))
-      .then(() => {})
-      .catch((e) => {
-        toast.error(e?.message || 'Saving signature has thrown an error!');
-      })
-      .finally(() => {
-        setSaving(false);
-      });
+
+    try {
+      await onSaveSignature(signatureData);
+    } catch (e) {
+      toast.error(
+        e instanceof Error
+          ? e.message
+          : 'Saving signature has thrown an error!',
+      );
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -52,7 +71,7 @@ function SignaturePad({
         className="bg-card border border-border"
         width={width}
         height={height}
-      ></canvas>
+      />
       <div className="flex items-center justify-between">
         <Button variant="outline" onClick={onClear}>
           Clear
