@@ -92,9 +92,11 @@ function SignaturePad({
   width = 300,
   height = 300,
   onSaveSignature = () => {},
+  maxSize = 5 * 1024 * 1024, // 5mb
   ...rest
 }: SignatureSettings & {
   onSaveSignature?: (signatureData: string) => unknown | Promise<unknown>;
+  maxSize?: number;
 }) {
   const signatureRef = useRef<Signature | null>(null);
   const [color, setColor] = useState({
@@ -146,21 +148,25 @@ function SignaturePad({
    * Callback to manage the save functionality e.g. saving to database or reading signature value
    */
   const handleSave = async () => {
-    if (!signatureRef.current) {
-      toast.error('Signature pad not initialized');
-      return;
-    }
-
-    const signatureData = signatureRef.current.exportSignature();
-
-    if (!signatureData) {
-      toast.error('Failed to export signature');
-      return;
-    }
-
-    setSaving(true);
-
     try {
+      if (!signatureRef.current) {
+        toast.error('Signature pad not initialized');
+        return;
+      }
+
+      const signatureData = signatureRef.current.exportSignature();
+      const size = signatureRef.current.getExportedImageSize('b');
+
+      if (size > maxSize)
+        throw new Error('Image too large to save as signature!');
+
+      if (!signatureData) {
+        toast.error('Failed to export signature');
+        return;
+      }
+
+      setSaving(true);
+
       await onSaveSignature(signatureData);
     } catch (e) {
       toast.error(
