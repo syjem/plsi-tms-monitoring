@@ -7,9 +7,9 @@ CREATE TABLE "engineers" (
 	"signature" text,
 	"phone" varchar(50),
 	"email" text,
-	"userId" uuid NOT NULL,
-	"fieldNumber" smallint,
-	CONSTRAINT "field_number_check" CHECK ("engineers"."fieldNumber" > 0)
+	"user_id" uuid NOT NULL,
+	"field_number" smallint,
+	CONSTRAINT "field_number_check" CHECK ("engineers"."field_number" > 0)
 );
 --> statement-breakpoint
 CREATE TABLE "work_logs" (
@@ -21,5 +21,5 @@ CREATE TABLE "work_logs" (
 	"user_id" uuid NOT NULL
 );
 --> statement-breakpoint
-ALTER TABLE "engineers" ADD CONSTRAINT "engineers_userId_users_id_fk" FOREIGN KEY ("userId") REFERENCES "auth"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "engineers" ADD CONSTRAINT "engineers_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "work_logs" ADD CONSTRAINT "work_logs_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE cascade ON UPDATE no action;

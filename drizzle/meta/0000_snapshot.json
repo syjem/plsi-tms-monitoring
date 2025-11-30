@@ -1,5 +1,5 @@
 {
-  "id": "50c62ee9-3fe6-41b7-a64a-20b3a93945b7",
+  "id": "4fc1f3a3-b57e-4195-a978-768344db8d17",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -59,14 +59,14 @@
           "primaryKey": false,
           "notNull": false
         },
-        "userId": {
-          "name": "userId",
+        "user_id": {
+          "name": "user_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
-        "fieldNumber": {
-          "name": "fieldNumber",
+        "field_number": {
+          "name": "field_number",
           "type": "smallint",
           "primaryKey": false,
           "notNull": false
@@ -74,13 +74,13 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "engineers_userId_users_id_fk": {
-          "name": "engineers_userId_users_id_fk",
+        "engineers_user_id_users_id_fk": {
+          "name": "engineers_user_id_users_id_fk",
           "tableFrom": "engineers",
           "tableTo": "users",
           "schemaTo": "auth",
           "columnsFrom": [
-            "userId"
+            "user_id"
           ],
           "columnsTo": [
             "id"
@@ -95,7 +95,7 @@
       "checkConstraints": {
         "field_number_check": {
           "name": "field_number_check",
-          "value": "\"engineers\".\"fieldNumber\" > 0"
+          "value": "\"engineers\".\"field_number\" > 0"
         }
       },
       "isRLSEnabled": false
