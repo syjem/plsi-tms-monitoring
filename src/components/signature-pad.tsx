@@ -136,6 +136,8 @@ function SignaturePad({
         toast.error('Signature pad not initialized');
         return;
       }
+      const isEmpty = signatureRef.current.isEmpty();
+      if (isEmpty) throw new Error('Signature is empty!');
 
       const signatureData = signatureRef.current.exportSignature();
       const size = signatureRef.current.getExportedImageSize('b');
