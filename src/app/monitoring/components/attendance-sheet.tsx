@@ -1,15 +1,16 @@
-"use client";
+'use client';
 
-import type { AttendanceData, AttendanceRow, Logs } from "@/types";
-import { toast } from "sonner";
-import { useState } from "react";
-import { CheckCheck, Edit } from "lucide-react";
-import { isRowEmpty } from "@/utils/is-row-empty";
-import TableRow from "@/app/monitoring//components/table-row";
-import TableHead from "@/app/monitoring//components/table-head";
-import { updateWorkLog } from "@/app/actions/logs/update-work-log";
-import { SheetFooter } from "@/app/monitoring/components/sheet-footer";
-import { SheetControls } from "@/app/monitoring/components/sheet-controls";
+import { updateWorkLog } from '@/app/actions/logs/update-work-log';
+import TableHead from '@/app/monitoring//components/table-head';
+import TableRow from '@/app/monitoring//components/table-row';
+import { AttendanceSheetHeader } from '@/app/monitoring/components/attendance-sheet-header';
+import { SheetControls } from '@/app/monitoring/components/sheet-controls';
+import { SheetFooter } from '@/app/monitoring/components/sheet-footer';
+import type { AttendanceData, AttendanceRow, Logs } from '@/types';
+import { isRowEmpty } from '@/utils/is-row-empty';
+import { CheckCheck, Edit } from 'lucide-react';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 export default function AttendanceSheet({
   engineers,
@@ -33,14 +34,14 @@ export default function AttendanceSheet({
     // Default empty groups if no initial data - 40 single-row
     return Array.from({ length: 40 }, () => [
       {
-        date: "",
-        day: "",
-        sched: "",
-        timeIn: "",
-        timeOut: "",
-        destination: "",
-        remarks: "",
-        signature: "",
+        date: '',
+        day: '',
+        sched: '',
+        timeIn: '',
+        timeOut: '',
+        destination: '',
+        remarks: '',
+        signature: '',
       },
     ]);
   });
@@ -49,7 +50,7 @@ export default function AttendanceSheet({
     groupIndex: number,
     rowIndex: number,
     field: keyof AttendanceRow,
-    value: string
+    value: string,
   ) => {
     if (!isEditable) return;
 
@@ -57,21 +58,21 @@ export default function AttendanceSheet({
       prev.map((group, gIndex) =>
         gIndex === groupIndex
           ? group.map((row, rIndex) =>
-              rIndex === rowIndex ? { ...row, [field]: value } : row
+              rIndex === rowIndex ? { ...row, [field]: value } : row,
             )
-          : group
-      )
+          : group,
+      ),
     );
   };
 
   const saveSheet = async () => {
-    const toastId = toast.loading("Saving attendance sheet...");
+    const toastId = toast.loading('Saving attendance sheet...');
 
     try {
       if (workLogs) {
         const { success, error } = await updateWorkLog(
           workLogs.id,
-          attendanceData
+          attendanceData,
         );
 
         if (!success) {
@@ -79,7 +80,7 @@ export default function AttendanceSheet({
           return;
         }
 
-        toast.success("Attendance sheet saved!", {
+        toast.success('Attendance sheet saved!', {
           id: toastId,
           icon: <CheckCheck className="h-4 w-4" />,
         });
@@ -87,7 +88,7 @@ export default function AttendanceSheet({
       setIsEditable(false);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to save attendance sheet.", { id: toastId });
+      toast.error('Failed to save attendance sheet.', { id: toastId });
     } finally {
       setTimeout(() => toast.dismiss(toastId), 1500);
     }
@@ -95,7 +96,7 @@ export default function AttendanceSheet({
 
   const enableEditing = () => {
     setIsEditable(true);
-    toast.warning("Edit mode enabled", {
+    toast.warning('Edit mode enabled', {
       icon: <Edit className="h-4 w-4" />,
     });
   };
@@ -110,7 +111,7 @@ export default function AttendanceSheet({
 
     // Check if we're at capacity (all 40 rows filled with data)
     if (nonEmptyRowsCount >= 40) {
-      toast.error("Cannot add row - all 40 rows are filled with data");
+      toast.error('Cannot add row - all 40 rows are filled with data');
       return;
     }
 
@@ -126,7 +127,7 @@ export default function AttendanceSheet({
     }
 
     if (emptyGroupsFromEnd === 0) {
-      toast.error("Cannot add row - no empty rows available to remove");
+      toast.error('Cannot add row - no empty rows available to remove');
       return;
     }
 
@@ -141,14 +142,14 @@ export default function AttendanceSheet({
       newData[groupIndex] = [
         ...newData[groupIndex],
         {
-          date: "",
-          day: "",
-          sched: "",
-          timeIn: "",
-          timeOut: "",
-          destination: "",
-          remarks: "",
-          signature: "",
+          date: '',
+          day: '',
+          sched: '',
+          timeIn: '',
+          timeOut: '',
+          destination: '',
+          remarks: '',
+          signature: '',
         },
       ];
 
@@ -157,12 +158,12 @@ export default function AttendanceSheet({
 
       return newData;
     });
-    toast.warning("You added a row..", {
+    toast.warning('You added a row..', {
       action: {
-        label: "Undo",
+        label: 'Undo',
         onClick: () => {
           setAttendanceData(prevData);
-          toast.success("You removed the added row");
+          toast.success('You removed the added row');
         },
       },
     });
@@ -170,12 +171,7 @@ export default function AttendanceSheet({
 
   return (
     <div className="min-h-screen bg-white dark:print:bg-white dark:print:text-black dark:bg-slate-900 dark:text-gray-200 px-8 py-8 md:py-16 shadow-lg print:shadow-none print:px-4 print:py-12">
-      <header className="text-center mb-10 print:mb-8 space-y-2 dark:text-gray-50 dark:print:text-gray-950">
-        <h1 className="text-3xl font-bold">Phillogix Systems Inc.</h1>
-        <h2 className="text-xl font-semibold">
-          Employee Monitoring Attendance Sheet
-        </h2>
-      </header>
+      <AttendanceSheetHeader />
 
       <SheetControls
         isEditable={isEditable}
@@ -208,7 +204,7 @@ export default function AttendanceSheet({
                     updateCell={updateCell}
                   />
                 );
-              })
+              }),
             )}
           </tbody>
         </table>

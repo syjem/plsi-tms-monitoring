@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from 'react';
 
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { formatBytes } from "@/utils/format-bytes";
-import { usePDFExtract } from "@/hooks/use-pdf-extract";
-import { Upload, FileText, X, ScanLine } from "lucide-react";
+import { ExtractionAnimation } from '@/components/extraction-animation';
+import { Button } from '@/components/ui/button';
 import {
   Empty,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
-} from "@/components/ui/empty";
-import { ExtractionAnimation } from "@/components/extraction-animation";
+} from '@/components/ui/empty';
+import { usePDFExtract } from '@/hooks/use-pdf-extract';
+import { cn } from '@/lib/utils';
+import { formatBytes } from '@/utils/format-bytes';
+import { FileText, ScanLine, Upload, X } from 'lucide-react';
 
 export function Dropzone() {
   const {
@@ -28,7 +28,7 @@ export function Dropzone() {
     inputRef,
     isDragActive,
   } = usePDFExtract({
-    allowedMimeTypes: ["application/pdf"],
+    allowedMimeTypes: ['application/pdf'],
     maxFiles: 1,
     maxFileSize: 1000 * 1000 * 5, // 5MB
   });
@@ -39,7 +39,7 @@ export function Dropzone() {
   const handleRemoveFile = () => {
     setFiles([]);
     if (inputRef.current) {
-      inputRef.current.value = "";
+      inputRef.current.value = '';
     }
   };
 
@@ -47,12 +47,12 @@ export function Dropzone() {
     <div
       {...getRootProps({
         className: cn(
-          "relative rounded-lg border-2 border-dashed dark:border-slate-800 dark:hover:border-slate-700 bg-white dark:bg-slate-900 p-8 transition-all duration-500",
-          !file && "border-gray-300 hover:border-gray-400 hover:shadow-md",
-          file && !hasErrors && !loading && "border-gray-300",
-          loading && "border-blue-400 bg-blue-50/50",
-          hasErrors && "border-red-400 bg-red-50/50",
-          isDragActive && "border-blue-400 bg-blue-50"
+          'relative rounded-lg border-2 border-dashed dark:border-slate-800 dark:hover:border-slate-700 bg-white dark:bg-slate-900 p-8 transition-all duration-500',
+          !file && 'border-gray-300 hover:border-gray-400 hover:shadow-md',
+          file && !hasErrors && !loading && 'border-gray-300',
+          loading && 'border-blue-400 bg-blue-50/50',
+          hasErrors && 'border-red-400 bg-red-50/50',
+          isDragActive && 'border-blue-400 bg-blue-50',
         ),
       })}
     >
@@ -65,8 +65,8 @@ export function Dropzone() {
       {file ? (
         <div
           className={cn(
-            "transition-all duration-500",
-            file ? "opacity-100 scale-100" : "opacity-0 scale-95"
+            'transition-all duration-500',
+            file ? 'opacity-100 scale-100' : 'opacity-0 scale-95',
           )}
         >
           <div className="flex flex-col items-center gap-6">
@@ -83,16 +83,16 @@ export function Dropzone() {
                     <p className="text-xs text-red-600 dark:text-red-500">
                       {file.errors
                         .map((e) =>
-                          e.message.startsWith("File is larger than")
+                          e.message.startsWith('File is larger than')
                             ? `File is larger than ${formatBytes(
                                 maxFileSize,
-                                2
+                                2,
                               )} (Size: ${formatBytes(file.size, 2)})`
-                            : e.message.startsWith("File type must be")
-                            ? "File type not allowed"
-                            : e.message
+                            : e.message.startsWith('File type must be')
+                            ? 'File type not allowed'
+                            : e.message,
                         )
-                        .join(", ")}
+                        .join(', ')}
                     </p>
                   ) : (
                     <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -151,8 +151,8 @@ function DropzoneEmptyState({
   return (
     <Empty
       className={cn(
-        "transition-all duration-500 ease-out",
-        visible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+        'transition-all duration-500 ease-out',
+        visible ? 'opacity-100 scale-100' : 'opacity-0 scale-95',
       )}
     >
       <EmptyHeader className="space-y-2">
@@ -162,13 +162,13 @@ function DropzoneEmptyState({
         <EmptyDescription>
           <div className="text-center">
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Drag and drop or{" "}
+              Drag and drop or{' '}
               <button
                 onClick={() => inputRef.current?.click()}
                 className="text-blue-600 hover:text-blue-700 underline font-medium"
               >
                 select pdf
-              </button>{" "}
+              </button>{' '}
               to upload
             </p>
             <p className="text-xs text-gray-700 dark:text-gray-200 mt-1">

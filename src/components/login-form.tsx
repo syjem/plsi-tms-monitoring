@@ -1,21 +1,43 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { cn } from "@/lib/utils";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { createClient } from "@/lib/supabase/client";
-import { AppLogo, Google } from "@/components/icons";
+import { Google } from '@/components/icons';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { createClient } from '@/lib/supabase/client';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Mail } from 'lucide-react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
-export function LoginForm({
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<"div">) {
+const emailSchema = z.object({
+  email: z.string().email('Please enter a valid email address'),
+});
+
+type EmailFormData = z.infer<typeof emailSchema>;
+
+interface EmailStepProps {
+  onSubmit: (email: string) => void;
+}
+
+export function LoginForm({ onSubmit }: EmailStepProps) {
   const [error, setError] = useState<string | null>(null);
-  const [loadingProvider, setLoadingProvider] = useState<"google" | null>(null);
+  const [loadingProvider, setLoadingProvider] = useState<'google' | null>(null);
 
-  const handleSocialLogin = async (provider: "google") => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<EmailFormData>({
+    resolver: zodResolver(emailSchema),
+  });
+
+  const onFormSubmit = (data: EmailFormData) => {
+    onSubmit(data.email);
+  };
+
+  const handleSocialLogin = async (provider: 'google') => {
     const supabase = createClient();
     setLoadingProvider(provider);
     setError(null);
@@ -30,63 +52,57 @@ export function LoginForm({
 
       if (error) throw error;
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+      setError(error instanceof Error ? error.message : 'An error occurred');
       setLoadingProvider(null);
     }
   };
+
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <form>
-        <div className="flex flex-col gap-6">
-          <div className="flex flex-col items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-md">
-              <AppLogo />
-            </div>
-            <h1 className="text-xl md:text-2xl font-bold text-center mb-6">
-              Phillogix Systems Employee <br /> Monitoring
-            </h1>
-          </div>
-          <div className="flex flex-col gap-6">
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                required
-                className="border-gray-400"
-              />
-            </div>
-            <Button
-              type="submit"
-              className="w-full shadow-sm cursor-pointer dark:text-gray-50"
-            >
-              Login
-            </Button>
-          </div>
-          <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-gray-300">
-            <span className="relative z-10 bg-background px-2 text-muted-foreground">
-              Or
-            </span>
-          </div>
-          <div className="grid">
-            <Button
-              type="button"
-              disabled={loadingProvider !== null}
-              variant="outline"
-              className="w-full border-gray-300 shadow-sm cursor-pointer"
-              onClick={() => handleSocialLogin("google")}
-            >
-              <Google />
-              {loadingProvider === "google"
-                ? "Logging in..."
-                : "Continue with Google"}
-            </Button>
-          </div>
-          {error && (
-            <div className="text-sm text-destructive text-center">{error}</div>
-          )}
+    <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-4">
+      <div className="grid gap-2">
+        <Label htmlFor="email">Email</Label>
+        <div className="relative">
+          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            id="email"
+            type="email"
+            placeholder="me@example.com"
+            className="pl-10 border-gray-400 dark:border-border"
+            {...register('email')}
+          />
         </div>
-      </form>
-    </div>
+      </div>
+      {errors.email && (
+        <p className="text-sm text-destructive">{errors.email.message}</p>
+      )}
+      <Button
+        type="submit"
+        className="w-full shadow-sm cursor-pointer dark:text-gray-50"
+      >
+        Continue
+      </Button>
+      <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-gray-300 dark:after:border-border">
+        <span className="relative z-10 bg-background px-2 text-muted-foreground">
+          Or
+        </span>
+      </div>
+      <div className="grid">
+        <Button
+          type="button"
+          disabled={loadingProvider !== null}
+          variant="outline"
+          className="w-full border-gray-300 dark:border-border shadow-sm cursor-pointer"
+          onClick={() => handleSocialLogin('google')}
+        >
+          <Google />
+          {loadingProvider === 'google'
+            ? 'Logging in...'
+            : 'Continue with Google'}
+        </Button>
+      </div>
+      {error && (
+        <div className="text-sm text-destructive text-center">{error}</div>
+      )}
+    </form>
   );
 }
