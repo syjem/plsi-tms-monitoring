@@ -78,7 +78,9 @@ function SignatureMenu({ children }: { children: ReactNode }) {
           <DialogHeader>
             <DialogTitle>My Signature</DialogTitle>
             <DialogDescription>
-              {data?.success
+              {isFetching
+                ? 'Loading signature details...'
+                : data?.success
                 ? 'Manage your signature!'
                 : 'Enter your signature here!'}
             </DialogDescription>
