@@ -85,7 +85,10 @@ function SignatureMenu({ children }: { children: ReactNode }) {
           </DialogHeader>
           <div className="pb-4">
             {isLoading ? (
-              <Skeleton className="w-[500px] h-[300px]" />
+              <div className="flex flex-col items-end">
+                <Skeleton className="w-[500px] h-[300px]" />
+                <Skeleton className="w-[100px] h-9 mt-4" />
+              </div>
             ) : (
               <Fragment>
                 {shouldShowCanvas ? (
