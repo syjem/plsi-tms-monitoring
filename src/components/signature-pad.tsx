@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Signature, SignatureSettings } from '@/utils/classes/signature';
 import { Loader } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { toast } from 'sonner';
 
 /**
@@ -59,6 +59,7 @@ import { toast } from 'sonner';
  * @param {string} [props.strokeColor='#fff'] - Hex color code for the signature stroke
  * @param {string} [props.fillColor='#000'] - Hex color code for the canvas background
  * @param {Function} [props.onSaveSignature=() => {}] - Async callback executed on save. Receives PNG data URL. Should throw Error on failure.
+ * @param {boolean} [props.isSavingSignature] - A loading state when user is saving the signature
  *
  * @returns {JSX.Element} React component rendering canvas and control buttons
  *
@@ -91,15 +92,15 @@ function SignaturePad({
   width = 300,
   height = 300,
   onSaveSignature = () => {},
+  isSavingSignature = false,
   maxSize = 5 * 1024 * 1024, // 5mb
   ...rest
 }: SignatureSettings & {
   onSaveSignature?: (signatureData: string) => unknown | Promise<unknown>;
   maxSize?: number;
+  isSavingSignature: boolean;
 }) {
   const signatureRef = useRef<Signature | null>(null);
-
-  const [saving, setSaving] = useState(false);
 
   // Initialization
   useEffect(() => {
@@ -127,6 +128,8 @@ function SignaturePad({
    */
   const handleSave = async () => {
     try {
+      if (isSavingSignature) return;
+
       if (!signatureRef.current) {
         toast.error('Signature pad not initialized');
         return;
@@ -143,8 +146,6 @@ function SignaturePad({
         return;
       }
 
-      setSaving(true);
-
       await onSaveSignature(signatureData);
     } catch (e) {
       toast.error(
@@ -152,8 +153,6 @@ function SignaturePad({
           ? e.message
           : 'Saving signature has thrown an error!',
       );
-    } finally {
-      setSaving(false);
     }
   };
 
@@ -169,13 +168,13 @@ function SignaturePad({
         <Button variant="outline" onClick={onClear}>
           Clear
         </Button>
-        <Button onClick={handleSave} disabled={saving}>
-          {saving && (
+        <Button onClick={handleSave} disabled={isSavingSignature}>
+          {isSavingSignature && (
             <span className="animate-spin">
               <Loader />
             </span>
           )}
-          {saving ? 'Saving...' : 'Save'}
+          {isSavingSignature ? 'Saving...' : 'Save'}
         </Button>
       </div>
     </div>

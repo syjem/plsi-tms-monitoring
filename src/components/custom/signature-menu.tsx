@@ -21,32 +21,42 @@ import { toast } from 'sonner';
 function SignatureMenu({ children }: { children: ReactNode }) {
   const { user } = useAuthUser();
   const [edit, setEdit] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const { data, isLoading, refetch } = useQuery({
     queryFn: () => getEngineerById(user!.id),
     queryKey: [user?.id],
   });
 
-  const handleSaveSignature = (signatureData: string) => {
+  const handleSaveSignature = async (signatureData: string) => {
     try {
+      // enable loader
+      setSubmitting(true);
+
       if (!user) throw new Error('user not found!');
 
-      toast.promise(() => addEngineerSignature(user.id, signatureData), {
+      return toast.promise(() => addEngineerSignature(user.id, signatureData), {
         loading: 'Saving signature...',
         success: (data) => {
           if (!data.success) throw new Error(data.error.message);
 
           // fetch data from the database
           refetch();
-
+          setSubmitting(false);
           return 'Signature saved successfully!';
         },
-        error: (e) =>
-          e?.message || 'Something went wrong while tyring to save signature!',
+        error: (e) => {
+          setSubmitting(false);
+          return (
+            e?.message || 'Something went wrong while tyring to save signature!'
+          );
+        },
       });
     } catch (e) {
       if (e instanceof Error) {
         toast.error(e?.message || 'Something went wrong!');
       }
+      // reset state
+      setSubmitting(false);
     }
   };
 
@@ -84,6 +94,7 @@ function SignatureMenu({ children }: { children: ReactNode }) {
                     height={300}
                     onSaveSignature={handleSaveSignature}
                     strokeWidth={1.2}
+                    isSavingSignature={submitting}
                   />
                 ) : (
                   <div className="flex flex-col items-end">
