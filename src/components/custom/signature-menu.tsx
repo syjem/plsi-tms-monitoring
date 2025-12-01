@@ -64,7 +64,7 @@ function SignatureMenu({ children }: { children: ReactNode }) {
     }
   };
 
-  const shouldShowCanvas = edit || !data?.success;
+  const shouldShowCanvas = edit || !data?.success || !data.data?.signature;
 
   const onEditClick = useCallback(() => {
     setEdit((prev) => !prev);
@@ -80,9 +80,9 @@ function SignatureMenu({ children }: { children: ReactNode }) {
             <DialogDescription>
               {isFetching
                 ? 'Loading signature details...'
-                : data?.success
+                : data?.success && data?.data?.signature
                 ? 'Manage your signature!'
-                : 'Enter your signature here!'}
+                : 'Create your signature here!'}
             </DialogDescription>
           </DialogHeader>
           <div className="pb-4">
