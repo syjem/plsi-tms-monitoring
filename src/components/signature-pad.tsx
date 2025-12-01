@@ -95,12 +95,14 @@ function SignaturePad({
   isSavingSignature = false,
   maxSize = 5 * 1024 * 1024, // 5mb
   onCancel = () => {},
+  showCancelAction = false,
   ...rest
 }: SignatureSettings & {
   onSaveSignature?: (signatureData: string) => unknown | Promise<unknown>;
   maxSize?: number;
   isSavingSignature: boolean;
   onCancel?: () => void;
+  showCancelAction?: boolean;
 }) {
   const signatureRef = useRef<Signature | null>(null);
 
@@ -169,9 +171,13 @@ function SignaturePad({
         height={height}
       />
       <div className="flex items-center justify-between">
-        <Button variant="ghost" onClick={onCancel}>
-          Cancel
-        </Button>
+        <div className="flex-1">
+          {showCancelAction && (
+            <Button variant="ghost" onClick={onCancel}>
+              Cancel
+            </Button>
+          )}
+        </div>
         <div className="flex items-center justify-between gap-4">
           <Button variant="outline" onClick={onClear}>
             Clear
