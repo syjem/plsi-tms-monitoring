@@ -100,6 +100,7 @@ function SignatureMenu({ children }: { children: ReactNode }) {
                     onSaveSignature={handleSaveSignature}
                     strokeWidth={1.2}
                     isSavingSignature={submitting}
+                    onCancel={() => setEdit(false)}
                   />
                 ) : (
                   <div className="flex flex-col items-end">

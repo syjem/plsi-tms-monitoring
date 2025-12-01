@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Signature, SignatureSettings } from '@/utils/classes/signature';
-import { Loader } from 'lucide-react';
+import { Loader, Save } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { toast } from 'sonner';
 
@@ -94,11 +94,13 @@ function SignaturePad({
   onSaveSignature = () => {},
   isSavingSignature = false,
   maxSize = 5 * 1024 * 1024, // 5mb
+  onCancel = () => {},
   ...rest
 }: SignatureSettings & {
   onSaveSignature?: (signatureData: string) => unknown | Promise<unknown>;
   maxSize?: number;
   isSavingSignature: boolean;
+  onCancel?: () => void;
 }) {
   const signatureRef = useRef<Signature | null>(null);
 
@@ -157,7 +159,7 @@ function SignaturePad({
   };
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-4">
       <canvas
         id="signature-canvas"
         className="border border-border"
@@ -165,17 +167,24 @@ function SignaturePad({
         height={height}
       />
       <div className="flex items-center justify-between">
-        <Button variant="outline" onClick={onClear}>
-          Clear
+        <Button variant="ghost" onClick={onCancel}>
+          Cancel
         </Button>
-        <Button onClick={handleSave} disabled={isSavingSignature}>
-          {isSavingSignature && (
-            <span className="animate-spin">
-              <Loader />
-            </span>
-          )}
-          {isSavingSignature ? 'Saving...' : 'Save'}
-        </Button>
+        <div className="flex items-center justify-between gap-4">
+          <Button variant="outline" onClick={onClear}>
+            Clear
+          </Button>
+          <Button onClick={handleSave} disabled={isSavingSignature}>
+            {isSavingSignature ? (
+              <span className="animate-spin">
+                <Loader />
+              </span>
+            ) : (
+              <Save />
+            )}
+            {isSavingSignature ? 'Saving Signature...' : 'Save Signature'}
+          </Button>
+        </div>
       </div>
     </div>
   );
