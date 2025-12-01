@@ -174,9 +174,9 @@ export class EngineerController {
           signature: engineers.signature,
         })
         .from(engineers)
-        .where(eq(engineers.id, id));
+        .where(eq(engineers.user_id, id));
 
-      return result[0];
+      return result.length > 0 ? result[0] : null;
     } catch (e) {
       if (e instanceof Error) {
         throw new Error(

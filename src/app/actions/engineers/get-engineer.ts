@@ -8,6 +8,8 @@ import { withErrorHandler } from '@/utils/with-error-handler';
 
 export async function getEngineerById(id: string) {
   const result = await withErrorHandler(async () => {
+    if (!id) throw new Error('id is required!');
+
     const { user } = await getClaims();
 
     // throw an error if the request is not authenticated
