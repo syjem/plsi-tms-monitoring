@@ -15,14 +15,14 @@ import { DialogTitle } from '@radix-ui/react-dialog';
 import { useQuery } from '@tanstack/react-query';
 import { Pencil } from 'lucide-react';
 import Image from 'next/image';
-import { Fragment, ReactNode, useCallback, useEffect, useState } from 'react';
+import { Fragment, ReactNode, useCallback, useState } from 'react';
 import { toast } from 'sonner';
 
 function SignatureMenu({ children }: { children: ReactNode }) {
   const { user } = useAuthUser();
   const [edit, setEdit] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const { data, isLoading, refetch } = useQuery({
+  const { data, refetch, isFetching } = useQuery({
     queryFn: () => getEngineerById(user!.id),
     queryKey: [user?.id],
   });
@@ -41,7 +41,11 @@ function SignatureMenu({ children }: { children: ReactNode }) {
 
           // fetch data from the database
           refetch();
+          // reset edit mode
+          setEdit(false);
+          // reset loader
           setSubmitting(false);
+
           return 'Signature saved successfully!';
         },
         error: (e) => {
@@ -66,14 +70,6 @@ function SignatureMenu({ children }: { children: ReactNode }) {
     setEdit((prev) => !prev);
   }, []);
 
-  // This will reset edit mode when the data is updated making sure that the data is fetched before resetting it avoiding content sudden change
-  useEffect(() => {
-    // reset edit state
-    if (edit) {
-      setEdit(false);
-    }
-  }, [data]);
-
   return (
     <Dialog>
       <form>
@@ -88,7 +84,7 @@ function SignatureMenu({ children }: { children: ReactNode }) {
             </DialogDescription>
           </DialogHeader>
           <div className="pb-4">
-            {isLoading ? (
+            {isFetching ? (
               <div className="flex flex-col items-end">
                 <Skeleton className="w-[500px] h-[300px]" />
                 <Skeleton className="w-[100px] h-9 mt-4" />
