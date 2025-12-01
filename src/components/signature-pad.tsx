@@ -160,7 +160,7 @@ function SignaturePad({
     <div className="space-y-2">
       <canvas
         id="signature-canvas"
-        className="bg-card border border-border"
+        className="border border-border"
         width={width}
         height={height}
       />

@@ -106,12 +106,6 @@ export class Signature {
     this.context.strokeStyle = this.settings.strokeColor!;
 
     this.context.lineCap = 'round';
-
-    // set canvas color style
-    this.context.fillStyle = this.settings.fillColor!;
-
-    // draw canvas
-    this.context.fillRect(0, 0, canvas.width, canvas.height);
   }
 
   /**
