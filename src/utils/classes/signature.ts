@@ -60,9 +60,9 @@ export class Signature {
   private canvas!: HTMLCanvasElement | null;
   private isDrawing: boolean = false;
   private lastPosition = { x: 0, y: 0 };
-  private boundMouseDown: (e: MouseEvent) => void;
-  private boundPointerMove: (e: MouseEvent) => void;
-  private boundMouseUp: (e: MouseEvent) => void;
+  private boundMouseDown: (e: MouseEvent | TouchEvent) => void;
+  private boundPointerMove: (e: MouseEvent | TouchEvent) => void;
+  private boundMouseUp: (e: MouseEvent | TouchEvent) => void;
 
   constructor(settings: SignatureSettings) {
     // apply settings update
@@ -122,10 +122,14 @@ export class Signature {
    */
   private attachEventListeners() {
     if (typeof document === 'undefined') return;
-
-    this.canvas!.addEventListener('mouseup', this.boundMouseUp);
     document.addEventListener('mousemove', this.boundPointerMove);
     this.canvas!.addEventListener('mousedown', this.boundMouseDown);
+    this.canvas!.addEventListener('mouseup', this.boundMouseUp);
+
+    // Touch events
+    this.canvas!.addEventListener('touchstart', this.boundMouseDown);
+    this.canvas!.addEventListener('touchend', this.boundMouseDown);
+    document.addEventListener('touchmove', this.boundPointerMove);
   }
 
   /**
@@ -137,26 +141,46 @@ export class Signature {
     document.removeEventListener('mousemove', this.boundPointerMove);
     this.canvas!.removeEventListener('mousedown', this.boundMouseDown);
     this.canvas!.removeEventListener('mouseup', this.boundMouseUp);
+
+    // Touch events
+    this.canvas!.removeEventListener('touchstart', this.boundMouseUp);
+    this.canvas!.removeEventListener('touchend', this.boundMouseDown);
+    document.removeEventListener('touchmove', this.boundPointerMove);
   }
 
   /**
    * Handles the mouseUp event - ends the drawing path
    */
-  private mouseUp(e: MouseEvent) {
+  private mouseUp(e: MouseEvent | TouchEvent) {
     this.setDrawing(false);
   }
 
   /**
    * Handles the mouseDown event - begins a new drawing path
    */
-  private mouseDown(e: MouseEvent) {
-    const { x, y } = this.getXYPosition(e);
+  private mouseDown(e: MouseEvent | TouchEvent) {
+    let coordinates;
 
-    this.setLastPosition({ x, y });
+    if ('touches' in e && e.touches.length > 0) {
+      // It's a touch event
+      const touch = e.touches[0];
+      coordinates = this.getXYPosition({
+        clientX: touch.clientX,
+        clientY: touch.clientY,
+      });
+    } else {
+      // It's a mouse event
+      coordinates = this.getXYPosition({
+        clientX: (e as MouseEvent).clientX,
+        clientY: (e as MouseEvent).clientY,
+      });
+    }
+
+    this.setLastPosition(coordinates);
     this.setDrawing(true);
 
     this.context.beginPath();
-    this.context.moveTo(x, y);
+    this.context.moveTo(coordinates.x, coordinates.y);
   }
 
   /**
@@ -176,30 +200,56 @@ export class Signature {
   /**
    * Calculates mouse coordinates relative to the canvas element
    */
-  private getXYPosition(e: MouseEvent) {
+  private getXYPosition({
+    clientX,
+    clientY,
+  }: {
+    clientX: number;
+    clientY: number;
+  }) {
     const rect = this.canvas!.getBoundingClientRect();
     return {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
+      x: clientX - rect.left,
+      y: clientY - rect.top,
     };
   }
 
   /**
    * Handles the mousemove event - draws lines on the canvas
    */
-  private pointerMove(e: MouseEvent) {
+  private pointerMove(e: MouseEvent | TouchEvent) {
     if (!this.isDrawing) return;
-    // get mouse coordinates
-    const { x, y } = this.getXYPosition(e);
+    let coordinates;
+    let clientX;
+    let clientY;
+    if ('touches' in e && e.touches.length > 0) {
+      // It's a touch event
+      const touch = e.touches[0];
+      clientX = touch.clientX;
+      clientY = touch.clientY;
 
-    this.drawLine({ x, y, type: 'quadratic' });
+      coordinates = this.getXYPosition({
+        clientX: touch.clientX,
+        clientY: touch.clientY,
+      });
+    } else {
+      // It's a mouse event
+      clientX = (e as MouseEvent).clientX;
+      clientY = (e as MouseEvent).clientY;
+      coordinates = this.getXYPosition({
+        clientX: (e as MouseEvent).clientX,
+        clientY: (e as MouseEvent).clientY,
+      });
+    }
+
+    this.drawLine({ x: coordinates.x, y: coordinates.y, type: 'quadratic' });
 
     this.context.stroke();
 
-    this.setLastPosition({ x, y });
+    this.setLastPosition(coordinates);
 
     // check if the position is out of the canvas
-    if (this.isOutOfCanvasBounds(e)) {
+    if (this.isOutOfCanvasBounds({ clientX, clientY })) {
       this.setDrawing(false);
     }
   }
@@ -241,8 +291,14 @@ export class Signature {
    * @param {MouseEvent} event - The mouse event
    * @returns {boolean} True if cursor is within canvas bounds
    */
-  private isOutOfCanvasBounds(event: MouseEvent): boolean {
-    const { x, y } = this.getXYPosition(event);
+  private isOutOfCanvasBounds({
+    clientX,
+    clientY,
+  }: {
+    clientX: number;
+    clientY: number;
+  }): boolean {
+    const { x, y } = this.getXYPosition({ clientX, clientY });
     const rect = this.canvas!.getBoundingClientRect();
 
     // Check if x and y are within the canvas boundaries
