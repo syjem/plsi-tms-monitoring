@@ -81,7 +81,11 @@ function SignatureMenu({ children }: { children: ReactNode }) {
         <DialogContent className="max-w-[425px] md:max-w-fit">
           <DialogHeader>
             <DialogTitle>My Signature</DialogTitle>
-            <DialogDescription>Enter your signature here!</DialogDescription>
+            <DialogDescription>
+              {data?.success
+                ? 'Manage your signature!'
+                : 'Enter your signature here!'}
+            </DialogDescription>
           </DialogHeader>
           <div className="pb-4">
             {isLoading ? (
