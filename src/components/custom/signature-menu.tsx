@@ -111,7 +111,11 @@ function SignatureMenu({ children }: { children: ReactNode }) {
                         height={300}
                       />
                     </div>
-                    <Button variant="outline" onClick={onEditClick}>
+                    <Button
+                      variant="outline"
+                      className="mt-4"
+                      onClick={onEditClick}
+                    >
                       <Pencil /> Edit Signature
                     </Button>
                   </div>
