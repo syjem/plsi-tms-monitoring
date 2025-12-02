@@ -22,6 +22,7 @@ import React, { useState } from 'react';
 export function CurrentUserAvatar({ user }: { user: JwtPayload }) {
   const { theme, setTheme } = useTheme();
   const [loading, setLoading] = useState(false);
+  const [openSignatureDialog, setSignatureDialogState] = useState(false);
   const router = useRouter();
 
   const userName = user.user_metadata.full_name as string;
@@ -63,8 +64,15 @@ export function CurrentUserAvatar({ user }: { user: JwtPayload }) {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <SignatureMenu>
-          <DropdownMenuLabel className="cursor-default" role="button">
+        <SignatureMenu
+          open={openSignatureDialog}
+          onOpenChange={setSignatureDialogState}
+        >
+          <DropdownMenuLabel
+            className="cursor-default"
+            role="button"
+            onClick={() => setSignatureDialogState((prev) => !prev)}
+          >
             My Signature
           </DropdownMenuLabel>
         </SignatureMenu>

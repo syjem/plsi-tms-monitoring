@@ -11,14 +11,14 @@ import {
 } from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuthUser } from '@/provider/auth-user.provider';
-import { DialogTitle } from '@radix-ui/react-dialog';
+import { DialogProps, DialogTitle } from '@radix-ui/react-dialog';
 import { useQuery } from '@tanstack/react-query';
 import { Pencil } from 'lucide-react';
 import Image from 'next/image';
-import { Fragment, ReactNode, useCallback, useState } from 'react';
+import { Fragment, useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-function SignatureMenu({ children }: { children: ReactNode }) {
+function SignatureMenu({ children, open, ...rest }: DialogProps) {
   const { user } = useAuthUser();
   const [edit, setEdit] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -70,8 +70,18 @@ function SignatureMenu({ children }: { children: ReactNode }) {
     setEdit((prev) => !prev);
   }, []);
 
+  // Reset edit state in close modal
+  useEffect(() => {
+    if (!open) {
+      const timer = setTimeout(() => {
+        setEdit(false);
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [open]);
+
   return (
-    <Dialog>
+    <Dialog open={open} {...rest}>
       <form>
         <DialogTrigger asChild>{children}</DialogTrigger>
         <DialogContent className="max-w-[425px] md:max-w-fit">
@@ -98,7 +108,7 @@ function SignatureMenu({ children }: { children: ReactNode }) {
                     width={500}
                     height={300}
                     onSaveSignature={handleSaveSignature}
-                    strokeWidth={1.2}
+                    strokeWidth={1.5}
                     isSavingSignature={submitting}
                     onCancel={() => setEdit(false)}
                     showCancelAction={edit}
