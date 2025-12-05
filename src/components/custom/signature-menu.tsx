@@ -9,68 +9,38 @@ import {
   DialogHeader,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useElementSize } from '@/hooks/use-element-size';
+
+import useScreenSize from '@/hooks/use-screen-size';
 import { useAuthUser } from '@/provider/auth-user.provider';
 import { DialogProps, DialogTitle } from '@radix-ui/react-dialog';
 import { useQuery } from '@tanstack/react-query';
 import { Pencil } from 'lucide-react';
 import Image from 'next/image';
-import { Fragment, useCallback, useEffect, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
 function SignatureMenu({ children, open, ...rest }: DialogProps) {
   const { user } = useAuthUser();
   const [edit, setEdit] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const { ref, width, padding } = useElementSize<HTMLDivElement>();
+  const { width: windowWidth } = useScreenSize();
   const { data, refetch, isFetching } = useQuery({
     queryFn: () => getEngineerById(user!.id),
     queryKey: [user?.id],
   });
 
-  const handleSaveSignature = async (signatureData: string) => {
-    try {
-      // enable loader
-      setSubmitting(true);
-
-      if (!user) throw new Error('user not found!');
-
-      return toast.promise(() => addEngineerSignature(user.id, signatureData), {
-        loading: 'Saving signature...',
-        success: (data) => {
-          if (!data.success) throw new Error(data.error.message);
-
-          // fetch data from the database
-          refetch();
-          // reset edit mode
-          setEdit(false);
-          // reset loader
-          setSubmitting(false);
-
-          return 'Signature saved successfully!';
-        },
-        error: (e) => {
-          setSubmitting(false);
-          return (
-            e?.message || 'Something went wrong while tyring to save signature!'
-          );
-        },
-      });
-    } catch (e) {
-      if (e instanceof Error) {
-        toast.error(e?.message || 'Something went wrong!');
-      }
-      // reset state
-      setSubmitting(false);
-    }
-  };
-
-  const shouldShowCanvas = edit || !data?.success || !data.data?.signature;
-
-  const onEditClick = useCallback(() => {
-    setEdit((prev) => !prev);
-  }, []);
-
-  // Reset edit state in close modal
+  // Reset edit state on close modal
   useEffect(() => {
     if (!open) {
       const timer = setTimeout(() => {
@@ -80,32 +50,94 @@ function SignatureMenu({ children, open, ...rest }: DialogProps) {
     }
   }, [open]);
 
+  const handleSaveSignature = useCallback(
+    async (signatureData: string) => {
+      try {
+        // enable loader
+        setSubmitting(true);
+
+        if (!user) throw new Error('user not found!');
+
+        return toast.promise(
+          () => addEngineerSignature(user.id, signatureData),
+          {
+            loading: 'Saving signature...',
+            success: (data) => {
+              if (!data.success) throw new Error(data.error.message);
+
+              // fetch data from the database
+              refetch();
+              // reset edit mode
+              setEdit(false);
+              // reset loader
+              setSubmitting(false);
+
+              return 'Signature saved successfully!';
+            },
+            error: (e) => {
+              setSubmitting(false);
+              return (
+                e?.message ||
+                'Something went wrong while tyring to save signature!'
+              );
+            },
+          },
+        );
+      } catch (e) {
+        if (e instanceof Error) {
+          toast.error(e?.message || 'Something went wrong!');
+        }
+        // reset state
+        setSubmitting(false);
+      }
+    },
+    [refetch, user],
+  );
+
+  const onEditClick = useCallback(() => {
+    setEdit((prev) => !prev);
+  }, []);
+
+  const isInMobile = windowWidth <= 540;
+  const shouldShowCanvas = edit || !data?.success || !data.data?.signature;
+
+  const widthForMobile = useMemo(() => {
+    return width - (padding.right + padding.left);
+  }, [width, padding]);
+
+  const Comp = isInMobile ? Sheet : Dialog;
+  const CompTrigger = isInMobile ? SheetTrigger : DialogTrigger;
+  const CompContent = isInMobile ? SheetContent : DialogContent;
+  const CompHeader = isInMobile ? SheetHeader : DialogHeader;
+  const CompTitle = isInMobile ? SheetTitle : DialogTitle;
+  const CompDescription = isInMobile ? SheetDescription : DialogDescription;
+
   return (
-    <Dialog open={open} {...rest}>
+    <Comp open={open} {...rest}>
       <form>
-        <DialogTrigger asChild>{children}</DialogTrigger>
-        <DialogContent className="max-w-[425px] md:max-w-fit">
-          <DialogHeader>
-            <DialogTitle>My Signature</DialogTitle>
-            <DialogDescription>
+        <CompTrigger asChild>{children}</CompTrigger>
+        <CompContent className="max-w-full md:max-w-fit" side="bottom">
+          <CompHeader>
+            <CompTitle>My Signature</CompTitle>
+            <CompDescription>
               {isFetching
                 ? 'Loading signature details...'
                 : data?.success && data?.data?.signature
                 ? 'Manage your signature!'
                 : 'Create your signature here!'}
-            </DialogDescription>
-          </DialogHeader>
-          <div className="pb-4">
+            </CompDescription>
+          </CompHeader>
+          <div className="p-4 w-full md:w-[500px]" ref={ref}>
             {isFetching ? (
               <div className="flex flex-col items-end">
-                <Skeleton className="w-[500px] h-[300px]" />
+                <Skeleton className="w-full md:w-[500px] h-[300px]" />
                 <Skeleton className="w-[100px] h-9 mt-4" />
               </div>
             ) : (
               <Fragment>
                 {shouldShowCanvas ? (
                   <SignaturePad
-                    width={500}
+                    width={isInMobile ? widthForMobile : 500}
                     height={300}
                     onSaveSignature={handleSaveSignature}
                     strokeWidth={1.5}
@@ -115,12 +147,11 @@ function SignatureMenu({ children, open, ...rest }: DialogProps) {
                   />
                 ) : (
                   <div className="flex flex-col items-end">
-                    <div className="w-[500px] h-[300px] bg-muted rounded-md">
+                    <div className="h-[300px] w-full md:w-[500px] bg-muted rounded-md relative">
                       <Image
                         src={data.data?.signature as string}
                         alt="signature"
-                        width={500}
-                        height={300}
+                        fill
                       />
                     </div>
                     <Button
@@ -135,9 +166,9 @@ function SignatureMenu({ children, open, ...rest }: DialogProps) {
               </Fragment>
             )}
           </div>
-        </DialogContent>
+        </CompContent>
       </form>
-    </Dialog>
+    </Comp>
   );
 }
 

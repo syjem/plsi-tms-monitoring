@@ -127,7 +127,9 @@ export class Signature {
     this.canvas!.addEventListener('mouseup', this.boundMouseUp);
 
     // Touch events
-    this.canvas!.addEventListener('touchstart', this.boundMouseDown);
+    this.canvas!.addEventListener('touchstart', this.boundMouseDown, {
+      passive: true,
+    });
     this.canvas!.addEventListener('touchend', this.boundMouseDown);
     document.addEventListener('touchmove', this.boundPointerMove);
   }
