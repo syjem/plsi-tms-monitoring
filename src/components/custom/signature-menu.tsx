@@ -127,7 +127,7 @@ function SignatureMenu({ children, open, ...rest }: DialogProps) {
                 : 'Create your signature here!'}
             </CompDescription>
           </CompHeader>
-          <div className="p-4 w-full md:w-[500px]" ref={ref}>
+          <div className="p-4 pt-0 md:p-0 w-full" ref={ref}>
             {isFetching ? (
               <div className="flex flex-col items-end">
                 <Skeleton className="w-full md:w-[500px] h-[300px]" />
