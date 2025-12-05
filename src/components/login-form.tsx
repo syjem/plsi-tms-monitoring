@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { createClient } from '@/lib/supabase/client';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Mail } from 'lucide-react';
+import { Loader, Mail } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -19,9 +19,10 @@ type EmailFormData = z.infer<typeof emailSchema>;
 
 interface EmailStepProps {
   onSubmit: (email: string) => void;
+  isLoading: boolean;
 }
 
-export function LoginForm({ onSubmit }: EmailStepProps) {
+export function LoginForm({ onSubmit, isLoading }: EmailStepProps) {
   const [error, setError] = useState<string | null>(null);
   const [loadingProvider, setLoadingProvider] = useState<'google' | null>(null);
 
@@ -66,6 +67,7 @@ export function LoginForm({ onSubmit }: EmailStepProps) {
           <Input
             id="email"
             type="email"
+            disabled={isLoading}
             placeholder="me@example.com"
             className="pl-10 border-gray-400 dark:border-border"
             {...register('email')}
@@ -77,9 +79,17 @@ export function LoginForm({ onSubmit }: EmailStepProps) {
       )}
       <Button
         type="submit"
+        disabled={isLoading}
         className="w-full shadow-sm cursor-pointer dark:text-gray-50"
       >
-        Continue
+        {isLoading ? (
+          <>
+            <Loader className="animate-spin ml-1" />
+            Logging in...
+          </>
+        ) : (
+          'Log in'
+        )}
       </Button>
       <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-gray-300 dark:after:border-border">
         <span className="relative z-10 bg-background px-2 text-muted-foreground">
