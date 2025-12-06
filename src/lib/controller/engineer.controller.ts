@@ -133,7 +133,7 @@ export class EngineerController {
           .from(engineers)
           .where(eq(engineers.email, data.email!));
 
-        if (existingUser) throw new Error('User already exists!');
+        if (existingUser.length > 0) throw new Error('User already exists!');
 
         const newUser = await txs
           .insert(engineers)
