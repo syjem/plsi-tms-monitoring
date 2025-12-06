@@ -1,5 +1,6 @@
 'use client';
 
+import SignatureMenu from '@/components/custom/signature-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -21,6 +22,7 @@ import React, { useState } from 'react';
 export function CurrentUserAvatar({ user }: { user: JwtPayload }) {
   const { theme, setTheme } = useTheme();
   const [loading, setLoading] = useState(false);
+  const [openSignatureDialog, setSignatureDialogState] = useState(false);
   const router = useRouter();
 
   const userName = user.user_metadata.full_name as string;
@@ -61,6 +63,19 @@ export function CurrentUserAvatar({ user }: { user: JwtPayload }) {
             <address className="text-muted-foreground">{email}</address>
           </div>
         </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <SignatureMenu
+          open={openSignatureDialog}
+          onOpenChange={setSignatureDialogState}
+        >
+          <DropdownMenuLabel
+            className="cursor-default"
+            role="button"
+            onClick={() => setSignatureDialogState((prev) => !prev)}
+          >
+            My Signature
+          </DropdownMenuLabel>
+        </SignatureMenu>
         <DropdownMenuSeparator />
         <DropdownMenuLabel>
           <div className="flex items-center justify-between">

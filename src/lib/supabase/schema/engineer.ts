@@ -1,7 +1,6 @@
 import { users } from '@/lib/supabase/auth-reference';
 import { relations, sql } from 'drizzle-orm';
 import {
-  bigint,
   check,
   pgTable,
   smallint,
@@ -14,22 +13,22 @@ import {
 export const engineers = pgTable(
   'engineers',
   {
-    id: bigint({ mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
+    id: uuid().primaryKey().defaultRandom(),
     created_at: timestamp({ withTimezone: true }).notNull().defaultNow(),
     updated_at: timestamp({ withTimezone: true }).notNull().defaultNow(),
     name: text(),
     title: text(),
     signature: text(), // Store base64 string
     phone: varchar({ length: 50 }),
-    userId: uuid('id')
-      .primaryKey()
+    email: text(),
+    user_id: uuid()
       .references(() => users.id, {
         onDelete: 'cascade',
       })
       .notNull(),
-    fieldNumber: smallint(),
+    field_number: smallint(),
   },
-  (table) => [check('field_number_check', sql`${table.fieldNumber} > 0`)],
+  (table) => [check('field_number_check', sql`${table.field_number} > 0`)],
 );
 
 // Type inference
@@ -39,7 +38,7 @@ export type NewEngineer = typeof engineers.$inferInsert;
 // Relations
 export const engineersRelations = relations(engineers, ({ one }) => ({
   user: one(users, {
-    fields: [engineers.userId],
+    fields: [engineers.user_id],
     references: [users.id],
   }),
 }));
