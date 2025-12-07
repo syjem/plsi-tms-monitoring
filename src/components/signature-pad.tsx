@@ -182,7 +182,11 @@ function SignaturePad({
           <Button variant="outline" onClick={onClear}>
             Clear
           </Button>
-          <Button onClick={handleSave} disabled={isSavingSignature}>
+          <Button
+            className="dark:text-slate-200"
+            onClick={handleSave}
+            disabled={isSavingSignature}
+          >
             {isSavingSignature ? (
               <span className="animate-spin">
                 <Loader />

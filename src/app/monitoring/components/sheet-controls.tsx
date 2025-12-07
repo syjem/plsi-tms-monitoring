@@ -1,21 +1,22 @@
-"use client";
+'use client';
 
-import React from "react";
+import { Button } from '@/components/ui/button';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Button } from "@/components/ui/button";
-import { Printer, Save, SquarePen } from "lucide-react";
+} from '@/components/ui/tooltip';
+import { Loader, Printer, Save, SquarePen } from 'lucide-react';
 
 type ButtonActionsProps = {
+  isSaving: boolean;
   isEditable: boolean;
   saveSheet: () => void;
   enableEditing: () => void;
 };
 
 export function SheetControls({
+  isSaving,
   isEditable,
   saveSheet,
   enableEditing,
@@ -32,10 +33,15 @@ export function SheetControls({
             <TooltipTrigger asChild>
               <Button
                 size="icon"
+                disabled={isSaving}
                 onClick={saveSheet}
                 className="cursor-pointer dark:text-white"
               >
-                <Save className="h-4 w-4" />
+                {isSaving ? (
+                  <Loader className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Save className="h-4 w-4" />
+                )}
               </Button>
             </TooltipTrigger>
             <TooltipContent side="left" sideOffset={4}>

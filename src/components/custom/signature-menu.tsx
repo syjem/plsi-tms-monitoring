@@ -25,11 +25,13 @@ import { useAuthUser } from '@/provider/auth-user.provider';
 import { DialogProps, DialogTitle } from '@radix-ui/react-dialog';
 import { useQuery } from '@tanstack/react-query';
 import { Pencil } from 'lucide-react';
+import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
 function SignatureMenu({ children, open, ...rest }: DialogProps) {
+  const { theme } = useTheme();
   const { user } = useAuthUser();
   const [edit, setEdit] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -140,10 +142,11 @@ function SignatureMenu({ children, open, ...rest }: DialogProps) {
                     width={isInMobile ? widthForMobile : 500}
                     height={300}
                     onSaveSignature={handleSaveSignature}
-                    strokeWidth={1.5}
+                    strokeWidth={1}
                     isSavingSignature={submitting}
                     onCancel={() => setEdit(false)}
                     showCancelAction={edit}
+                    strokeColor={theme === 'dark' ? '#ffffff' : '#000000'}
                   />
                 ) : (
                   <div className="flex flex-col items-end">

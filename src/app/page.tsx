@@ -31,7 +31,7 @@ async function HeroSection() {
         Welcome,{' '}
         <span className="text-primary">{user.user_metadata.full_name}~</span>
       </p>
-      <h1 className="text-2xl font-extrabold text-gray-900 dark:text-gray-100 font-sans">
+      <h1 className="text-xl md:text-2xl font-extrabold text-gray-900 dark:text-gray-100 font-sans">
         Phillogix Systems Employee <br /> Monitoring
       </h1>
     </div>

@@ -1,5 +1,4 @@
-import { Dropzone } from '@/components/dropzone';
-import { EmptyFileManager } from '@/components/file-manager-empty';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export function TabSectionSkeleton() {
@@ -18,10 +17,9 @@ export function TabSectionSkeleton() {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="upload">
-          <Dropzone />
-        </TabsContent>
-        <TabsContent value="files">
-          <EmptyFileManager />
+          <div className="rounded-lg border-2 border-dashed bg-white dark:bg-slate-900 transition-all duration-500 border-gray-300 dark:border-slate-800 hover:border-gray-400 dark:hover:border-gray-700 hover:shadow-md">
+            <Skeleton className="h-[208px] w-full dark:bg-inherit" />
+          </div>
         </TabsContent>
       </Tabs>
     </section>
