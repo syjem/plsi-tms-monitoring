@@ -1,17 +1,7 @@
-"use client";
+'use client';
 
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { toast } from "sonner";
-import { Logs } from "@/types";
-import { cn } from "@/lib/utils";
+import { deleteWorkLog } from '@/app/actions/logs/delete-work-log';
+import { EmptyFileManager } from '@/components/file-manager-empty';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,7 +11,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+} from '@/components/ui/alert-dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,13 +19,24 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { formatISODate } from "@/utils/format-date";
-import { deleteWorkLog } from "@/app/actions/logs/delete-work-log";
-import { EmptyFileManager } from "@/components/file-manager-empty";
-import { CheckCheck, CircleAlert, Ellipsis, Loader } from "lucide-react";
+} from '@/components/ui/dropdown-menu';
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { cn } from '@/lib/utils';
+import { Logs } from '@/types';
+import { formatISODate } from '@/utils/format-date';
+import { CheckCheck, CircleAlert, Ellipsis, Loader } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 function FileManager({ logs }: { logs: Logs[] }) {
   const router = useRouter();
@@ -49,7 +50,7 @@ function FileManager({ logs }: { logs: Logs[] }) {
   }, []);
 
   const deleteLogHandler = async (id: string) => {
-    const toastId = toast.warning("Deleting log...", {
+    const toastId = toast.warning('Deleting log...', {
       icon: <Loader className="h-4 w-4 animate-spin" />,
     });
 
@@ -71,7 +72,7 @@ function FileManager({ logs }: { logs: Logs[] }) {
       router.refresh();
     } catch (error) {
       console.error(error);
-      toast.error("An error has occurred, please try again!", {
+      toast.error('An error has occurred, please try again!', {
         id: toastId,
         icon: <CircleAlert className="h-4 w-4" />,
       });
@@ -96,24 +97,28 @@ function FileManager({ logs }: { logs: Logs[] }) {
       ) : (
         <div
           className={cn(
-            "p-6 transition-all duration-500 ease-out",
-            visible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+            'p-6 transition-all duration-500 ease-out',
+            visible ? 'opacity-100 scale-100' : 'opacity-0 scale-95',
           )}
         >
           <Table>
             <TableCaption>Your recent logs</TableCaption>
             <TableHeader>
               <TableRow className="dark:hover:bg-slate-800">
-                <TableHead className="w-[200px]">Date</TableHead>
-                <TableHead>Last modified</TableHead>
+                <TableHead className="w-[200px] font-bold">Date</TableHead>
+                <TableHead className="font-bold">Last modified</TableHead>
                 <TableHead className="sr-only">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {logs.map((log) => (
                 <TableRow key={log.id} className="dark:hover:bg-slate-800">
-                  <TableCell className="font-medium">{log.date}</TableCell>
-                  <TableCell>{formatISODate(log.updated_at)}</TableCell>
+                  <TableCell className="font-medium text-muted-foreground">
+                    {log.date}
+                  </TableCell>
+                  <TableCell className="font-medium text-muted-foreground">
+                    {formatISODate(log.updated_at)}
+                  </TableCell>
 
                   <TableCell className="flex items-center justify-center rounded-full p-2">
                     <DropdownMenu>
@@ -123,10 +128,14 @@ function FileManager({ logs }: { logs: Logs[] }) {
                       <DropdownMenuContent>
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                          onClick={() => router.push(`/monitoring/${log.id}`)}
-                        >
-                          View
+                        <DropdownMenuItem asChild>
+                          <Link
+                            href={`/monitoring/${log.id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            View
+                          </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onClick={() => {

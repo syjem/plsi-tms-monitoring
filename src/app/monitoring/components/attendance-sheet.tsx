@@ -26,6 +26,7 @@ export default function AttendanceSheet({
 }) {
   const [isEditable, setIsEditable] = useState(false);
   const [hoveredGroup, setHoveredGroup] = useState<number | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   const [attendanceData, setAttendanceData] = useState<AttendanceData>(() => {
     if (workLogs?.logs && workLogs.logs.length > 0) {
@@ -66,6 +67,7 @@ export default function AttendanceSheet({
   };
 
   const saveSheet = async () => {
+    setIsSaving(true);
     const toastId = toast.loading('Saving attendance sheet...');
 
     try {
@@ -91,6 +93,7 @@ export default function AttendanceSheet({
       toast.error('Failed to save attendance sheet.', { id: toastId });
     } finally {
       setTimeout(() => toast.dismiss(toastId), 1500);
+      setIsSaving(false);
     }
   };
 
@@ -174,6 +177,7 @@ export default function AttendanceSheet({
       <AttendanceSheetHeader />
 
       <SheetControls
+        isSaving={isSaving}
         isEditable={isEditable}
         saveSheet={saveSheet}
         enableEditing={enableEditing}
