@@ -1,10 +1,9 @@
-"use client";
-
-import { cn } from "@/lib/utils";
-import { Plus } from "lucide-react";
-import type { AttendanceRow } from "@/types";
-import React, { SetStateAction } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
+import { TableCell, TableRow } from '@/components/ui/table';
+import { cn } from '@/lib/utils';
+import type { AttendanceRow } from '@/types';
+import { Plus } from 'lucide-react';
+import { SetStateAction } from 'react';
 
 type TableRowProps = {
   groupIndex: number;
@@ -20,11 +19,11 @@ type TableRowProps = {
     groupIndex: number,
     rowIndex: number,
     field: keyof AttendanceRow,
-    value: string
+    value: string,
   ) => void;
 };
 
-function TableRow({
+export function CustomTableRow({
   groupIndex,
   row,
   rowIndex,
@@ -37,15 +36,15 @@ function TableRow({
   updateCell,
 }: TableRowProps) {
   return (
-    <tr
+    <TableRow
       className={cn(
-        "h-8 print:h-4.5 transition-colors duration-150",
-        isEditable && isHighlighted && "bg-blue-100 dark:bg-slate-800"
+        'h-8 print:h-4.5 transition-colors duration-150',
+        isEditable && isHighlighted && 'bg-blue-100 dark:bg-slate-800',
       )}
       onMouseEnter={() => setHoveredGroup(groupIndex)}
       onMouseLeave={() => setHoveredGroup(null)}
     >
-      <td className="relative border border-black dark:border-gray-500 px-1">
+      <TableCell className="relative border border-black dark:border-gray-500 px-1">
         {isEditable && isHighlighted && isFirstRowInGroup && isRowNotEmpty && (
           <Button
             size="icon"
@@ -59,115 +58,113 @@ function TableRow({
           type="text"
           value={row.date}
           onChange={(e) =>
-            updateCell(groupIndex, rowIndex, "date", e.target.value)
+            updateCell(groupIndex, rowIndex, 'date', e.target.value)
           }
           className={cn(
-            "w-full h-full border-none outline-none bg-transparent text-xs print:text-[10px] uppercase",
-            isEditable ? "cursor-text" : "cursor-default text-center"
+            'w-full h-full border-none outline-none bg-transparent text-xs print:text-[10px] uppercase',
+            isEditable ? 'cursor-text' : 'cursor-default text-center',
           )}
           readOnly={!isEditable}
         />
-      </td>
-      <td className="border border-black dark:border-gray-500 px-1">
+      </TableCell>
+      <TableCell className="border border-black dark:border-gray-500 px-1">
         <input
           type="text"
           value={row.day}
           onChange={(e) =>
-            updateCell(groupIndex, rowIndex, "day", e.target.value)
+            updateCell(groupIndex, rowIndex, 'day', e.target.value)
           }
           className={cn(
-            "w-full h-full border-none outline-none bg-transparent text-xs print:text-[10px] uppercase",
-            isEditable ? "cursor-text" : "cursor-default text-center"
+            'w-full h-full border-none outline-none bg-transparent text-xs print:text-[10px] uppercase',
+            isEditable ? 'cursor-text' : 'cursor-default text-center',
           )}
           readOnly={!isEditable}
         />
-      </td>
-      <td className="border border-black dark:border-gray-500 px-1">
+      </TableCell>
+      <TableCell className="border border-black dark:border-gray-500 px-1">
         <input
           type="text"
           value={row.sched}
           onChange={(e) =>
-            updateCell(groupIndex, rowIndex, "sched", e.target.value)
+            updateCell(groupIndex, rowIndex, 'sched', e.target.value)
           }
           className={cn(
-            "w-full h-full border-none outline-none bg-transparent text-xs uppercase",
-            isEditable ? "cursor-text" : "cursor-default text-center"
+            'w-full h-full border-none outline-none bg-transparent text-xs uppercase',
+            isEditable ? 'cursor-text' : 'cursor-default text-center',
           )}
           readOnly={!isEditable}
         />
-      </td>
-      <td className="border border-black dark:border-gray-500 px-1">
+      </TableCell>
+      <TableCell className="border border-black dark:border-gray-500 px-1">
         <input
           type="text"
           value={row.timeIn}
           onChange={(e) =>
-            updateCell(groupIndex, rowIndex, "timeIn", e.target.value)
+            updateCell(groupIndex, rowIndex, 'timeIn', e.target.value)
           }
           className={cn(
-            "w-full h-full border-none outline-none bg-transparent text-xs uppercase",
-            isEditable ? "cursor-text" : "cursor-default text-center"
+            'w-full h-full border-none outline-none bg-transparent text-xs uppercase',
+            isEditable ? 'cursor-text' : 'cursor-default text-center',
           )}
           readOnly={!isEditable}
         />
-      </td>
-      <td className="border border-black dark:border-gray-500 px-1">
+      </TableCell>
+      <TableCell className="border border-black dark:border-gray-500 px-1">
         <input
           type="text"
           value={row.timeOut}
           onChange={(e) =>
-            updateCell(groupIndex, rowIndex, "timeOut", e.target.value)
+            updateCell(groupIndex, rowIndex, 'timeOut', e.target.value)
           }
           className={cn(
-            "w-full h-full border-none outline-none bg-transparent text-xs uppercase",
-            isEditable ? "cursor-text" : "cursor-default text-center"
+            'w-full h-full border-none outline-none bg-transparent text-xs uppercase',
+            isEditable ? 'cursor-text' : 'cursor-default text-center',
           )}
           readOnly={!isEditable}
         />
-      </td>
-      <td className="border border-black dark:border-gray-500 px-1">
+      </TableCell>
+      <TableCell className="border border-black dark:border-gray-500 px-1">
         <input
           type="text"
           value={row.destination}
           onChange={(e) =>
-            updateCell(groupIndex, rowIndex, "destination", e.target.value)
+            updateCell(groupIndex, rowIndex, 'destination', e.target.value)
           }
           className={cn(
-            "w-full h-full border-none outline-none bg-transparent text-xs uppercase",
-            isEditable ? "cursor-text" : "cursor-default text-center"
+            'w-full h-full border-none outline-none bg-transparent text-xs uppercase',
+            isEditable ? 'cursor-text' : 'cursor-default text-center',
           )}
           readOnly={!isEditable}
         />
-      </td>
-      <td className="border border-black dark:border-gray-500 px-1">
+      </TableCell>
+      <TableCell className="border border-black dark:border-gray-500 px-1">
         <input
           type="text"
           value={row.remarks}
           onChange={(e) =>
-            updateCell(groupIndex, rowIndex, "remarks", e.target.value)
+            updateCell(groupIndex, rowIndex, 'remarks', e.target.value)
           }
           className={cn(
-            "w-full h-full border-none outline-none bg-transparent text-xs uppercase",
-            isEditable ? "cursor-text" : "cursor-default text-center"
+            'w-full h-full border-none outline-none bg-transparent text-xs uppercase',
+            isEditable ? 'cursor-text' : 'cursor-default text-center',
           )}
           readOnly={!isEditable}
         />
-      </td>
-      <td className="border border-black dark:border-gray-500 px-1">
+      </TableCell>
+      <TableCell className="border border-black dark:border-gray-500 px-1">
         <input
           type="text"
           value={row.signature}
           onChange={(e) =>
-            updateCell(groupIndex, rowIndex, "signature", e.target.value)
+            updateCell(groupIndex, rowIndex, 'signature', e.target.value)
           }
           className={cn(
-            "w-full h-full border-none outline-none bg-transparent text-xs uppercase",
-            isEditable ? "cursor-text" : "cursor-default text-center"
+            'w-full h-full border-none outline-none bg-transparent text-xs uppercase',
+            isEditable ? 'cursor-text' : 'cursor-default text-center',
           )}
           readOnly={!isEditable}
         />
-      </td>
-    </tr>
+      </TableCell>
+    </TableRow>
   );
 }
-
-export default TableRow;
