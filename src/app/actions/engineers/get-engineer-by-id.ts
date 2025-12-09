@@ -1,21 +1,24 @@
 'use server';
 
-import { getUser } from '@/app/actions/get-user';
+import { getClaims } from '@/app/actions/get-claims';
 import { ERRORS } from '@/constants/errors';
 import { EngineerController } from '@/lib/controller/engineer.controller';
 import { db } from '@/lib/supabase';
 import { withErrorHandler } from '@/utils/with-error-handler';
 
-export async function getEngineer() {
+export async function getEngineerById(id: string) {
   const result = await withErrorHandler(async () => {
-    const user = await getUser();
+    if (!id) throw new Error('id is required!');
+
+    const { user } = await getClaims();
+
+    // throw an error if the request is not authenticated
+    if (!user) throw new Error(ERRORS.NOT_ALLOWED);
 
     // initialize controller
     const controller = new EngineerController(db);
 
-    if (!user) throw new Error(ERRORS.USER_NOT_FOUND);
-
-    return controller.getEngineerById(user.id);
+    return controller.getEngineerById(id);
   });
 
   return result;

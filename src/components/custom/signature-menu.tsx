@@ -1,5 +1,4 @@
 import { addEngineerSignature } from '@/app/actions/engineers/add-signature';
-import { getEngineerById } from '@/app/actions/engineers/get-engineer';
 import SignaturePad from '@/components/signature-pad';
 import { Button } from '@/components/ui/button';
 import {
@@ -22,25 +21,53 @@ import { useElementSize } from '@/hooks/use-element-size';
 
 import useScreenSize from '@/hooks/use-screen-size';
 import { useAuthUser } from '@/provider/auth-user.provider';
+import { OperationResult } from '@/utils/with-error-handler';
 import { DialogProps, DialogTitle } from '@radix-ui/react-dialog';
-import { useQuery } from '@tanstack/react-query';
+import { QueryObserverResult, RefetchOptions } from '@tanstack/react-query';
 import { Pencil } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
-function SignatureMenu({ children, open, ...rest }: DialogProps) {
+type EngineerResult =
+  | OperationResult<
+      | {
+          id: bigint;
+          field_number: number | null;
+          name: string | null;
+          title: string | null;
+          email: string | null;
+          signature: string | null;
+        }
+      | null
+      | undefined,
+      Record<string, unknown>
+    >
+  | undefined;
+
+type SignatureMenuProps = DialogProps & {
+  isFetching: boolean;
+  data: EngineerResult;
+  refetch: (
+    options?: RefetchOptions | undefined,
+  ) => Promise<QueryObserverResult<EngineerResult, Error>>;
+};
+
+function SignatureMenu({
+  children,
+  open,
+  data,
+  isFetching,
+  refetch,
+  ...rest
+}: SignatureMenuProps) {
   const { theme } = useTheme();
   const { user } = useAuthUser();
   const [edit, setEdit] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const { ref, width, padding } = useElementSize<HTMLDivElement>();
   const { width: windowWidth } = useScreenSize();
-  const { data, refetch, isFetching } = useQuery({
-    queryFn: () => getEngineerById(user!.id),
-    queryKey: [user?.id],
-  });
 
   // Reset edit state on close modal
   useEffect(() => {
