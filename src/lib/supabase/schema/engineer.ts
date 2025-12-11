@@ -1,4 +1,4 @@
-import { users } from '@/lib/supabase/auth-reference';
+import { users } from '@/lib/supabase/references/auth.user';
 import { relations, sql } from 'drizzle-orm';
 import {
   check,
@@ -7,7 +7,6 @@ import {
   text,
   timestamp,
   uuid,
-  varchar,
 } from 'drizzle-orm/pg-core';
 
 export const engineers = pgTable(
@@ -19,8 +18,6 @@ export const engineers = pgTable(
     name: text(),
     title: text(),
     signature: text(), // Store base64 string
-    phone: varchar({ length: 50 }),
-    email: text(),
     user_id: uuid()
       .references(() => users.id, {
         onDelete: 'cascade',
