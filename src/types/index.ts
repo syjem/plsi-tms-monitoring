@@ -64,7 +64,7 @@ export type SystemsEngineerDataType = {
 
 export type Logs = {
   id: string;
-  date: string;
+  period: string;
   logs: AttendanceData;
   created_at: string;
   updated_at: string;
