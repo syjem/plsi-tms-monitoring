@@ -8,6 +8,20 @@
       "when": 1764510324734,
       "tag": "0000_sturdy_shinobi_shaw",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1765440309280,
+      "tag": "0001_cool_captain_flint",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1765441715778,
+      "tag": "0002_tricky_spiral",
+      "breakpoints": true
     }
   ]
 }

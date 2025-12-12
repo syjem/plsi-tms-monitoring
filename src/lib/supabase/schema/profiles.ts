@@ -2,30 +2,35 @@ import { users } from '@/lib/supabase/references/auth.user';
 import { relations } from 'drizzle-orm';
 import { jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
-export const workLogs = pgTable('work_logs', {
+export const profiles = pgTable('profiles', {
   id: uuid().primaryKey().defaultRandom(),
   created_at: timestamp({ withTimezone: true }).notNull().defaultNow(),
   updated_at: timestamp({ withTimezone: true }).notNull().defaultNow(),
-  period: text().notNull(),
-  logs: jsonb().notNull(),
+  signature: text(),
+  signatory_names: jsonb().$type<
+    {
+      name: string;
+      title: string;
+    }[]
+  >(),
   user_id: uuid()
     .references(() => users.id, {
       onDelete: 'cascade',
     })
-    .notNull(),
+    .notNull()
+    .unique(),
 });
 
-// Type inference
-export type WorkLog = typeof workLogs.$inferSelect;
-export type NewWorkLog = typeof workLogs.$inferInsert;
+export type Profiles = typeof profiles.$inferSelect;
+export type NewProfiles = typeof profiles.$inferInsert;
 
-export const workLogsRelations = relations(workLogs, ({ one }) => ({
+export const profilesRelations = relations(profiles, ({ one }) => ({
   user: one(users, {
-    fields: [workLogs.user_id],
+    fields: [profiles.user_id],
     references: [users.id],
   }),
 }));
 
-export const usersWorklogRelations = relations(users, ({ many }) => ({
-  workLogs: many(workLogs),
+export const usersProfilesRelations = relations(users, ({ one }) => ({
+  profile: one(profiles),
 }));

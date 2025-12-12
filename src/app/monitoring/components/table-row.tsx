@@ -40,6 +40,7 @@ export function CustomTableRow({
       className={cn(
         'h-8 print:h-4.5 transition-colors duration-150',
         isEditable && isHighlighted && 'bg-blue-100 dark:bg-slate-800',
+        !isEditable && 'hover:bg-transparent dark:hover:transparent',
       )}
       onMouseEnter={() => setHoveredGroup(groupIndex)}
       onMouseLeave={() => setHoveredGroup(null)}
