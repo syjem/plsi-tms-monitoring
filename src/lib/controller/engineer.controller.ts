@@ -1,4 +1,4 @@
-import { engineers, NewEngineer } from '@/lib/supabase/schema';
+import { engineers } from '@/lib/supabase/schema';
 import { eq } from 'drizzle-orm';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 
@@ -123,36 +123,36 @@ export class EngineerController {
    *   console.error(result.error.message);
    * }
    */
-  async create(data: NewEngineer) {
-    try {
-      if (!data.email) throw new Error('Missing engineer email!');
+  // async create(data: NewEngineer) {
+  //   try {
+  //     if (!data.email) throw new Error('Missing engineer email!');
 
-      const result = await this.db.transaction(async (txs) => {
-        const existingUser = await txs
-          .select({ id: engineers.id })
-          .from(engineers)
-          .where(eq(engineers.email, data.email!));
+  //     const result = await this.db.transaction(async (txs) => {
+  //       const existingUser = await txs
+  //         .select({ id: engineers.id })
+  //         .from(engineers)
+  //         .where(eq(engineers.email, data.email!));
 
-        if (existingUser.length > 0) throw new Error('User already exists!');
+  //       if (existingUser.length > 0) throw new Error('User already exists!');
 
-        const newUser = await txs
-          .insert(engineers)
-          .values(data)
-          .returning({ id: engineers.id, created_at: engineers.created_at });
+  //       const newUser = await txs
+  //         .insert(engineers)
+  //         .values(data)
+  //         .returning({ id: engineers.id, created_at: engineers.created_at });
 
-        return newUser[0];
-      });
+  //       return newUser[0];
+  //     });
 
-      return result;
-    } catch (e) {
-      if (e instanceof Error) {
-        throw new Error(
-          `[${EngineerController.name}:${this.create.name}] Error: ` +
-            e?.message,
-        );
-      }
-    }
-  }
+  //     return result;
+  //   } catch (e) {
+  //     if (e instanceof Error) {
+  //       throw new Error(
+  //         `[${EngineerController.name}:${this.create.name}] Error: ` +
+  //           e?.message,
+  //       );
+  //     }
+  //   }
+  // }
   /**
    * Retrieve engineer record by the provided id
    * @param id - engineer unique id
@@ -170,7 +170,6 @@ export class EngineerController {
           field_number: engineers.field_number,
           name: engineers.name,
           title: engineers.title,
-          email: engineers.email,
           signature: engineers.signature,
         })
         .from(engineers)

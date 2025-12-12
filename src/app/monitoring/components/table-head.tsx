@@ -3,7 +3,7 @@ import { TableHead, TableHeader, TableRow } from '@/components/ui/table';
 export function CustomTableHead() {
   return (
     <TableHeader className="text-sm">
-      <TableRow className="bg-gray-100 dark:bg-slate-900/80 dark:print:bg-gray-100">
+      <TableRow className="bg-gray-100 dark:bg-slate-900/80 dark:print:bg-gray-100 hover:bg-bg-gray-100 hover:dark:bg-slate-900/80">
         <TableHead className="text-center font-semibold border border-black dark:border-gray-500 p-2 print:p-1 w-16">
           Date
         </TableHead>
