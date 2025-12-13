@@ -1,4 +1,4 @@
-import TableHead from '@/app/monitoring//components/table-head';
+import { CustomTableHead } from '@/app/monitoring//components/table-head';
 import { AttendanceSheetHeader } from '@/app/monitoring/components/attendance-sheet-header';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -8,7 +8,7 @@ export function AttendanceSheetSkeleton() {
       <AttendanceSheetHeader />
       <div className="mb-4 mx-auto max-w-4xl print:max-w-[700px]">
         <table className="w-full border-collapse text-xs overflow-auto">
-          <TableHead />
+          <CustomTableHead />
           <tbody>
             {Array.from({ length: 40 }).map((_, index) => (
               <tr key={index} className="space-y-1">

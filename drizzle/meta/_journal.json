@@ -8,6 +8,20 @@
       "when": 1765622020190,
       "tag": "0000_quick_rogue",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1765440309280,
+      "tag": "0001_cool_captain_flint",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1765441715778,
+      "tag": "0002_tricky_spiral",
+      "breakpoints": true
     }
   ]
 }

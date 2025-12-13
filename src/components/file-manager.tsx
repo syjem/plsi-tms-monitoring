@@ -105,7 +105,7 @@ function FileManager({ logs }: { logs: Logs[] }) {
             <TableCaption>Your recent logs</TableCaption>
             <TableHeader>
               <TableRow className="dark:hover:bg-slate-800">
-                <TableHead className="w-[200px] font-bold">Date</TableHead>
+                <TableHead className="w-[200px] font-bold">From — To</TableHead>
                 <TableHead className="font-bold">Last modified</TableHead>
                 <TableHead className="sr-only">Actions</TableHead>
               </TableRow>
@@ -114,7 +114,7 @@ function FileManager({ logs }: { logs: Logs[] }) {
               {logs.map((log) => (
                 <TableRow key={log.id} className="dark:hover:bg-slate-800">
                   <TableCell className="font-medium text-muted-foreground">
-                    {log.date}
+                    {log.period}
                   </TableCell>
                   <TableCell className="font-medium text-muted-foreground">
                     {formatISODate(log.updated_at)}

@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
+import { extractTextFromPDF } from '@/app/actions/extract-pdf';
+import { saveExtractedLogs } from '@/app/actions/save-extracted-logs';
+import { isNextRedirectError } from '@/utils/is-next-redirect-error';
+import { processLogs } from '@/utils/process-logs';
+import { useCallback, useEffect, useState } from 'react';
 import {
   type FileError,
   type FileRejection,
   useDropzone,
-} from "react-dropzone";
-import { toast } from "sonner";
-import { processLogs } from "@/utils/process-logs";
-import { useCallback, useEffect, useState } from "react";
-import { extractTextFromPDF } from "@/app/actions/extract-pdf";
-import { isNextRedirectError } from "@/utils/is-next-redirect-error";
-import { saveExtractedLogs } from "@/app/actions/save-extracted-logs";
+} from 'react-dropzone';
+import { toast } from 'sonner';
 
 /* ------------------------- Types & Interfaces ------------------------- */
 
@@ -25,11 +25,11 @@ type UsePDFExtractOptions = {
   maxFiles?: number;
 };
 
-type ExtractionStage = "uploading" | "extracting" | "saving" | null;
+type ExtractionStage = 'uploading' | 'extracting' | 'saving' | null;
 
 export const usePDFExtract = (options: UsePDFExtractOptions) => {
   const {
-    allowedMimeTypes = ["application/pdf"],
+    allowedMimeTypes = ['application/pdf'],
     maxFileSize = Number.POSITIVE_INFINITY,
     maxFiles = 1,
   } = options;
@@ -57,7 +57,7 @@ export const usePDFExtract = (options: UsePDFExtractOptions) => {
 
       setFiles([...files, ...validFiles, ...invalidFiles]);
     },
-    [files]
+    [files],
   );
 
   const {
@@ -71,7 +71,7 @@ export const usePDFExtract = (options: UsePDFExtractOptions) => {
     noClick: true,
     accept: allowedMimeTypes.reduce(
       (acc, type) => ({ ...acc, [type]: [] }),
-      {}
+      {},
     ),
     maxSize: maxFileSize,
     maxFiles,
@@ -84,32 +84,32 @@ export const usePDFExtract = (options: UsePDFExtractOptions) => {
     setLoading(true);
     setErrors([]);
 
-    setStage("uploading");
+    setStage('uploading');
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    setStage("extracting");
+    setStage('extracting');
 
     try {
       const result = await extractTextFromPDF(files[0]);
 
       if (!result.success) {
-        toast.error(result.error || "Extraction failed");
+        toast.error(result.error || 'Extraction failed');
         return;
       }
 
-      const date = `${result.data.from}-${result.data.to}`;
+      const date = `${result.data.from} — ${result.data.to}`;
       const processedLogs = processLogs(result.data.logs);
 
-      setStage("saving");
+      setStage('saving');
       const { success, error } = await saveExtractedLogs(date, processedLogs);
 
       if (!success) {
-        toast.error(error || "Failed to save extracted data");
+        toast.error(error || 'Failed to save extracted data');
       }
     } catch (error: unknown) {
       if (isNextRedirectError(error)) return;
 
-      toast.error("Something went wrong during PDF processing");
+      toast.error('Something went wrong during PDF processing');
     } finally {
       setLoading(false);
     }

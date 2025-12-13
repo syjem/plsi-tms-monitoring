@@ -1,9 +1,8 @@
 'use client';
 
 import { updateWorkLog } from '@/app/actions/logs/update-work-log';
-import TableHead from '@/app/monitoring//components/table-head';
-import TableRow from '@/app/monitoring//components/table-row';
 import { AttendanceSheetHeader } from '@/app/monitoring/components/attendance-sheet-header';
+import AttendanceSheetTable from '@/app/monitoring/components/attendance-sheet-table';
 import { SheetControls } from '@/app/monitoring/components/sheet-controls';
 import { SheetFooter } from '@/app/monitoring/components/sheet-footer';
 import type { AttendanceData, AttendanceRow, Logs } from '@/types';
@@ -184,34 +183,14 @@ export default function AttendanceSheet({
       />
 
       <div className="mb-4 mx-auto max-w-4xl print:max-w-[700px]">
-        <table className="w-full border-collapse text-xs overflow-auto">
-          <TableHead />
-          <tbody>
-            {attendanceData.map((group, groupIndex) =>
-              group.map((row, rowIndex) => {
-                const isHighlighted = hoveredGroup === groupIndex;
-                const isFirstRowInGroup = rowIndex === 0;
-                const isRowNotEmpty = !isRowEmpty(row);
-
-                return (
-                  <TableRow
-                    key={groupIndex - rowIndex}
-                    groupIndex={groupIndex}
-                    row={row}
-                    rowIndex={rowIndex}
-                    isEditable={isEditable}
-                    isHighlighted={isHighlighted}
-                    isFirstRowInGroup={isFirstRowInGroup}
-                    isRowNotEmpty={isRowNotEmpty}
-                    setHoveredGroup={setHoveredGroup}
-                    addRowToGroup={addRowToGroup}
-                    updateCell={updateCell}
-                  />
-                );
-              }),
-            )}
-          </tbody>
-        </table>
+        <AttendanceSheetTable
+          attendanceData={attendanceData}
+          hoveredGroup={hoveredGroup}
+          isEditable={isEditable}
+          setHoveredGroup={setHoveredGroup}
+          updateCell={updateCell}
+          addRowToGroup={addRowToGroup}
+        />
       </div>
 
       <SheetFooter isEditable={isEditable} engineers={engineers} />

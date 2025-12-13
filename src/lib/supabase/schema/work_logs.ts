@@ -1,4 +1,4 @@
-import { users } from '@/lib/supabase/auth-reference';
+import { users } from '@/lib/supabase/references/auth.user';
 import { relations, sql } from 'drizzle-orm';
 import {
   jsonb,
