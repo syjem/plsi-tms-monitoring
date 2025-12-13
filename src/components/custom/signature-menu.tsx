@@ -37,7 +37,6 @@ type EngineerResult =
           field_number: number | null;
           name: string | null;
           title: string | null;
-          email: string | null;
           signature: string | null;
         }
       | null
