@@ -1,5 +1,5 @@
 {
-  "id": "4fc1f3a3-b57e-4195-a978-768344db8d17",
+  "id": "3165c9ad-1b05-483b-8b2b-673997c1a3e8",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -10,10 +10,20 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "uuid",
+          "type": "bigint",
           "primaryKey": true,
           "notNull": true,
-          "default": "gen_random_uuid()"
+          "identity": {
+            "type": "always",
+            "name": "engineers_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "9223372036854775807",
+            "cache": "1",
+            "cycle": false
+          }
         },
         "created_at": {
           "name": "created_at",
@@ -91,7 +101,35 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "policies": {},
+      "policies": {
+        "Engineers can insert their own record": {
+          "name": "Engineers can insert their own record",
+          "as": "PERMISSIVE",
+          "for": "INSERT",
+          "to": [
+            "authenticated"
+          ],
+          "withCheck": "(SELECT auth.uid()) = user_id"
+        },
+        "Engineers can update their own record": {
+          "name": "Engineers can update their own record",
+          "as": "PERMISSIVE",
+          "for": "UPDATE",
+          "to": [
+            "authenticated"
+          ],
+          "withCheck": "(SELECT auth.uid()) = user_id"
+        },
+        "Engineers can view their own record": {
+          "name": "Engineers can view their own record",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "authenticated"
+          ],
+          "using": "(SELECT auth.uid()) = user_id"
+        }
+      },
       "checkConstraints": {
         "field_number_check": {
           "name": "field_number_check",
@@ -163,7 +201,45 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "policies": {},
+      "policies": {
+        "Authenticated users can delete their own record": {
+          "name": "Authenticated users can delete their own record",
+          "as": "PERMISSIVE",
+          "for": "DELETE",
+          "to": [
+            "authenticated"
+          ],
+          "using": "(SELECT auth.uid() as uid) = user_id"
+        },
+        "Authenticated users can update their own record": {
+          "name": "Authenticated users can update their own record",
+          "as": "PERMISSIVE",
+          "for": "UPDATE",
+          "to": [
+            "authenticated"
+          ],
+          "using": "(SELECT auth.uid() as uid) = user_id",
+          "withCheck": "(SELECT auth.uid() as uid) = user_id"
+        },
+        "Enable insert based on user_id": {
+          "name": "Enable insert based on user_id",
+          "as": "PERMISSIVE",
+          "for": "INSERT",
+          "to": [
+            "authenticated"
+          ],
+          "withCheck": "auth.uid() = user_id"
+        },
+        "Enable select for users based on user_id": {
+          "name": "Enable select for users based on user_id",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "authenticated"
+          ],
+          "using": "(SELECT auth.uid() as uid) = user_id"
+        }
+      },
       "checkConstraints": {},
       "isRLSEnabled": false
     }

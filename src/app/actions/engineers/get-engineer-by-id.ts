@@ -1,29 +1,25 @@
 'use server';
 
-import { getUser } from '@/app/actions/get-user';
+import { getClaims } from '@/app/actions/get-claims';
 import { ERRORS } from '@/constants/errors';
 import { EngineerController } from '@/lib/controller/engineer.controller';
 import { db } from '@/lib/supabase';
 import { withErrorHandler } from '@/utils/with-error-handler';
 
-export const addEngineerSignature = async (
-  userId: string,
-  signatureData: string,
-) => {
+export async function getEngineerById(id: string) {
   const result = await withErrorHandler(async () => {
-    if (!userId) throw new Error('userId is required');
+    if (!id) throw new Error('id is required!');
 
-    // check for user session and authorization
-    const user = await getUser();
+    const { user } = await getClaims();
 
-    // retrict further access when no user token found (possible exploit access)
+    // throw an error if the request is not authenticated
     if (!user) throw new Error(ERRORS.NOT_ALLOWED);
 
     // initialize controller
     const controller = new EngineerController(db);
 
-    return controller.addSignature(userId, signatureData);
+    return controller.getEngineerById(id);
   });
 
   return result;
-};
+}
