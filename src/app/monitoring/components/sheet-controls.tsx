@@ -26,7 +26,7 @@ export function SheetControls({
   };
 
   return (
-    <div className="fixed right-4 bottom-4 print:hidden">
+    <div className="fixed right-4 z-99 bottom-4 print:hidden">
       {isEditable ? (
         <div className="flex flex-col space-y-1">
           <Tooltip>
@@ -61,7 +61,7 @@ export function SheetControls({
                 <Printer className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent side="left" sideOffset={4}>
+            <TooltipContent side="left" sideOffset={4} className="print:hidden">
               Print
             </TooltipContent>
           </Tooltip>
@@ -75,7 +75,7 @@ export function SheetControls({
                 <SquarePen className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent side="left" sideOffset={4}>
+            <TooltipContent side="left" sideOffset={4} className="print:hidden">
               Edit
             </TooltipContent>
           </Tooltip>
