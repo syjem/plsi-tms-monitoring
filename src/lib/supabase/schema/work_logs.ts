@@ -16,7 +16,7 @@ export const workLogs = pgTable(
     id: uuid().primaryKey().defaultRandom(),
     created_at: timestamp({ withTimezone: true }).notNull().defaultNow(),
     updated_at: timestamp({ withTimezone: true }).notNull().defaultNow(),
-    date: text().notNull(),
+    period: text().notNull(),
     logs: jsonb().notNull(),
     user_id: uuid()
       .references(() => users.id, {
@@ -24,31 +24,13 @@ export const workLogs = pgTable(
       })
       .notNull(),
   },
-  (table) => [
-    pgPolicy('Authenticated users can delete their own record', {
+  () => [
+    pgPolicy('Work Logs RLS for ALL', {
       as: 'permissive',
-      for: 'delete',
+      for: 'all',
       to: authenticatedRole,
-      using: sql`(SELECT auth.uid() as uid) = user_id`,
-    }),
-    pgPolicy('Authenticated users can update their own record', {
-      as: 'permissive',
-      for: 'update',
-      to: authenticatedRole,
-      using: sql`(SELECT auth.uid() as uid) = user_id`,
-      withCheck: sql`(SELECT auth.uid() as uid) = user_id`,
-    }),
-    pgPolicy('Enable insert based on user_id', {
-      as: 'permissive',
-      for: 'insert',
-      to: authenticatedRole,
-      withCheck: sql`auth.uid() = user_id`,
-    }),
-    pgPolicy('Enable select for users based on user_id', {
-      as: 'permissive',
-      for: 'select',
-      to: authenticatedRole,
-      using: sql`(SELECT auth.uid() as uid) = user_id`,
+      withCheck: sql`(( SELECT auth.uid() AS uid) = user_id)`,
+      using: sql`(( SELECT auth.uid() AS uid) = user_id)`,
     }),
   ],
 );

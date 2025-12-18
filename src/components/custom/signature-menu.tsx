@@ -33,10 +33,15 @@ import { toast } from 'sonner';
 type EngineerResult =
   | OperationResult<
       | {
-          id: bigint;
-          field_number: number | null;
-          name: string | null;
-          title: string | null;
+          id: string;
+          signatory_names:
+            | {
+                name: string;
+                title: string;
+              }[]
+            | null;
+          created_at: Date;
+          updated_at: Date;
           signature: string | null;
         }
       | null

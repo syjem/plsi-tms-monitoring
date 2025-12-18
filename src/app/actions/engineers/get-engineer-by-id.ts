@@ -2,7 +2,7 @@
 
 import { getClaims } from '@/app/actions/get-claims';
 import { ERRORS } from '@/constants/errors';
-import { EngineerController } from '@/lib/controller/engineer.controller';
+import { ProfilesController } from '@/lib/controller/profiles.controller';
 import { db } from '@/lib/supabase';
 import { withErrorHandler } from '@/utils/with-error-handler';
 
@@ -16,7 +16,7 @@ export async function getEngineerById(id: string) {
     if (!user) throw new Error(ERRORS.NOT_ALLOWED);
 
     // initialize controller
-    const controller = new EngineerController(db);
+    const controller = new ProfilesController(db);
 
     return controller.getEngineerById(id);
   });

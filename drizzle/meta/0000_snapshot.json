@@ -1,29 +1,19 @@
 {
-  "id": "3165c9ad-1b05-483b-8b2b-673997c1a3e8",
+  "id": "4f8ee4c8-25ec-40ae-aa3d-b3a0c6e651c5",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.engineers": {
-      "name": "engineers",
+    "public.profiles": {
+      "name": "profiles",
       "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "bigint",
+          "type": "uuid",
           "primaryKey": true,
           "notNull": true,
-          "identity": {
-            "type": "always",
-            "name": "engineers_id_seq",
-            "schema": "public",
-            "increment": "1",
-            "startWith": "1",
-            "minValue": "1",
-            "maxValue": "9223372036854775807",
-            "cache": "1",
-            "cycle": false
-          }
+          "default": "gen_random_uuid()"
         },
         "created_at": {
           "name": "created_at",
@@ -39,33 +29,15 @@
           "notNull": true,
           "default": "now()"
         },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "title": {
-          "name": "title",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
         "signature": {
           "name": "signature",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "phone": {
-          "name": "phone",
-          "type": "varchar(50)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "email": {
-          "name": "email",
-          "type": "text",
+        "signatory_names": {
+          "name": "signatory_names",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": false
         },
@@ -74,19 +46,13 @@
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
-        },
-        "field_number": {
-          "name": "field_number",
-          "type": "smallint",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "engineers_user_id_users_id_fk": {
-          "name": "engineers_user_id_users_id_fk",
-          "tableFrom": "engineers",
+        "profiles_user_id_users_id_fk": {
+          "name": "profiles_user_id_users_id_fk",
+          "tableFrom": "profiles",
           "tableTo": "users",
           "schemaTo": "auth",
           "columnsFrom": [
@@ -100,42 +66,28 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "profiles_user_id_unique": {
+          "name": "profiles_user_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "user_id"
+          ]
+        }
+      },
       "policies": {
-        "Engineers can insert their own record": {
-          "name": "Engineers can insert their own record",
+        "Profiles RLS for ALL": {
+          "name": "Profiles RLS for ALL",
           "as": "PERMISSIVE",
-          "for": "INSERT",
+          "for": "ALL",
           "to": [
             "authenticated"
           ],
-          "withCheck": "(SELECT auth.uid()) = user_id"
-        },
-        "Engineers can update their own record": {
-          "name": "Engineers can update their own record",
-          "as": "PERMISSIVE",
-          "for": "UPDATE",
-          "to": [
-            "authenticated"
-          ],
-          "withCheck": "(SELECT auth.uid()) = user_id"
-        },
-        "Engineers can view their own record": {
-          "name": "Engineers can view their own record",
-          "as": "PERMISSIVE",
-          "for": "SELECT",
-          "to": [
-            "authenticated"
-          ],
-          "using": "(SELECT auth.uid()) = user_id"
+          "using": "(( SELECT auth.uid() AS uid) = user_id)",
+          "withCheck": "(( SELECT auth.uid() AS uid) = user_id)"
         }
       },
-      "checkConstraints": {
-        "field_number_check": {
-          "name": "field_number_check",
-          "value": "\"engineers\".\"field_number\" > 0"
-        }
-      },
+      "checkConstraints": {},
       "isRLSEnabled": false
     },
     "public.work_logs": {
@@ -163,8 +115,8 @@
           "notNull": true,
           "default": "now()"
         },
-        "date": {
-          "name": "date",
+        "period": {
+          "name": "period",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -202,42 +154,15 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {
-        "Authenticated users can delete their own record": {
-          "name": "Authenticated users can delete their own record",
+        "Work Logs RLS for ALL": {
+          "name": "Work Logs RLS for ALL",
           "as": "PERMISSIVE",
-          "for": "DELETE",
+          "for": "ALL",
           "to": [
             "authenticated"
           ],
-          "using": "(SELECT auth.uid() as uid) = user_id"
-        },
-        "Authenticated users can update their own record": {
-          "name": "Authenticated users can update their own record",
-          "as": "PERMISSIVE",
-          "for": "UPDATE",
-          "to": [
-            "authenticated"
-          ],
-          "using": "(SELECT auth.uid() as uid) = user_id",
-          "withCheck": "(SELECT auth.uid() as uid) = user_id"
-        },
-        "Enable insert based on user_id": {
-          "name": "Enable insert based on user_id",
-          "as": "PERMISSIVE",
-          "for": "INSERT",
-          "to": [
-            "authenticated"
-          ],
-          "withCheck": "auth.uid() = user_id"
-        },
-        "Enable select for users based on user_id": {
-          "name": "Enable select for users based on user_id",
-          "as": "PERMISSIVE",
-          "for": "SELECT",
-          "to": [
-            "authenticated"
-          ],
-          "using": "(SELECT auth.uid() as uid) = user_id"
+          "using": "(( SELECT auth.uid() AS uid) = user_id)",
+          "withCheck": "(( SELECT auth.uid() AS uid) = user_id)"
         }
       },
       "checkConstraints": {},

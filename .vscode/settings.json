@@ -26,5 +26,6 @@
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "prettier.requireConfig": true // Ensure it uses your config file
+  "prettier.requireConfig": true,
+  "postman.settings.dotenv-detection-notification-visibility": false // Ensure it uses your config file
 }

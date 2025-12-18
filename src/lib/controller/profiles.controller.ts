@@ -1,8 +1,8 @@
-import { engineers } from '@/lib/supabase/schema';
+import { profiles } from '@/lib/supabase/schema';
 import { eq } from 'drizzle-orm';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 
-export class EngineerController {
+export class ProfilesController {
   db: PostgresJsDatabase<Record<string, never>>;
   constructor(db: PostgresJsDatabase<Record<string, never>>) {
     this.db = db;
@@ -36,30 +36,30 @@ export class EngineerController {
     try {
       // update engineer signature if present otherwise add new entry
       const result = await this.db.transaction(async (txs) => {
-        const engineer = await txs
+        const profile = await txs
           .select()
-          .from(engineers)
-          .where(eq(engineers.user_id, user_id));
+          .from(profiles)
+          .where(eq(profiles.user_id, user_id));
 
         // check if user is existed
-        if (engineer.length > 0) {
+        if (profile.length > 0) {
           // apply update
-          const update_result = await txs
-            .update(engineers)
+          const updated_signature = await txs
+            .update(profiles)
             .set({ signature: data })
-            .where(eq(engineers.user_id, user_id))
-            .returning({ updated_at: engineers.updated_at, id: engineers.id });
+            .where(eq(profiles.user_id, user_id))
+            .returning({ updated_at: profiles.updated_at, id: profiles.id });
 
-          return update_result;
+          return updated_signature;
         }
 
         // add new entry to the database
         const create_result = await this.db
-          .insert(engineers)
+          .insert(profiles)
           .values({ user_id: user_id, signature: data })
           .returning({
-            created_at: engineers.created_at,
-            id: engineers.id,
+            created_at: profiles.created_at,
+            id: profiles.id,
           });
 
         return create_result;
@@ -69,7 +69,7 @@ export class EngineerController {
     } catch (e) {
       if (e instanceof Error) {
         throw new Error(
-          `[${EngineerController.name}:${this.addSignature.name}] Error: ` +
+          `[${ProfilesController.name}:${this.addSignature.name}] Error: ` +
             e?.message,
         );
       }
@@ -166,20 +166,20 @@ export class EngineerController {
 
       const result = await this.db
         .select({
-          id: engineers.id,
-          field_number: engineers.field_number,
-          name: engineers.name,
-          title: engineers.title,
-          signature: engineers.signature,
+          id: profiles.id,
+          signatory_names: profiles.signatory_names,
+          created_at: profiles.created_at,
+          updated_at: profiles.updated_at,
+          signature: profiles.signature,
         })
-        .from(engineers)
-        .where(eq(engineers.user_id, id));
+        .from(profiles)
+        .where(eq(profiles.user_id, id));
 
       return result.length > 0 ? result[0] : null;
     } catch (e) {
       if (e instanceof Error) {
         throw new Error(
-          `[${EngineerController.name}:${this.getEngineerById.name}] Error: ` +
+          `[${ProfilesController.name}:${this.getEngineerById.name}] Error: ` +
             e?.message,
         );
       }

@@ -2,7 +2,7 @@
 
 import { getUser } from '@/app/actions/get-user';
 import { ERRORS } from '@/constants/errors';
-import { EngineerController } from '@/lib/controller/engineer.controller';
+import { ProfilesController } from '@/lib/controller/profiles.controller';
 import { db } from '@/lib/supabase';
 import { withErrorHandler } from '@/utils/with-error-handler';
 
@@ -20,7 +20,7 @@ export const addEngineerSignature = async (
     if (!user) throw new Error(ERRORS.NOT_ALLOWED);
 
     // initialize controller
-    const controller = new EngineerController(db);
+    const controller = new ProfilesController(db);
 
     return controller.addSignature(userId, signatureData);
   });
