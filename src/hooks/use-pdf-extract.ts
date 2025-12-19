@@ -97,11 +97,11 @@ export const usePDFExtract = (options: UsePDFExtractOptions) => {
         return;
       }
 
-      const date = `${result.data.from} — ${result.data.to}`;
+      const period = `${result.data.from} — ${result.data.to}`;
       const processedLogs = processLogs(result.data.logs);
 
       setStage('saving');
-      const { success, error } = await saveExtractedLogs(date, processedLogs);
+      const { success, error } = await saveExtractedLogs(period, processedLogs);
 
       if (!success) {
         toast.error(error || 'Failed to save extracted data');

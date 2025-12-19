@@ -1,10 +1,10 @@
-"use server";
+'use server';
 
-import { AttendanceData } from "@/types";
-import { createClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
+import { createClient } from '@/lib/supabase/server';
+import { AttendanceData } from '@/types';
+import { redirect } from 'next/navigation';
 
-export async function saveExtractedLogs(date: string, logs: AttendanceData) {
+export async function saveExtractedLogs(period: string, logs: AttendanceData) {
   const supabase = await createClient();
 
   const {
@@ -13,12 +13,12 @@ export async function saveExtractedLogs(date: string, logs: AttendanceData) {
   } = await supabase.auth.getUser();
 
   if (userError || !user) {
-    return { success: false, error: "User not authenticated" };
+    return { success: false, error: 'User not authenticated' };
   }
 
   const { data, error } = await supabase
-    .from("work_logs")
-    .insert({ user_id: user.id, logs, date })
+    .from('work_logs')
+    .insert({ user_id: user.id, logs, period })
     .select()
     .single();
 
