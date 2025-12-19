@@ -19,6 +19,7 @@ export const profiles = pgTable(
     signature: text(),
     signatory_names: jsonb().$type<
       {
+        id: number;
         name: string;
         title: string;
       }[]
