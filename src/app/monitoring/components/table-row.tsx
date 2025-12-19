@@ -38,7 +38,7 @@ export function CustomTableRow({
   return (
     <TableRow
       className={cn(
-        'transition-colors duration-150',
+        'transition-colors duration-150 hover:bg-blue-100 dark:bg-slate-800',
         isEditable && isHighlighted && 'bg-blue-100 dark:bg-slate-800',
         !isEditable && 'hover:bg-transparent dark:hover:transparent',
       )}
