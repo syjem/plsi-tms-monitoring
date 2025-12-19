@@ -1,56 +1,37 @@
-"use client";
+'use client';
 
-import { toast } from "sonner";
-import { cn } from "@/lib/utils";
-import { Plus } from "lucide-react";
-import React, { useState } from "react";
+import { FirstFieldDialog } from '@/app/monitoring/components/first-dialog';
+import { SecondFieldDialog } from '@/app/monitoring/components/second-dialog';
 import {
   Empty,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
-} from "@/components/ui/empty";
-import { FirstFieldDialog } from "@/app/monitoring/components/first-dialog";
-import { SecondFieldDialog } from "@/app/monitoring/components/second-dialog";
-import { upsertSystemsEngineer } from "@/app/actions/engineers/upsert-engineers";
+} from '@/components/ui/empty';
+import { cn } from '@/lib/utils';
+import { Plus } from 'lucide-react';
+import React, { useState } from 'react';
 
-type FieldValueType = {
-  id?: number;
+type SignatoryNames = {
+  id: number;
   name: string;
   title: string;
-};
+}[];
 
-export const SheetFooter = ({
-  engineers,
-  isEditable,
-}: {
-  engineers: {
-    id: number;
-    field_number: number;
-    name: string;
-    title: string;
-  }[];
-  isEditable: boolean;
-}) => {
-  const firstField = engineers.filter((item) => item.field_number === 1);
-  const secondField = engineers.filter((item) => item.field_number === 2);
-
+export const SheetFooter = ({ isEditable }: { isEditable: boolean }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const [isFirstDialogOpen, setIsFirstDialogOpen] = useState(false);
   const [isSecondDialogOpen, setIsSecondDialogOpen] = useState(false);
+  const [signatoryNames, setSignatoryNames] = useState<SignatoryNames>([]);
 
-  const [firstFieldData, setFirstFieldData] = useState<FieldValueType>({
-    id: firstField[0]?.id || undefined,
-    name: firstField[0]?.name || "",
-    title: firstField[0]?.title || "",
-  });
-
-  const [secondFieldData, setSecondFieldData] = useState<FieldValueType>({
-    id: secondField[0]?.id || undefined,
-    name: secondField[0]?.name || "",
-    title: secondField[0]?.title || "",
-  });
+  const firstFieldData = signatoryNames.find((s) => s.id === 1) || {
+    name: '',
+    title: '',
+  };
+  const secondFieldData = signatoryNames.find((s) => s.id === 2) || {
+    name: '',
+    title: '',
+  };
 
   const handleAddFirstField = () => {
     if (!isEditable) return;
@@ -64,45 +45,43 @@ export const SheetFooter = ({
 
   const handleDialogSubmit = async (
     e: React.FormEvent<HTMLFormElement>,
-    field_number: number
+    id: number,
   ) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
       const formData = new FormData(e.currentTarget);
-      const id = Number(formData.get("id"));
-      const name = formData.get("name") as string;
-      const title = formData.get("title") as string;
+      const id = Number(formData.get('id'));
+      const name = formData.get('name') as string;
+      const title = formData.get('title') as string;
 
       if (!name || !title) {
         return;
       }
 
-      const { data, error } = await upsertSystemsEngineer(
-        id ? id : undefined,
-        name,
-        title,
-        field_number
-      );
-
-      if (!data || error) {
-        toast.error(error || "Failed to save");
-        return;
-      }
-
-      if (field_number === 1) {
-        setFirstFieldData({ id: data.id, name: data.name, title: data.title });
-      } else if (field_number === 2) {
-        setSecondFieldData({ id: data.id, name: data.name, title: data.title });
+      if (id) {
+        // Update existing signatory
+        setSignatoryNames((prev) =>
+          prev.map((signatory) =>
+            signatory.id === id ? { ...signatory, name, title } : signatory,
+          ),
+        );
+      } else {
+        // Add new signatory
+        const newId =
+          signatoryNames.length > 0
+            ? Math.max(...signatoryNames.map((s) => s.id)) + 1
+            : 1;
+        setSignatoryNames((prev) => [...prev, { id: newId, name, title }]);
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error('Error submitting form:', error);
     } finally {
-      if (field_number === 1) setIsFirstDialogOpen(false);
-      else if (field_number === 2) setIsSecondDialogOpen(false);
-
       setIsSubmitting(false);
+
+      if (id === 1) setIsFirstDialogOpen(false);
+      else if (id === 2) setIsSecondDialogOpen(false);
     }
   };
 
@@ -129,9 +108,9 @@ export const SheetFooter = ({
           <div
             onClick={handleAddFirstField}
             className={cn(
-              "flex-1 flex flex-col items-stretch px-2 md:px-8 py-4 transition-all rounded-sm",
+              'flex-1 flex flex-col items-stretch px-2 md:px-8 py-4 transition-all rounded-sm',
               isEditable &&
-                "border-2 border-dashed border-gray-400 active:border-primary active:scale-95"
+                'border-2 border-dashed border-gray-400 active:border-primary active:scale-95',
             )}
           >
             <h5 className="text-center text-base md:text-2xl font-semibold print:text-xl">
@@ -145,10 +124,10 @@ export const SheetFooter = ({
           <Empty
             onClick={handleAddFirstField}
             className={cn(
-              "transition-all rounded-sm gap-0 py-2 border-2 border-dashed active:scale-95",
+              'transition-all rounded-sm gap-0 py-2 border-2 border-dashed active:scale-95',
               isEditable
-                ? "border-slate-700  active:border-primary"
-                : "border-transparent active:border-transparent"
+                ? 'border-slate-700  active:border-primary'
+                : 'border-transparent active:border-transparent',
             )}
           >
             {isEditable ? (
@@ -169,9 +148,9 @@ export const SheetFooter = ({
           <div
             onClick={handleAddSecondField}
             className={cn(
-              "flex-1 flex flex-col items-stretch px-2 md:px-8 py-4 transition-all rounded-sm",
+              'flex-1 flex flex-col items-stretch px-2 md:px-8 py-4 transition-all rounded-sm',
               isEditable &&
-                "border-2 border-dashed border-gray-400 active:border-primary active:scale-95"
+                'border-2 border-dashed border-gray-400 active:border-primary active:scale-95',
             )}
           >
             <h5 className="text-center text-base md:text-2xl font-semibold print:text-xl">
@@ -185,10 +164,10 @@ export const SheetFooter = ({
           <Empty
             onClick={handleAddSecondField}
             className={cn(
-              "transition-all rounded-sm gap-0 py-2 border-2 border-dashed active:scale-95",
+              'transition-all rounded-sm gap-0 py-2 border-2 border-dashed active:scale-95',
               isEditable
-                ? "border-slate-700  active:border-primary"
-                : "border-transparent active:border-transparent"
+                ? 'border-slate-700  active:border-primary'
+                : 'border-transparent active:border-transparent',
             )}
           >
             {isEditable ? (

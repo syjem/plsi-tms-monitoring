@@ -12,15 +12,8 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 
 export default function AttendanceSheet({
-  engineers,
   workLogs,
 }: {
-  engineers: {
-    id: number;
-    field_number: number;
-    name: string;
-    title: string;
-  }[];
   workLogs: Logs | null;
 }) {
   const [isEditable, setIsEditable] = useState(false);
@@ -193,7 +186,7 @@ export default function AttendanceSheet({
         />
       </div>
 
-      <SheetFooter isEditable={isEditable} engineers={engineers} />
+      <SheetFooter isEditable={isEditable} />
     </div>
   );
 }
