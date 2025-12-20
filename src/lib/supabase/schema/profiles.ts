@@ -17,7 +17,7 @@ export const profiles = pgTable(
     created_at: timestamp({ withTimezone: true }).notNull().defaultNow(),
     updated_at: timestamp({ withTimezone: true }).notNull().defaultNow(),
     signature: text(),
-    signatory_names: jsonb().$type<
+    signatories: jsonb().$type<
       {
         id: number;
         name: string;

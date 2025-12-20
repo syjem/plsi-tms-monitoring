@@ -1,4 +1,4 @@
-import { Loader } from "lucide-react";
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogClose,
@@ -6,49 +6,45 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Loader } from 'lucide-react';
 
 export function FirstFieldDialog({
   open,
   setOpen,
   onSubmit,
   isSubmitting,
-  firstFieldData,
+  firstSignatory,
 }: {
   open: boolean;
   setOpen: (open: boolean) => void;
-  onSubmit: (e: React.FormEvent<HTMLFormElement>, field_number: number) => void;
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   isSubmitting: boolean;
-  firstFieldData: { id?: number; name: string; title: string };
+  firstSignatory: { name: string; title: string };
 }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Edit First Field</DialogTitle>
+          <DialogTitle>
+            {!firstSignatory.name ? 'Add' : 'Edit'} Signatory
+          </DialogTitle>
         </DialogHeader>
-        <form onSubmit={(e) => onSubmit(e, 1)}>
-          <Input type="hidden" name="id" defaultValue={firstFieldData.id} />
+        <form onSubmit={(e) => onSubmit(e)}>
+          <Input type="hidden" name="id" defaultValue={1} />
           <div className="grid gap-4">
             <div className="grid gap-3">
               <Label htmlFor="name">Name</Label>
-              <Input
-                id="name"
-                name="name"
-                defaultValue={firstFieldData.name}
-                required
-              />
+              <Input id="name" name="name" defaultValue={firstSignatory.name} />
             </div>
             <div className="grid gap-3">
-              <Label htmlFor="title">Job Title</Label>
+              <Label htmlFor="title">Position</Label>
               <Input
                 id="title"
                 name="title"
-                defaultValue={firstFieldData.title}
-                required
+                defaultValue={firstSignatory.title}
               />
             </div>
           </div>
@@ -69,7 +65,7 @@ export function FirstFieldDialog({
                   Saving...
                 </>
               ) : (
-                "Save changes"
+                'Save changes'
               )}
             </Button>
           </DialogFooter>

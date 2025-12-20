@@ -1,4 +1,4 @@
-import { Loader } from "lucide-react";
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogClose,
@@ -6,49 +6,49 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Loader } from 'lucide-react';
 
 export function SecondFieldDialog({
   open,
   setOpen,
   onSubmit,
   isSubmitting,
-  secondFieldData,
+  secondSignatory,
 }: {
   open: boolean;
   setOpen: (open: boolean) => void;
-  onSubmit: (e: React.FormEvent<HTMLFormElement>, field_number: number) => void;
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   isSubmitting: boolean;
-  secondFieldData: { id?: number; name: string; title: string };
+  secondSignatory: { name: string; title: string };
 }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Edit Second Field</DialogTitle>
+          <DialogTitle>
+            {!secondSignatory.name ? 'Add Signatory' : 'Edit Signatory'}
+          </DialogTitle>
         </DialogHeader>
-        <form onSubmit={(e) => onSubmit(e, 2)}>
-          <Input type="hidden" name="id" defaultValue={secondFieldData.id} />
+        <form onSubmit={(e) => onSubmit(e)}>
+          <Input type="hidden" name="id" defaultValue={2} />
           <div className="grid gap-4">
             <div className="grid gap-3">
               <Label htmlFor="name">Name</Label>
               <Input
                 id="name"
                 name="name"
-                defaultValue={secondFieldData.name}
-                required
+                defaultValue={secondSignatory.name}
               />
             </div>
             <div className="grid gap-3">
-              <Label htmlFor="title">Job Title</Label>
+              <Label htmlFor="title">Position</Label>
               <Input
                 id="title"
                 name="title"
-                defaultValue={secondFieldData.title}
-                required
+                defaultValue={secondSignatory.title}
               />
             </div>
           </div>
@@ -69,7 +69,7 @@ export function SecondFieldDialog({
                   Saving...
                 </>
               ) : (
-                "Save changes"
+                'Save changes'
               )}
             </Button>
           </DialogFooter>

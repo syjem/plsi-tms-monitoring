@@ -22,13 +22,13 @@ export const SheetFooter = ({ isEditable }: { isEditable: boolean }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isFirstDialogOpen, setIsFirstDialogOpen] = useState(false);
   const [isSecondDialogOpen, setIsSecondDialogOpen] = useState(false);
-  const [signatoryNames, setSignatoryNames] = useState<SignatoryNames>([]);
+  const [signatory, setSignatory] = useState<SignatoryNames>([]);
 
-  const firstFieldData = signatoryNames.find((s) => s.id === 1) || {
+  const firstSignatory = signatory.find((s) => s.id === 1) || {
     name: '',
     title: '',
   };
-  const secondFieldData = signatoryNames.find((s) => s.id === 2) || {
+  const secondSignatory = signatory.find((s) => s.id === 2) || {
     name: '',
     title: '',
   };
@@ -43,10 +43,7 @@ export const SheetFooter = ({ isEditable }: { isEditable: boolean }) => {
     setIsSecondDialogOpen(true);
   };
 
-  const handleDialogSubmit = async (
-    e: React.FormEvent<HTMLFormElement>,
-    id: number,
-  ) => {
+  const handleDialogSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -56,32 +53,22 @@ export const SheetFooter = ({ isEditable }: { isEditable: boolean }) => {
       const name = formData.get('name') as string;
       const title = formData.get('title') as string;
 
-      if (!name || !title) {
-        return;
-      }
+      if (!id || !name || !title) return;
 
-      if (id) {
-        // Update existing signatory
-        setSignatoryNames((prev) =>
-          prev.map((signatory) =>
-            signatory.id === id ? { ...signatory, name, title } : signatory,
-          ),
-        );
-      } else {
-        // Add new signatory
-        const newId =
-          signatoryNames.length > 0
-            ? Math.max(...signatoryNames.map((s) => s.id)) + 1
-            : 1;
-        setSignatoryNames((prev) => [...prev, { id: newId, name, title }]);
-      }
+      const newSignatory = { id, name, title };
+
+      // Remove existing entry with the same id if it exists
+      setSignatory((prev) => prev.filter((signatory) => signatory.id !== id));
+      setSignatory((prev) =>
+        [...prev, newSignatory].sort((a, b) => a.id - b.id),
+      );
+
+      if (id === 1) setIsFirstDialogOpen(false);
+      else if (id === 2) setIsSecondDialogOpen(false);
     } catch (error) {
       console.error('Error submitting form:', error);
     } finally {
       setIsSubmitting(false);
-
-      if (id === 1) setIsFirstDialogOpen(false);
-      else if (id === 2) setIsSecondDialogOpen(false);
     }
   };
 
@@ -92,7 +79,7 @@ export const SheetFooter = ({ isEditable }: { isEditable: boolean }) => {
         setOpen={setIsFirstDialogOpen}
         onSubmit={handleDialogSubmit}
         isSubmitting={isSubmitting}
-        firstFieldData={firstFieldData}
+        firstSignatory={firstSignatory}
       />
 
       <SecondFieldDialog
@@ -100,11 +87,11 @@ export const SheetFooter = ({ isEditable }: { isEditable: boolean }) => {
         setOpen={setIsSecondDialogOpen}
         onSubmit={handleDialogSubmit}
         isSubmitting={isSubmitting}
-        secondFieldData={secondFieldData}
+        secondSignatory={secondSignatory}
       />
 
       <footer className="flex justify-between mx-auto max-w-4xl print:max-w-[700px] gap-x-8">
-        {firstFieldData.name ? (
+        {firstSignatory.name ? (
           <div
             onClick={handleAddFirstField}
             className={cn(
@@ -114,10 +101,10 @@ export const SheetFooter = ({ isEditable }: { isEditable: boolean }) => {
             )}
           >
             <h5 className="text-center text-base md:text-2xl font-semibold print:text-xl">
-              {firstFieldData.name}
+              {firstSignatory.name}
             </h5>
             <p className="text-center text-xs md:text-sm text-gray-700 dark:text-gray-400 dark:print:text-gray-700">
-              {firstFieldData.title}
+              {firstSignatory.title}
             </p>
           </div>
         ) : (
@@ -138,13 +125,13 @@ export const SheetFooter = ({ isEditable }: { isEditable: boolean }) => {
                 >
                   <Plus className="size-4" />
                 </EmptyMedia>
-                <EmptyDescription>Add a new field</EmptyDescription>
+                <EmptyDescription>Add a signatory</EmptyDescription>
               </EmptyHeader>
             ) : null}
           </Empty>
         )}
 
-        {secondFieldData.name ? (
+        {secondSignatory.name ? (
           <div
             onClick={handleAddSecondField}
             className={cn(
@@ -154,10 +141,10 @@ export const SheetFooter = ({ isEditable }: { isEditable: boolean }) => {
             )}
           >
             <h5 className="text-center text-base md:text-2xl font-semibold print:text-xl">
-              {secondFieldData.name}
+              {secondSignatory.name}
             </h5>
             <p className="text-center text-xs md:text-sm text-gray-700 dark:text-gray-400 dark:print:text-gray-700">
-              {secondFieldData.title}
+              {secondSignatory.title}
             </p>
           </div>
         ) : (
@@ -178,7 +165,7 @@ export const SheetFooter = ({ isEditable }: { isEditable: boolean }) => {
                 >
                   <Plus className="size-4" />
                 </EmptyMedia>
-                <EmptyDescription>Add a new field</EmptyDescription>
+                <EmptyDescription>Add a signatory</EmptyDescription>
               </EmptyHeader>
             ) : null}
           </Empty>

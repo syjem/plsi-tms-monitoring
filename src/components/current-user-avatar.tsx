@@ -47,7 +47,7 @@ export function CurrentUserAvatar({ user }: { user: JwtPayload }) {
     setLoading(true);
     try {
       const supabase = createClient();
-      await supabase.auth.signOut();
+      await supabase.auth.signOut({ scope: 'local' });
       router.push('/auth/login');
     } catch (error) {
       console.error('Error signing out:', error);

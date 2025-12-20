@@ -34,8 +34,9 @@ type EngineerResult =
   | OperationResult<
       | {
           id: string;
-          signatory_names:
+          signatories:
             | {
+                id: number;
                 name: string;
                 title: string;
               }[]

@@ -1,4 +1,4 @@
-import { profiles } from '@/lib/supabase/schema';
+import { NewProfiles, profiles } from '@/lib/supabase/schema';
 import { eq } from 'drizzle-orm';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 
@@ -123,36 +123,28 @@ export class ProfilesController {
    *   console.error(result.error.message);
    * }
    */
-  // async create(data: NewEngineer) {
-  //   try {
-  //     if (!data.email) throw new Error('Missing engineer email!');
+  async upsertSignatories(data: NewProfiles) {
+    try {
+      const result = await this.db.transaction(async (txs) => {
+        const newUser = await txs
+          .insert(profiles)
+          .values(data)
+          .returning({ id: profiles.id, created_at: profiles.created_at });
 
-  //     const result = await this.db.transaction(async (txs) => {
-  //       const existingUser = await txs
-  //         .select({ id: engineers.id })
-  //         .from(engineers)
-  //         .where(eq(engineers.email, data.email!));
+        return newUser[0];
+      });
 
-  //       if (existingUser.length > 0) throw new Error('User already exists!');
+      return result;
+    } catch (e) {
+      if (e instanceof Error) {
+        throw new Error(
+          `[${ProfilesController.name}:${this.upsertSignatories.name}] Error: ` +
+            e?.message,
+        );
+      }
+    }
+  }
 
-  //       const newUser = await txs
-  //         .insert(engineers)
-  //         .values(data)
-  //         .returning({ id: engineers.id, created_at: engineers.created_at });
-
-  //       return newUser[0];
-  //     });
-
-  //     return result;
-  //   } catch (e) {
-  //     if (e instanceof Error) {
-  //       throw new Error(
-  //         `[${EngineerController.name}:${this.create.name}] Error: ` +
-  //           e?.message,
-  //       );
-  //     }
-  //   }
-  // }
   /**
    * Retrieve engineer record by the provided id
    * @param id - engineer unique id
@@ -167,7 +159,7 @@ export class ProfilesController {
       const result = await this.db
         .select({
           id: profiles.id,
-          signatory_names: profiles.signatory_names,
+          signatories: profiles.signatories,
           created_at: profiles.created_at,
           updated_at: profiles.updated_at,
           signature: profiles.signature,
