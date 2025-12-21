@@ -22,7 +22,7 @@ export const Signatories = ({ isEditable }: { isEditable: boolean }) => {
   const [isFirstDialogOpen, setIsFirstDialogOpen] = useState(false);
   const [isSecondDialogOpen, setIsSecondDialogOpen] = useState(false);
 
-  const { data, refetch, isFetching } = useQuery({
+  const { data, refetch, isLoading } = useQuery({
     queryKey: ['signatories'],
     queryFn: getSignatories,
     refetchOnWindowFocus: false,
@@ -91,7 +91,7 @@ export const Signatories = ({ isEditable }: { isEditable: boolean }) => {
     }
   };
 
-  if (isFetching) {
+  if (isLoading) {
     return (
       <div className="flex justify-between mx-auto max-w-4xl gap-x-8 px-2 md:px-8 py-4">
         <Skeleton className="h-20 w-full flex-1" />
