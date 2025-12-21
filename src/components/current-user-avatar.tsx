@@ -1,6 +1,6 @@
 'use client';
 
-import { getEngineer } from '@/app/actions/engineers/get-engineer';
+import { getEngineerSignature } from '@/app/actions/profiles/get-signature';
 import SignatureMenu from '@/components/custom/signature-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -26,7 +26,7 @@ export function CurrentUserAvatar({ user }: { user: JwtPayload }) {
   const [loading, setLoading] = useState(false);
   const [openSignatureDialog, setSignatureDialogState] = useState(false);
   const { data, refetch, isFetching } = useQuery({
-    queryFn: () => getEngineer(),
+    queryFn: () => getEngineerSignature(),
     queryKey: [user],
     refetchOnWindowFocus: false,
   });

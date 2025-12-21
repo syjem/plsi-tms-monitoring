@@ -32,7 +32,7 @@ export function FirstFieldDialog({
             {!firstSignatory.name ? 'Add' : 'Edit'} Signatory
           </DialogTitle>
         </DialogHeader>
-        <form onSubmit={(e) => onSubmit(e)}>
+        <form onSubmit={onSubmit}>
           <Input type="hidden" name="id" defaultValue={1} />
           <div className="grid gap-4">
             <div className="grid gap-3">
@@ -65,7 +65,7 @@ export function FirstFieldDialog({
                   Saving...
                 </>
               ) : (
-                'Save changes'
+                'Save'
               )}
             </Button>
           </DialogFooter>

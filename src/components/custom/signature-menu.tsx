@@ -1,4 +1,4 @@
-import { addEngineerSignature } from '@/app/actions/engineers/add-signature';
+import { setEngineerSignature } from '@/app/actions/profiles/set-signature';
 import SignaturePad from '@/components/signature-pad';
 import { Button } from '@/components/ui/button';
 import {
@@ -31,24 +31,7 @@ import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
 type EngineerResult =
-  | OperationResult<
-      | {
-          id: string;
-          signatories:
-            | {
-                id: number;
-                name: string;
-                title: string;
-              }[]
-            | null;
-          created_at: Date;
-          updated_at: Date;
-          signature: string | null;
-        }
-      | null
-      | undefined,
-      Record<string, unknown>
-    >
+  | OperationResult<string | null | undefined, Record<string, unknown>>
   | undefined;
 
 type SignatureMenuProps = DialogProps & {
@@ -93,7 +76,7 @@ function SignatureMenu({
         if (!user) throw new Error('user not found!');
 
         return toast.promise(
-          () => addEngineerSignature(user.id, signatureData),
+          () => setEngineerSignature(user.id, signatureData),
           {
             loading: 'Saving signature...',
             success: (data) => {
@@ -133,7 +116,7 @@ function SignatureMenu({
   }, []);
 
   const isInMobile = windowWidth <= 540;
-  const shouldShowCanvas = edit || !data?.success || !data.data?.signature;
+  const shouldShowCanvas = edit || !data?.success || !data.data;
 
   const widthForMobile = useMemo(() => {
     return width - (padding.right + padding.left);
@@ -156,7 +139,7 @@ function SignatureMenu({
             <CompDescription>
               {isFetching
                 ? 'Loading signature details...'
-                : data?.success && data?.data?.signature
+                : data?.success && data?.data
                 ? 'Manage your signature!'
                 : 'Create your signature here!'}
             </CompDescription>
@@ -183,11 +166,7 @@ function SignatureMenu({
                 ) : (
                   <div className="flex flex-col items-end">
                     <div className="h-[300px] w-full md:w-[500px] bg-muted rounded-md relative">
-                      <Image
-                        src={data.data?.signature as string}
-                        alt="signature"
-                        fill
-                      />
+                      <Image src={data.data as string} alt="signature" fill />
                     </div>
                     <Button
                       variant="outline"

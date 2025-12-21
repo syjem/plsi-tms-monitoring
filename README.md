@@ -43,3 +43,16 @@ It integrates with the **Flask PDF Extraction API** to parse PDF daily logs repo
 </div>
 
 ---
+
+## **Features**
+
+- controllers for DB logic, actions for server-side
+- Additional Considerations:
+
+- Fetching Initial Data: Add a new server action (e.g., getSignatories) that calls getEngineerById and returns the signatories array.
+- Validation: Add client-side checks (e.g., required fields) and server-side (as above).
+- Testing: After implementation, run your schema migrations and test with real data. Use Drizzle's migration tools.
+- Edge Cases: Handle cases where the profile doesn't exist (create it first if needed, but assume it does).
+- Performance: For small arrays, this is efficient. If signatories grow, consider partial updates later.
+- Security: RLS ensures users only update their own profiles.
+  This plan is efficient (minimal DB calls, leverages your existing setup), secure, and follows Next.js best practices. It builds directly on your code without overhauling it. If you approve, I can implement these changes step-by-step. Let me know if you have questions or want adjustments!

@@ -12,30 +12,30 @@ export function AttendanceSheetSkeleton() {
           <CustomTableHead />
           <TableBody>
             {Array.from({ length: 40 }).map((_, index) => (
-              <TableRow key={index} className="space-y-1">
+              <TableRow key={index}>
                 <TableCell className="border border-black dark:border-gray-500 p-0">
-                  <Skeleton className="h-8 w-full bg-slate-200 dark:bg-slate-800 rounded-none" />
+                  <Skeleton className="h-6 w-full bg-slate-200 dark:bg-slate-800 rounded-none" />
                 </TableCell>
                 <TableCell className="border border-black dark:border-gray-500 p-0">
-                  <Skeleton className="h-8 w-full bg-slate-200 dark:bg-slate-800 rounded-none" />
+                  <Skeleton className="h-6 w-full bg-slate-200 dark:bg-slate-800 rounded-none" />
                 </TableCell>
                 <TableCell className="border border-black dark:border-gray-500 p-0">
-                  <Skeleton className="h-8 w-full bg-slate-200 dark:bg-slate-800 rounded-none" />
+                  <Skeleton className="h-6 w-full bg-slate-200 dark:bg-slate-800 rounded-none" />
                 </TableCell>
                 <TableCell className="border border-black dark:border-gray-500 p-0">
-                  <Skeleton className="h-8 w-full bg-slate-200 dark:bg-slate-800 rounded-none" />
+                  <Skeleton className="h-6 w-full bg-slate-200 dark:bg-slate-800 rounded-none" />
                 </TableCell>
                 <TableCell className="border border-black dark:border-gray-500 p-0">
-                  <Skeleton className="h-8 w-full bg-slate-200 dark:bg-slate-800 rounded-none" />
+                  <Skeleton className="h-6 w-full bg-slate-200 dark:bg-slate-800 rounded-none" />
                 </TableCell>
                 <TableCell className="border border-black dark:border-gray-500 p-0">
-                  <Skeleton className="h-8 w-full bg-slate-200 dark:bg-slate-800 rounded-none" />
+                  <Skeleton className="h-6 w-full bg-slate-200 dark:bg-slate-800 rounded-none" />
                 </TableCell>
                 <TableCell className="border border-black dark:border-gray-500 p-0">
-                  <Skeleton className="h-8 w-full bg-slate-200 dark:bg-slate-800 rounded-none" />
+                  <Skeleton className="h-6 w-full bg-slate-200 dark:bg-slate-800 rounded-none" />
                 </TableCell>
                 <TableCell className="border border-black dark:border-gray-500 p-0">
-                  <Skeleton className="h-8 w-full bg-slate-200 dark:bg-slate-800 rounded-none" />
+                  <Skeleton className="h-6 w-full bg-slate-200 dark:bg-slate-800 rounded-none" />
                 </TableCell>
               </TableRow>
             ))}

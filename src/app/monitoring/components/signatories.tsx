@@ -1,5 +1,7 @@
 'use client';
 
+import { getSignatories } from '@/app/actions/profiles/get-signatories';
+import { setSignatory as setEngineerSignatory } from '@/app/actions/profiles/set-signatory';
 import { FirstFieldDialog } from '@/app/monitoring/components/first-dialog';
 import { SecondFieldDialog } from '@/app/monitoring/components/second-dialog';
 import {
@@ -10,7 +12,8 @@ import {
 } from '@/components/ui/empty';
 import { cn } from '@/lib/utils';
 import { Plus } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 type SignatoryNames = {
   id: number;
@@ -18,11 +21,23 @@ type SignatoryNames = {
   title: string;
 }[];
 
-export const SheetFooter = ({ isEditable }: { isEditable: boolean }) => {
+export const Signatories = ({ isEditable }: { isEditable: boolean }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isFirstDialogOpen, setIsFirstDialogOpen] = useState(false);
   const [isSecondDialogOpen, setIsSecondDialogOpen] = useState(false);
   const [signatory, setSignatory] = useState<SignatoryNames>([]);
+
+  useEffect(() => {
+    const loadSignatories = async () => {
+      const result = await getSignatories();
+      if (result.success) {
+        setSignatory(result.data);
+      } else {
+        console.error('Failed to load signatories:', result.error.message);
+      }
+    };
+    loadSignatories();
+  }, []);
 
   const firstSignatory = signatory.find((s) => s.id === 1) || {
     name: '',
@@ -57,16 +72,30 @@ export const SheetFooter = ({ isEditable }: { isEditable: boolean }) => {
 
       const newSignatory = { id, name, title };
 
-      // Remove existing entry with the same id if it exists
-      setSignatory((prev) => prev.filter((signatory) => signatory.id !== id));
-      setSignatory((prev) =>
-        [...prev, newSignatory].sort((a, b) => a.id - b.id),
-      );
+      // Compute the updated signatory array
+      const updatedSignatories = [
+        ...signatory.filter((s) => s.id !== id),
+        newSignatory,
+      ].sort((a, b) => a.id - b.id);
+
+      // Update state
+      setSignatory(updatedSignatories);
+
+      // Pass the updated array to the server action
+      const result = await setEngineerSignatory(updatedSignatories);
+      if (!result.success) {
+        throw new Error(result.error.message);
+      }
 
       if (id === 1) setIsFirstDialogOpen(false);
       else if (id === 2) setIsSecondDialogOpen(false);
+
+      toast.success('Signatories updated successfully');
     } catch (error) {
       console.error('Error submitting form:', error);
+      if (error instanceof Error) {
+        toast.error(error?.message || 'Failed to update signatories');
+      }
     } finally {
       setIsSubmitting(false);
     }

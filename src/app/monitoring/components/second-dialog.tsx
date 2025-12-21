@@ -32,7 +32,7 @@ export function SecondFieldDialog({
             {!secondSignatory.name ? 'Add Signatory' : 'Edit Signatory'}
           </DialogTitle>
         </DialogHeader>
-        <form onSubmit={(e) => onSubmit(e)}>
+        <form onSubmit={onSubmit}>
           <Input type="hidden" name="id" defaultValue={2} />
           <div className="grid gap-4">
             <div className="grid gap-3">
@@ -69,7 +69,7 @@ export function SecondFieldDialog({
                   Saving...
                 </>
               ) : (
-                'Save changes'
+                'Save'
               )}
             </Button>
           </DialogFooter>

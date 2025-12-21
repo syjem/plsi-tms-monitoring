@@ -4,7 +4,7 @@ import { updateWorkLog } from '@/app/actions/logs/update-work-log';
 import { AttendanceSheetHeader } from '@/app/monitoring/components/attendance-sheet-header';
 import AttendanceSheetTable from '@/app/monitoring/components/attendance-sheet-table';
 import { SheetControls } from '@/app/monitoring/components/sheet-controls';
-import { SheetFooter } from '@/app/monitoring/components/sheet-footer';
+import { Signatories } from '@/app/monitoring/components/signatories';
 import type { AttendanceData, AttendanceRow, Logs } from '@/types';
 import { isRowEmpty } from '@/utils/is-row-empty';
 import { CheckCheck, Edit } from 'lucide-react';
@@ -165,7 +165,7 @@ export default function AttendanceSheet({
   };
 
   return (
-    <div className="min-h-screen bg-white dark:print:bg-white dark:print:text-black dark:bg-slate-900 dark:text-gray-200 px-8 py-8 md:py-16 shadow-lg print:shadow-none print:px-4 print:py-12">
+    <main className="min-h-screen bg-white dark:print:bg-white dark:print:text-black dark:bg-slate-900 dark:text-gray-200 px-8 py-8 md:py-16 shadow-lg print:shadow-none print:px-4 print:py-12">
       <AttendanceSheetHeader />
 
       <SheetControls
@@ -186,7 +186,7 @@ export default function AttendanceSheet({
         />
       </div>
 
-      <SheetFooter isEditable={isEditable} />
-    </div>
+      <Signatories isEditable={isEditable} />
+    </main>
   );
 }

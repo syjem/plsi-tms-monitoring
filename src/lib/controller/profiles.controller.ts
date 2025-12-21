@@ -1,4 +1,4 @@
-import { NewProfiles, profiles } from '@/lib/supabase/schema';
+import { profiles } from '@/lib/supabase/schema';
 import { eq } from 'drizzle-orm';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 
@@ -32,7 +32,7 @@ export class ProfilesController {
    * // Insert new engineer record with signature
    * const result = await controller.addSignature('newUser456', 'data:image/png;base64,...');
    */
-  async addSignature(user_id: string, data: string) {
+  async setSignature(user_id: string, data: string) {
     try {
       // update engineer signature if present otherwise add new entry
       const result = await this.db.transaction(async (txs) => {
@@ -69,76 +69,7 @@ export class ProfilesController {
     } catch (e) {
       if (e instanceof Error) {
         throw new Error(
-          `[${ProfilesController.name}:${this.addSignature.name}] Error: ` +
-            e?.message,
-        );
-      }
-    }
-  }
-
-  /**
-   * Creates a new engineer record with the provided data.
-   *
-   * Validates required fields, checks for duplicate emails, and inserts a new engineer
-   * record into the database within a transaction. Returns the created engineer's id
-   * and creation timestamp.
-   *
-   * @param {NewEngineer} data - The engineer data to create
-   * @param {string} data.email - The engineer's email address (required, must be unique)
-   * @param {string} [data.name] - The engineer's full name
-   * @param {string} [data.phone] - The engineer's phone number
-   * @param {string} [data.signature] - The engineer's signature (optional, can be added later)
-   *
-   * @returns {Promise<{id: string, created_at: Date}>}
-   *   The newly created engineer record containing the id and creation timestamp
-   *
-   * @throws {Error} Throws an error with context if:
-   *   - The email field is missing or empty
-   *   - An engineer with the same email already exists
-   *   - A database operation fails
-   *
-   * @example
-   * // Create a new engineer
-   * try {
-   *   const newEngineer = await engineerController.create({
-   *     email: 'john.doe@example.com',
-   *     name: 'John Doe',
-   *     phone: '555-0123'
-   *   });
-   *   console.log('Engineer created:', newEngineer.id);
-   * } catch (error) {
-   *   console.error('Failed to create engineer:', error.message);
-   * }
-   *
-   * @example
-   * // Using with withErrorHandler for structured error responses
-   * const result = await withErrorHandler(
-   *   () => engineerController.create({ email: 'jane@example.com' }),
-   *   { errorCode: 'ENGINEER_CREATE_FAILED' }
-   * );
-   *
-   * if (result.success) {
-   *   console.log('Created engineer:', result.data.id);
-   * } else {
-   *   console.error(result.error.message);
-   * }
-   */
-  async upsertSignatories(data: NewProfiles) {
-    try {
-      const result = await this.db.transaction(async (txs) => {
-        const newUser = await txs
-          .insert(profiles)
-          .values(data)
-          .returning({ id: profiles.id, created_at: profiles.created_at });
-
-        return newUser[0];
-      });
-
-      return result;
-    } catch (e) {
-      if (e instanceof Error) {
-        throw new Error(
-          `[${ProfilesController.name}:${this.upsertSignatories.name}] Error: ` +
+          `[${ProfilesController.name}:${this.setSignature.name}] Error: ` +
             e?.message,
         );
       }
@@ -172,6 +103,47 @@ export class ProfilesController {
       if (e instanceof Error) {
         throw new Error(
           `[${ProfilesController.name}:${this.getEngineerById.name}] Error: ` +
+            e?.message,
+        );
+      }
+    }
+  }
+
+  /**
+   * Updates the signatories array for a user's profile.
+   *
+   * Replaces the entire signatories JSONB field with the provided array.
+   * Uses a transaction to ensure atomicity.
+   *
+   * @param {string} user_id - The unique identifier of the user
+   * @param {Array<{id: number, name: string, title: string}>} signatories - The new signatories array
+   * @returns {Promise<{id: string, signatories: any, updated_at: Date}>}
+   *   Returns the updated profile data
+   *
+   * @throws {Error} Throws an error with context if the database operation fails
+   */
+  async setSignatories(
+    user_id: string,
+    signatories: { id: number; name: string; title: string }[],
+  ) {
+    try {
+      const result = await this.db.transaction(async (txs) => {
+        const updated = await txs
+          .update(profiles)
+          .set({ signatories, updated_at: new Date() })
+          .where(eq(profiles.user_id, user_id))
+          .returning({
+            id: profiles.id,
+            signatories: profiles.signatories,
+            updated_at: profiles.updated_at,
+          });
+        return updated[0];
+      });
+      return result;
+    } catch (e) {
+      if (e instanceof Error) {
+        throw new Error(
+          `[${ProfilesController.name}:${this.setSignatories.name}] Error: ` +
             e?.message,
         );
       }

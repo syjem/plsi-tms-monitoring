@@ -6,7 +6,7 @@ import { ProfilesController } from '@/lib/controller/profiles.controller';
 import { db } from '@/lib/supabase';
 import { withErrorHandler } from '@/utils/with-error-handler';
 
-export const addEngineerSignature = async (
+export const setEngineerSignature = async (
   userId: string,
   signatureData: string,
 ) => {
@@ -22,7 +22,7 @@ export const addEngineerSignature = async (
     // initialize controller
     const controller = new ProfilesController(db);
 
-    return controller.addSignature(userId, signatureData);
+    return controller.setSignature(userId, signatureData);
   });
 
   return result;
