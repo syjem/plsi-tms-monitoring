@@ -10,40 +10,32 @@ import {
   EmptyHeader,
   EmptyMedia,
 } from '@/components/ui/empty';
+import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
+import { useQuery } from '@tanstack/react-query';
 import { Plus } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { toast } from 'sonner';
-
-type SignatoryNames = {
-  id: number;
-  name: string;
-  title: string;
-}[];
 
 export const Signatories = ({ isEditable }: { isEditable: boolean }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isFirstDialogOpen, setIsFirstDialogOpen] = useState(false);
   const [isSecondDialogOpen, setIsSecondDialogOpen] = useState(false);
-  const [signatory, setSignatory] = useState<SignatoryNames>([]);
 
-  useEffect(() => {
-    const loadSignatories = async () => {
-      const result = await getSignatories();
-      if (result.success) {
-        setSignatory(result.data);
-      } else {
-        console.error('Failed to load signatories:', result.error.message);
-      }
-    };
-    loadSignatories();
-  }, []);
+  const { data, refetch, isFetching } = useQuery({
+    queryKey: ['signatories'],
+    queryFn: getSignatories,
+    refetchOnWindowFocus: false,
+  });
 
-  const firstSignatory = signatory.find((s) => s.id === 1) || {
+  const signatories = data?.success ? data.data : [];
+
+  const firstSignatory = signatories.find((s) => s.id === 1) || {
     name: '',
     title: '',
   };
-  const secondSignatory = signatory.find((s) => s.id === 2) || {
+
+  const secondSignatory = signatories.find((s) => s.id === 2) || {
     name: '',
     title: '',
   };
@@ -72,34 +64,41 @@ export const Signatories = ({ isEditable }: { isEditable: boolean }) => {
 
       const newSignatory = { id, name, title };
 
-      // Compute the updated signatory array
       const updatedSignatories = [
-        ...signatory.filter((s) => s.id !== id),
+        ...signatories.filter((s) => s.id !== id),
         newSignatory,
       ].sort((a, b) => a.id - b.id);
 
-      // Update state
-      setSignatory(updatedSignatories);
-
-      // Pass the updated array to the server action
       const result = await setEngineerSignatory(updatedSignatories);
+
       if (!result.success) {
         throw new Error(result.error.message);
       }
 
+      await refetch();
+
       if (id === 1) setIsFirstDialogOpen(false);
-      else if (id === 2) setIsSecondDialogOpen(false);
+      if (id === 2) setIsSecondDialogOpen(false);
 
       toast.success('Signatories updated successfully');
     } catch (error) {
       console.error('Error submitting form:', error);
-      if (error instanceof Error) {
-        toast.error(error?.message || 'Failed to update signatories');
-      }
+      toast.error(
+        error instanceof Error ? error.message : 'Failed to update signatories',
+      );
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  if (isFetching) {
+    return (
+      <div className="flex justify-between mx-auto max-w-4xl gap-x-8 px-2 md:px-8 py-4">
+        <Skeleton className="h-20 w-full flex-1" />
+        <Skeleton className="h-20 w-full flex-1" />
+      </div>
+    );
+  }
 
   return (
     <React.Fragment>

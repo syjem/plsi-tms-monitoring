@@ -12,7 +12,6 @@ export async function getEngineerSignature() {
 
     if (!user) throw new Error(ERRORS.USER_NOT_FOUND);
 
-    // initialize controller
     const controller = new ProfilesController(db);
     const profile = await controller.getEngineerById(user.id);
 

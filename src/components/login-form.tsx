@@ -104,10 +104,17 @@ export function LoginForm({ onSubmit, isLoading }: EmailStepProps) {
           className="w-full border-gray-300 dark:border-border shadow-sm cursor-pointer"
           onClick={() => handleSocialLogin('google')}
         >
-          <Google />
-          {loadingProvider === 'google'
-            ? 'Logging in...'
-            : 'Continue with Google'}
+          {loadingProvider === 'google' ? (
+            <>
+              <Loader className="animate-spin ml-1" />
+              Continuing...
+            </>
+          ) : (
+            <>
+              <Google />
+              Continue with Google
+            </>
+          )}
         </Button>
       </div>
       {error && (
