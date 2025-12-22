@@ -157,7 +157,7 @@ function SignatureMenu({
                     width={isInMobile ? widthForMobile : 500}
                     height={300}
                     onSaveSignature={handleSaveSignature}
-                    strokeWidth={1}
+                    strokeWidth={3}
                     isSavingSignature={submitting}
                     onCancel={() => setEdit(false)}
                     showCancelAction={edit}

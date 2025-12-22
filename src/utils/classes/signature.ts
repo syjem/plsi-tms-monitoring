@@ -153,7 +153,7 @@ export class Signature {
   /**
    * Handles the mouseUp event - ends the drawing path
    */
-  private mouseUp(e: MouseEvent | TouchEvent) {
+  private mouseUp() {
     this.setDrawing(false);
   }
 

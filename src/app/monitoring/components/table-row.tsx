@@ -2,7 +2,9 @@ import { Button } from '@/components/ui/button';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 import type { AttendanceRow } from '@/types';
+import { OperationResult } from '@/utils/with-error-handler';
 import { Plus } from 'lucide-react';
+import Image from 'next/image';
 import { SetStateAction } from 'react';
 
 type TableRowProps = {
@@ -21,6 +23,10 @@ type TableRowProps = {
     field: keyof AttendanceRow,
     value: string,
   ) => void;
+  signature: OperationResult<
+    string | null | undefined,
+    Record<string, unknown>
+  >;
 };
 
 export function CustomTableRow({
@@ -34,6 +40,7 @@ export function CustomTableRow({
   setHoveredGroup,
   addRowToGroup,
   updateCell,
+  signature,
 }: TableRowProps) {
   return (
     <TableRow
@@ -152,19 +159,16 @@ export function CustomTableRow({
           readOnly={!isEditable}
         />
       </TableCell>
-      <TableCell className="border border-black dark:border-gray-500 p-1 print:py-0">
-        <input
-          type="text"
-          value={row.signature}
-          onChange={(e) =>
-            updateCell(groupIndex, rowIndex, 'signature', e.target.value)
-          }
-          className={cn(
-            'w-full h-full border-none outline-none bg-transparent text-xs uppercase',
-            isEditable ? 'cursor-text' : 'cursor-default text-center',
-          )}
-          readOnly={!isEditable}
-        />
+      <TableCell className="relative border border-black dark:border-gray-500 p-1 print:py-0">
+        {signature.success && signature.data && isRowNotEmpty && (
+          <Image
+            src={signature.data}
+            alt="Engineer Signature"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+            width={100}
+            height={100}
+          />
+        )}
       </TableCell>
     </TableRow>
   );

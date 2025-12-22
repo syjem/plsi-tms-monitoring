@@ -12,12 +12,23 @@ import {
 } from '@/components/ui/empty';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
+import { OperationResult } from '@/utils/with-error-handler';
 import { useQuery } from '@tanstack/react-query';
 import { Plus } from 'lucide-react';
+import Image from 'next/image';
 import React, { useState } from 'react';
 import { toast } from 'sonner';
 
-export const Signatories = ({ isEditable }: { isEditable: boolean }) => {
+export const Signatories = ({
+  isEditable,
+  signature,
+}: {
+  isEditable: boolean;
+  signature: OperationResult<
+    string | null | undefined,
+    Record<string, unknown>
+  >;
+}) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isFirstDialogOpen, setIsFirstDialogOpen] = useState(false);
   const [isSecondDialogOpen, setIsSecondDialogOpen] = useState(false);
@@ -123,11 +134,20 @@ export const Signatories = ({ isEditable }: { isEditable: boolean }) => {
           <div
             onClick={handleAddFirstField}
             className={cn(
-              'flex-1 flex flex-col items-stretch px-2 md:px-8 py-4 transition-all rounded-sm',
+              'relative flex-1 flex flex-col items-stretch px-2 md:px-8 py-4 transition-all rounded-sm',
               isEditable &&
                 'border-2 border-dashed border-gray-400 active:border-primary active:scale-95',
             )}
           >
+            {signature.success && signature.data && (
+              <Image
+                src={signature.data}
+                alt="Engineer Signature"
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                width={200}
+                height={200}
+              />
+            )}
             <h5 className="text-center text-base md:text-2xl font-semibold print:text-xl">
               {firstSignatory.name}
             </h5>

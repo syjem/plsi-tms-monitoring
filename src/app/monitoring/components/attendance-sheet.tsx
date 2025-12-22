@@ -7,14 +7,20 @@ import { SheetControls } from '@/app/monitoring/components/sheet-controls';
 import { Signatories } from '@/app/monitoring/components/signatories';
 import type { AttendanceData, AttendanceRow, Logs } from '@/types';
 import { isRowEmpty } from '@/utils/is-row-empty';
+import { OperationResult } from '@/utils/with-error-handler';
 import { CheckCheck, Edit } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
 export default function AttendanceSheet({
   workLogs,
+  signature,
 }: {
   workLogs: Logs | null;
+  signature: OperationResult<
+    string | null | undefined,
+    Record<string, unknown>
+  >;
 }) {
   const [isEditable, setIsEditable] = useState(false);
   const [hoveredGroup, setHoveredGroup] = useState<number | null>(null);
@@ -183,10 +189,11 @@ export default function AttendanceSheet({
           setHoveredGroup={setHoveredGroup}
           updateCell={updateCell}
           addRowToGroup={addRowToGroup}
+          signature={signature}
         />
       </div>
 
-      <Signatories isEditable={isEditable} />
+      <Signatories isEditable={isEditable} signature={signature} />
     </main>
   );
 }

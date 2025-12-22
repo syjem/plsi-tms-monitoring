@@ -3,6 +3,7 @@ import { CustomTableRow } from '@/app/monitoring/components/table-row';
 import { Table, TableBody } from '@/components/ui/table';
 import { AttendanceData, AttendanceRow } from '@/types';
 import { isRowEmpty } from '@/utils/is-row-empty';
+import { OperationResult } from '@/utils/with-error-handler';
 import { SetStateAction } from 'react';
 
 type AttendanceSheetTableProps = {
@@ -17,6 +18,10 @@ type AttendanceSheetTableProps = {
   ) => void;
   setHoveredGroup: (value: SetStateAction<number | null>) => void;
   addRowToGroup: (groupIndex: number) => void;
+  signature: OperationResult<
+    string | null | undefined,
+    Record<string, unknown>
+  >;
 };
 
 function AttendanceSheetTable({
@@ -26,6 +31,7 @@ function AttendanceSheetTable({
   setHoveredGroup,
   updateCell,
   addRowToGroup,
+  signature,
 }: AttendanceSheetTableProps) {
   return (
     <Table className="text-xs">
@@ -50,6 +56,7 @@ function AttendanceSheetTable({
                 setHoveredGroup={setHoveredGroup}
                 addRowToGroup={addRowToGroup}
                 updateCell={updateCell}
+                signature={signature}
               />
             );
           }),
