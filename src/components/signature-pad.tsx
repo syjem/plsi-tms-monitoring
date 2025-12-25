@@ -118,7 +118,7 @@ function SignaturePad({
       signatureRef.current?.removeEventListeners();
       signatureRef.current = null;
     };
-  }, []);
+  }, [rest]);
 
   /**
    * Clear the canvas to start new signature
