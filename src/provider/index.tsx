@@ -1,8 +1,8 @@
 'use client';
 
-import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
 import { AuthUserProvider } from '@/provider/auth-user.provider';
+import { ThemeProvider } from '@/provider/theme-provider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactNode } from 'react';
 
