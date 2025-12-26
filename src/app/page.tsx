@@ -27,11 +27,11 @@ async function HeroSection() {
 
   return (
     <div className="w-full max-w-4xl mx-auto text-center py-8 md:pt-10 px-4 sm:px-6 lg:px-8">
-      <p className="font-semibold text-base text-gray-700 dark:text-gray-300 mb-6 font-mono">
+      <p className="font-semibold text-base text-gray-700 mb-6 font-mono">
         Welcome,{' '}
         <span className="text-primary">{user.user_metadata.full_name}~</span>
       </p>
-      <h1 className="text-xl md:text-2xl font-extrabold text-gray-900 dark:text-gray-100 font-sans">
+      <h1 className="text-xl md:text-2xl font-extrabold text-gray-900 font-sans">
         Phillogix Systems Employee <br /> Monitoring
       </h1>
     </div>

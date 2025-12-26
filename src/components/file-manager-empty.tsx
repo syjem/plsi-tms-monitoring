@@ -20,7 +20,7 @@ export function EmptyFileManager({ visible }: { visible?: boolean }) {
         )}
       >
         <EmptyHeader className="space-y-2">
-          <EmptyMedia variant="icon" className="dark:bg-slate-800">
+          <EmptyMedia variant="icon">
             <CloudUpload className="size-4" />
           </EmptyMedia>
           <EmptyTitle>Logs Empty</EmptyTitle>

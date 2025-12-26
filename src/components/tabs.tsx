@@ -3,7 +3,6 @@
 import { Dropzone } from '@/components/dropzone';
 import FileManager from '@/components/file-manager';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { cn } from '@/lib/utils';
 import { Logs } from '@/types';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState, useTransition } from 'react';
@@ -36,25 +35,11 @@ export function MainTab({ logs }: { logs: Logs[] }) {
 
   return (
     <Tabs value={tab} onValueChange={handleTabChange}>
-      <TabsList className="dark:bg-slate-800/80">
-        <TabsTrigger
-          value="upload"
-          className={cn(
-            'px-4 py-2',
-            tab === 'upload' && 'dark:data-[state=active]:bg-primary',
-          )}
-          disabled={isPending}
-        >
+      <TabsList>
+        <TabsTrigger value="upload" className="px-4 py-2" disabled={isPending}>
           Upload
         </TabsTrigger>
-        <TabsTrigger
-          value="files"
-          className={cn(
-            'px-4 py-2',
-            tab === 'files' && 'dark:data-[state=active]:bg-primary',
-          )}
-          disabled={isPending}
-        >
+        <TabsTrigger value="files" className="px-4 py-2" disabled={isPending}>
           Files
         </TabsTrigger>
       </TabsList>

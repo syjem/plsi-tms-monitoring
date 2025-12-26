@@ -45,18 +45,18 @@ export function CustomTableRow({
   return (
     <TableRow
       className={cn(
-        'transition-colors duration-150 hover:bg-blue-100 hover:dark:bg-slate-800',
-        isEditable && isHighlighted && 'bg-blue-100 dark:bg-slate-800',
-        !isEditable && 'hover:bg-transparent dark:hover:transparent',
+        'transition-colors duration-150 hover:bg-blue-100',
+        isEditable && isHighlighted && 'bg-blue-100',
+        !isEditable && 'hover:bg-transparent',
       )}
       onMouseEnter={() => setHoveredGroup(groupIndex)}
       onMouseLeave={() => setHoveredGroup(null)}
     >
-      <TableCell className="relative border border-black dark:border-gray-500 p-1 print:py-0">
+      <TableCell className="relative border border-black p-1 print:py-0">
         {isEditable && isHighlighted && isFirstRowInGroup && isRowNotEmpty && (
           <Button
             size="icon"
-            className="absolute -left-[37px] -top-1 dark:text-slate-50"
+            className="absolute -left-[37px] -top-1"
             onClick={() => addRowToGroup(groupIndex)}
           >
             <Plus />
@@ -75,7 +75,7 @@ export function CustomTableRow({
           readOnly={!isEditable}
         />
       </TableCell>
-      <TableCell className="border border-black dark:border-gray-500 p-1 print:py-0">
+      <TableCell className="border border-black p-1 print:py-0">
         <input
           type="text"
           value={row.day}
@@ -89,7 +89,7 @@ export function CustomTableRow({
           readOnly={!isEditable}
         />
       </TableCell>
-      <TableCell className="border border-black dark:border-gray-500 p-1 print:py-0">
+      <TableCell className="border border-black p-1 print:py-0">
         <input
           type="text"
           value={row.sched}
@@ -103,7 +103,7 @@ export function CustomTableRow({
           readOnly={!isEditable}
         />
       </TableCell>
-      <TableCell className="border border-black dark:border-gray-500 p-1 print:py-0">
+      <TableCell className="border border-black p-1 print:py-0">
         <input
           type="text"
           value={row.timeIn}
@@ -117,7 +117,7 @@ export function CustomTableRow({
           readOnly={!isEditable}
         />
       </TableCell>
-      <TableCell className="border border-black dark:border-gray-500 p-1 print:py-0">
+      <TableCell className="border border-black p-1 print:py-0">
         <input
           type="text"
           value={row.timeOut}
@@ -131,7 +131,7 @@ export function CustomTableRow({
           readOnly={!isEditable}
         />
       </TableCell>
-      <TableCell className="border border-black dark:border-gray-500 p-1 print:py-0">
+      <TableCell className="border border-black p-1 print:py-0">
         <input
           type="text"
           value={row.destination}
@@ -145,7 +145,7 @@ export function CustomTableRow({
           readOnly={!isEditable}
         />
       </TableCell>
-      <TableCell className="border border-black dark:border-gray-500 p-1 print:py-0">
+      <TableCell className="border border-black p-1 print:py-0">
         <input
           type="text"
           value={row.remarks}
@@ -159,7 +159,7 @@ export function CustomTableRow({
           readOnly={!isEditable}
         />
       </TableCell>
-      <TableCell className="relative border border-black dark:border-gray-500 p-1 print:py-0">
+      <TableCell className="relative border border-black p-1 print:py-0">
         {signature.success && signature.data && isRowNotEmpty && (
           <Image
             src={signature.data}

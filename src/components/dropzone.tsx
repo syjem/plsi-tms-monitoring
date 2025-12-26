@@ -47,7 +47,7 @@ export function Dropzone() {
     <div
       {...getRootProps({
         className: cn(
-          'relative rounded-lg border-2 border-dashed dark:border-slate-800 dark:hover:border-slate-700 bg-white dark:bg-slate-900 p-8 transition-all duration-500',
+          'relative rounded-lg border-2 border-dashed bg-white p-8 transition-all duration-500',
           !file && 'border-gray-300 hover:border-gray-400 hover:shadow-md',
           file && !hasErrors && !loading && 'border-gray-300',
           loading && 'border-blue-400 bg-blue-50/50',
@@ -70,17 +70,17 @@ export function Dropzone() {
           )}
         >
           <div className="flex flex-col items-center gap-6">
-            <div className="w-full flex items-center justify-between bg-gray-50 dark:bg-slate-800 rounded-lg p-4 border border-gray-200 dark:border-slate-700">
+            <div className="w-full flex items-center justify-between bg-gray-50 rounded-lg p-4 border border-gray-200">
               <div className="flex items-center gap-3">
-                <div className="rounded bg-green-100 dark:bg-green-900 p-2">
-                  <FileText className="h-5 w-5 text-green-600 dark:text-green-200" />
+                <div className="rounded bg-green-100 p-2">
+                  <FileText className="h-5 w-5 text-green-600" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                  <p className="text-sm font-medium text-gray-900">
                     {file.name}
                   </p>
                   {hasErrors ? (
-                    <p className="text-xs text-red-600 dark:text-red-500">
+                    <p className="text-xs text-red-600">
                       {file.errors
                         .map((e) =>
                           e.message.startsWith('File is larger than')
@@ -95,7 +95,7 @@ export function Dropzone() {
                         .join(', ')}
                     </p>
                   ) : (
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                    <p className="text-xs text-gray-500">
                       {formatBytes(file.size, 2)}
                     </p>
                   )}
@@ -156,12 +156,12 @@ function DropzoneEmptyState({
       )}
     >
       <EmptyHeader className="space-y-2">
-        <EmptyMedia variant="icon" className="dark:bg-slate-800">
+        <EmptyMedia variant="icon">
           <Upload className="size-4" />
         </EmptyMedia>
         <EmptyDescription>
           <div className="text-center">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-gray-600">
               Drag and drop or{' '}
               <button
                 onClick={() => inputRef.current?.click()}
@@ -171,7 +171,7 @@ function DropzoneEmptyState({
               </button>{' '}
               to upload
             </p>
-            <p className="text-xs text-gray-700 dark:text-gray-200 mt-1">
+            <p className="text-xs text-gray-700 mt-1">
               Max file size: {formatBytes(maxFileSize, 2)}
             </p>
           </div>
