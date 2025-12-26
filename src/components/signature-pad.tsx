@@ -31,17 +31,6 @@ import { toast } from 'sonner';
  * />
  *
  * @example
- * // Custom styling with dark theme
- * <SignaturePad
- *   width={500}
- *   height={300}
- *   strokeColor="#ffffff"
- *   fillColor="#1a1a1a"
- *   strokeWidth={2}
- *   onSaveSignature={handleSaveSignature}
- * />
- *
- * @example
  * // With error handling in parent component
  * const handleSaveSignature = async (dataUrl: string) => {
  *   try {
@@ -182,11 +171,7 @@ function SignaturePad({
           <Button variant="outline" onClick={onClear}>
             Clear
           </Button>
-          <Button
-            className="dark:text-slate-200"
-            onClick={handleSave}
-            disabled={isSavingSignature}
-          >
+          <Button onClick={handleSave} disabled={isSavingSignature}>
             {isSavingSignature ? (
               <span className="animate-spin">
                 <Loader />

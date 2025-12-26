@@ -171,7 +171,7 @@ export default function AttendanceSheet({
   };
 
   return (
-    <main className="min-h-screen bg-white dark:print:bg-white dark:print:text-black dark:bg-slate-900 dark:text-gray-200 px-8 py-8 md:py-16 shadow-lg print:shadow-none print:px-4 print:py-12">
+    <main className="min-h-screen bg-white px-8 py-8 md:py-16 shadow-lg print:shadow-none print:px-4 print:py-12">
       <AttendanceSheetHeader />
 
       <SheetControls

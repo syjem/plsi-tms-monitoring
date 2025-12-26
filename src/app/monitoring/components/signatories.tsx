@@ -151,7 +151,7 @@ export const Signatories = ({
             <h5 className="text-center text-base md:text-2xl font-semibold print:text-xl">
               {firstSignatory.name}
             </h5>
-            <p className="text-center text-xs md:text-sm text-gray-700 dark:text-gray-400 dark:print:text-gray-700">
+            <p className="text-center text-xs md:text-sm text-gray-700">
               {firstSignatory.title}
             </p>
           </div>
@@ -167,10 +167,7 @@ export const Signatories = ({
           >
             {isEditable ? (
               <EmptyHeader className="gap-0">
-                <EmptyMedia
-                  variant="icon"
-                  className="bg-gray-200 dark:bg-slate-800"
-                >
+                <EmptyMedia variant="icon" className="bg-gray-200">
                   <Plus className="size-4" />
                 </EmptyMedia>
                 <EmptyDescription>Add a signatory</EmptyDescription>
@@ -191,7 +188,7 @@ export const Signatories = ({
             <h5 className="text-center text-base md:text-2xl font-semibold print:text-xl">
               {secondSignatory.name}
             </h5>
-            <p className="text-center text-xs md:text-sm text-gray-700 dark:text-gray-400 dark:print:text-gray-700">
+            <p className="text-center text-xs md:text-sm text-gray-700">
               {secondSignatory.title}
             </p>
           </div>
@@ -207,10 +204,7 @@ export const Signatories = ({
           >
             {isEditable ? (
               <EmptyHeader className="gap-0">
-                <EmptyMedia
-                  variant="icon"
-                  className="bg-gray-200 dark:bg-slate-800"
-                >
+                <EmptyMedia variant="icon" className="bg-gray-200">
                   <Plus className="size-4" />
                 </EmptyMedia>
                 <EmptyDescription>Add a signatory</EmptyDescription>

@@ -11,18 +11,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
 import { createClient } from '@/lib/supabase/client';
 import { JwtPayload } from '@supabase/supabase-js';
 import { useQuery } from '@tanstack/react-query';
 import { Loader, LogOut } from 'lucide-react';
-import { useTheme } from 'next-themes';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 export function CurrentUserAvatar({ user }: { user: JwtPayload }) {
-  const { theme, setTheme } = useTheme();
   const [loading, setLoading] = useState(false);
   const [openSignatureDialog, setSignatureDialogState] = useState(false);
   const { data, refetch, isFetching } = useQuery({
@@ -88,23 +84,7 @@ export function CurrentUserAvatar({ user }: { user: JwtPayload }) {
           </DropdownMenuLabel>
         </SignatureMenu>
         <DropdownMenuSeparator />
-        <DropdownMenuLabel>
-          <div className="flex items-center justify-between">
-            <Label htmlFor="dark-mode">Dark mode</Label>
-            <Switch
-              id="dark-mode"
-              checked={theme === 'dark'}
-              onCheckedChange={(checked) =>
-                setTheme(checked ? 'dark' : 'light')
-              }
-            />
-          </div>
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onClick={handleSignout}
-          className="font-medium hover:bg-red-100"
-        >
+        <DropdownMenuItem onClick={handleSignout} className="font-medium">
           {loading ? (
             <React.Fragment>
               <Loader className="animate-spin" />

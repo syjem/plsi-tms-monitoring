@@ -54,11 +54,7 @@ export function FirstFieldDialog({
                 Cancel
               </Button>
             </DialogClose>
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-              className="dark:text-gray-100"
-            >
+            <Button type="submit" disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
                   <Loader className="size-4 animate-spin" />

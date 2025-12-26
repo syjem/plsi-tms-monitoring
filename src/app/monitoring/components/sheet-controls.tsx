@@ -35,7 +35,7 @@ export function SheetControls({
                 size="icon"
                 disabled={isSaving}
                 onClick={saveSheet}
-                className="cursor-pointer dark:text-white"
+                className="cursor-pointer"
               >
                 {isSaving ? (
                   <Loader className="h-4 w-4 animate-spin" />
@@ -56,7 +56,7 @@ export function SheetControls({
               <Button
                 size="icon"
                 onClick={handlePrint}
-                className="cursor-pointer bg-blue-500 hover:bg-blue-600 dark:text-white"
+                className="cursor-pointer bg-blue-500 hover:bg-blue-600"
               >
                 <Printer className="h-4 w-4" />
               </Button>
@@ -70,7 +70,7 @@ export function SheetControls({
               <Button
                 size="icon"
                 onClick={enableEditing}
-                className="cursor-pointer dark:text-white"
+                className="cursor-pointer"
               >
                 <SquarePen className="h-4 w-4" />
               </Button>

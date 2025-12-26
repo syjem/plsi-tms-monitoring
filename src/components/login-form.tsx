@@ -69,7 +69,7 @@ export function LoginForm({ onSubmit, isLoading }: EmailStepProps) {
             type="email"
             disabled={isLoading}
             placeholder="me@example.com"
-            className="pl-10 border-gray-400 dark:border-border"
+            className="pl-10 border-gray-400"
             {...register('email')}
           />
         </div>
@@ -80,7 +80,7 @@ export function LoginForm({ onSubmit, isLoading }: EmailStepProps) {
       <Button
         type="submit"
         disabled={isLoading}
-        className="w-full shadow-sm cursor-pointer dark:text-gray-50"
+        className="w-full shadow-sm cursor-pointer"
       >
         {isLoading ? (
           <>
@@ -91,7 +91,7 @@ export function LoginForm({ onSubmit, isLoading }: EmailStepProps) {
           'Log in'
         )}
       </Button>
-      <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-gray-300 dark:after:border-border">
+      <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-gray-300">
         <span className="relative z-10 bg-background px-2 text-muted-foreground">
           Or
         </span>
@@ -101,7 +101,7 @@ export function LoginForm({ onSubmit, isLoading }: EmailStepProps) {
           type="button"
           disabled={loadingProvider !== null}
           variant="outline"
-          className="w-full border-gray-300 dark:border-border shadow-sm cursor-pointer"
+          className="w-full border-gray-300 shadow-sm cursor-pointer"
           onClick={() => handleSocialLogin('google')}
         >
           {loadingProvider === 'google' ? (

@@ -84,7 +84,7 @@ function FileManager({ logs }: { logs: Logs[] }) {
   };
 
   return (
-    <section className="rounded-lg border-2 border-dashed bg-white dark:bg-slate-900 transition-all duration-500 border-gray-300 dark:border-slate-800 hover:border-gray-400 dark:hover:border-gray-700 hover:shadow-md">
+    <section className="rounded-lg border-2 border-dashed bg-white transition-all duration-500 border-gray-300 hover:border-gray-400 hover:shadow-md">
       <DeleteAlertDialog
         open={open}
         setOpen={alertHandler}
@@ -104,7 +104,7 @@ function FileManager({ logs }: { logs: Logs[] }) {
           <Table>
             <TableCaption>Your recent logs</TableCaption>
             <TableHeader>
-              <TableRow className="dark:hover:bg-slate-800">
+              <TableRow>
                 <TableHead className="w-[200px] font-bold">From — To</TableHead>
                 <TableHead className="font-bold">Last modified</TableHead>
                 <TableHead className="sr-only">Actions</TableHead>
@@ -112,7 +112,7 @@ function FileManager({ logs }: { logs: Logs[] }) {
             </TableHeader>
             <TableBody>
               {logs.map((log) => (
-                <TableRow key={log.id} className="dark:hover:bg-slate-800">
+                <TableRow key={log.id}>
                   <TableCell className="font-medium text-muted-foreground">
                     {log.period}
                   </TableCell>
@@ -184,7 +184,7 @@ function DeleteAlertDialog({
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
-            className="bg-red-500 hover:bg-red-600 dark:text-gray-200"
+            className="bg-red-500 hover:bg-red-600"
             onClick={async () => {
               if (id) await deleteLogHandler(id);
               setOpen(false);
