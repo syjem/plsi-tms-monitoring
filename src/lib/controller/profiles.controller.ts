@@ -128,17 +128,38 @@ export class ProfilesController {
   ) {
     try {
       const result = await this.db.transaction(async (txs) => {
-        const updated = await txs
-          .update(profiles)
-          .set({ signatories, updated_at: new Date() })
-          .where(eq(profiles.user_id, user_id))
+        const profile = await txs
+          .select()
+          .from(profiles)
+          .where(eq(profiles.user_id, user_id));
+
+        // proceed to update if profile exists
+        if (profile.length > 0) {
+          const updated = await txs
+            .update(profiles)
+            .set({ signatories, updated_at: new Date() })
+            .where(eq(profiles.user_id, user_id))
+            .returning({
+              id: profiles.id,
+              signatories: profiles.signatories,
+              updated_at: profiles.updated_at,
+            });
+          return updated[0];
+        }
+
+        // add new entry to the database
+        const created = await this.db
+          .insert(profiles)
+          .values({ user_id: user_id, signatories: signatories })
           .returning({
             id: profiles.id,
             signatories: profiles.signatories,
             updated_at: profiles.updated_at,
           });
-        return updated[0];
+
+        return created[0];
       });
+
       return result;
     } catch (e) {
       if (e instanceof Error) {
