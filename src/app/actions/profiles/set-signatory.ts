@@ -1,28 +1,27 @@
 'use server';
 
 import { getUser } from '@/app/actions/get-user';
+import { ERRORS } from '@/constants/errors';
 import { ProfilesController } from '@/lib/controller/profiles.controller';
 import { db } from '@/lib/supabase';
+import { signatoriesSchema } from '@/lib/zod/schema';
 import { withErrorHandler } from '@/utils/with-error-handler';
 
-export async function setSignatory(
-  signatories: { id: number; name: string; title: string }[],
-) {
-  const result = await withErrorHandler(
-    async () => {
-      const user = await getUser();
-      if (!user) throw new Error('Unauthorized');
+export async function setSignatory(signatories: unknown) {
+  const result = await withErrorHandler(async () => {
+    const user = await getUser();
+    if (!user) throw new Error(ERRORS.UNAUTHORIZED);
 
-      // Validation
-      if (!Array.isArray(signatories) || signatories.length > 2) {
-        throw new Error('Invalid signatories data');
-      }
+    // Zod validation
+    const parsed = signatoriesSchema.safeParse(signatories);
 
-      const controller = new ProfilesController(db);
-      return controller.setSignatories(user.id, signatories);
-    },
-    { errorCode: 'SIGNATORIES_UPDATE_FAILED' },
-  );
+    if (!parsed.success) {
+      throw new Error(ERRORS.INVALID_INPUT);
+    }
+
+    const controller = new ProfilesController(db);
+    return controller.setSignatories(user.id, parsed.data);
+  });
 
   return result;
 }

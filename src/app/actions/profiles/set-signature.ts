@@ -13,13 +13,9 @@ export const setEngineerSignature = async (
   const result = await withErrorHandler(async () => {
     if (!userId) throw new Error('userId is required');
 
-    // check for user session and authorization
     const user = await getUser();
+    if (!user) throw new Error(ERRORS.UNAUTHORIZED);
 
-    // retrict further access when no user token found (possible exploit access)
-    if (!user) throw new Error(ERRORS.NOT_ALLOWED);
-
-    // initialize controller
     const controller = new ProfilesController(db);
 
     return controller.setSignature(userId, signatureData);
