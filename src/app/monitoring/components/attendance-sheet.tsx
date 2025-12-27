@@ -8,7 +8,7 @@ import { Signatories } from '@/app/monitoring/components/signatories';
 import type { AttendanceData, AttendanceRow, Logs } from '@/types';
 import { isRowEmpty } from '@/utils/is-row-empty';
 import { OperationResult } from '@/utils/with-error-handler';
-import { CheckCheck, Edit } from 'lucide-react';
+import { Edit } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -82,7 +82,6 @@ export default function AttendanceSheet({
 
         toast.success('Attendance sheet saved!', {
           id: toastId,
-          icon: <CheckCheck className="h-4 w-4" />,
         });
       }
       setIsEditable(false);
