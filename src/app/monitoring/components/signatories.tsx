@@ -61,15 +61,17 @@ export const Signatories = ({
     setIsSecondDialogOpen(true);
   };
 
-  const handleDialogSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleDialogSubmit = async (data: {
+    id: number;
+    name: string;
+    title: string;
+  }) => {
     setIsSubmitting(true);
 
     try {
-      const formData = new FormData(e.currentTarget);
-      const id = Number(formData.get('id'));
-      const name = formData.get('name') as string;
-      const title = formData.get('title') as string;
+      const id = data.id;
+      const name = data.name;
+      const title = data.title;
 
       if (!id || !name || !title) return;
 
