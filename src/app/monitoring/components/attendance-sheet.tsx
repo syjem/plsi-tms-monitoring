@@ -81,10 +81,12 @@ export default function AttendanceSheet({
       });
       setIsEditable(false);
     } catch (error) {
-      console.error(error);
-      toast.error('Failed to save attendance sheet.', { id: toastId });
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : 'Failed to save attendance sheet.';
+      toast.error(errorMessage, { id: toastId });
     } finally {
-      setTimeout(() => toast.dismiss(toastId), 1500);
       setIsSaving(false);
     }
   };

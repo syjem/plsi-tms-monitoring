@@ -41,7 +41,7 @@ export class WorkLogsController {
   async updateLogById(id: string, user_id: string, logs: AttendanceData) {
     const updated_log = await this.db
       .update(workLogs)
-      .set({ logs: logs, updated_at: new Date() })
+      .set({ logs, updated_at: new Date() })
       .where(and(eq(workLogs.id, id), eq(workLogs.user_id, user_id)))
       .returning({ id: workLogs.id, updated_at: workLogs.updated_at });
     return updated_log[0];

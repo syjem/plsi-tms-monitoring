@@ -5,18 +5,18 @@ import { ERRORS } from '@/constants/errors';
 import { WorkLogsController } from '@/lib/controller/logs.controller';
 import { db } from '@/lib/supabase';
 import { AttendanceData } from '@/types';
-import { notFound } from 'next/navigation';
+import { redirect } from 'next/navigation';
 
-export async function getWorkLogById(id: string) {
-  if (!id) throw new Error(ERRORS.MISSING_REQUIRED_FIELD);
+export async function createLog(period: string, logs: AttendanceData) {
+  if (!period || !logs) throw new Error(ERRORS.MISSING_REQUIRED_FIELD);
 
   const user = await getUser();
   if (!user) throw new Error(ERRORS.UNAUTHORIZED);
 
   const controller = new WorkLogsController(db);
-  const workLog = await controller.getLogById(id, user.id);
+  const createdLog = await controller.createLog(user.id, period, logs);
 
-  if (!workLog) notFound();
+  if (!createdLog) throw new Error(ERRORS.NOT_ALLOWED);
 
-  return { logs: workLog.logs as AttendanceData, id: workLog.id };
+  redirect(`/monitoring/${createdLog.id}`);
 }
