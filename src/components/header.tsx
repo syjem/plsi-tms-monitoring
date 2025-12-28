@@ -1,9 +1,9 @@
-import { getClaims } from '@/app/actions/get-claims';
+import { getUser } from '@/app/actions/get-user';
 import { CurrentUserAvatar } from '@/components/current-user-avatar';
 import { AppLogo } from '@/components/icons';
 
 export async function Header() {
-  const { user } = await getClaims();
+  const user = await getUser();
 
   return (
     <header className="w-full mx-auto py-4 px-4 sm:px-6 lg:px-8">

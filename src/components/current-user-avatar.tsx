@@ -12,13 +12,13 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { createClient } from '@/lib/supabase/client';
-import { JwtPayload } from '@supabase/supabase-js';
+import { User } from '@supabase/supabase-js';
 import { useQuery } from '@tanstack/react-query';
 import { Loader, LogOut } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
-export function CurrentUserAvatar({ user }: { user: JwtPayload }) {
+export function CurrentUserAvatar({ user }: { user: User | null }) {
   const [loading, setLoading] = useState(false);
   const [openSignatureDialog, setSignatureDialogState] = useState(false);
   const { data, refetch, isFetching } = useQuery({
@@ -29,9 +29,9 @@ export function CurrentUserAvatar({ user }: { user: JwtPayload }) {
 
   const router = useRouter();
 
-  const userName = user.user_metadata.full_name as string;
-  const email = user.email;
-  const avatarUrl = user.user_metadata.avatar_url;
+  const userName = user?.user_metadata.full_name as string;
+  const email = user?.email;
+  const avatarUrl = user?.user_metadata.avatar_url;
 
   const initials = userName
     ?.split(' ')

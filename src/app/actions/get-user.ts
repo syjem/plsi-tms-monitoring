@@ -1,6 +1,7 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
+import { redirect } from 'next/navigation';
 
 /**
  * Retrieves the currently authenticated user from Supabase.
@@ -22,7 +23,7 @@ export async function getUser() {
   const supabase = await createClient();
   const { error } = await supabase.auth.getClaims();
 
-  if (error) throw error;
+  if (error) redirect('/auth/login');
 
   const { data } = await supabase.auth.getUser();
 
