@@ -29,8 +29,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { WorkLog } from '@/lib/supabase/schema';
 import { cn } from '@/lib/utils';
-import { Logs } from '@/types';
 import { formatISODate } from '@/utils/format-date';
 import { CheckCheck, CircleAlert, Ellipsis, Loader } from 'lucide-react';
 import Link from 'next/link';
@@ -38,7 +38,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-function FileManager({ logs }: { logs: Logs[] }) {
+function FileManager({ logs }: { logs: WorkLog[] }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [visible, setVisible] = useState(false);

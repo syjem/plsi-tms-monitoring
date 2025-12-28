@@ -1,35 +1,12 @@
-"use server";
+'use server';
 
-import { AttendanceData } from "@/types";
-import { createClient } from "@/lib/supabase/server";
+import { getUser } from '@/app/actions/get-user';
+import { ERRORS } from '@/constants/errors';
+import { AttendanceData } from '@/types';
 
 export async function updateWorkLog(id: string, logs: AttendanceData) {
-  const supabase = await createClient();
+  const user = await getUser();
+  if (!user) throw new Error(ERRORS.UNAUTHORIZED);
 
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
-
-  if (userError || !user) {
-    return { success: false, error: "User not authenticated" };
-  }
-
-  const { error } = await supabase
-    .from("work_logs")
-    .update({ logs: logs, updated_at: new Date().toISOString() })
-    .eq("user_id", user.id)
-    .eq("id", id)
-    .single();
-
-  if (error) {
-    return {
-      success: false,
-      error: "Failed to update the log, please try again.",
-    };
-  }
-
-  return {
-    success: true,
-  };
+  return { success: true };
 }
