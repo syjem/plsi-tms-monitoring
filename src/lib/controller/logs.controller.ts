@@ -11,6 +11,14 @@ export class WorkLogsController {
     this.db = db;
   }
 
+  async createLog(user_id: string, period: string, logs: AttendanceData) {
+    const new_log = await this.db
+      .insert(workLogs)
+      .values({ user_id, period, logs })
+      .returning({ id: workLogs.id });
+    return new_log[0];
+  }
+
   //   Single log
   async getLogById(id: string, user_id: string) {
     const work_log = await this.db
@@ -30,20 +38,20 @@ export class WorkLogsController {
     return work_logs;
   }
 
-  async updateLogById(id: string, logs: AttendanceData) {
+  async updateLogById(id: string, user_id: string, logs: AttendanceData) {
     const updated_log = await this.db
       .update(workLogs)
       .set({ logs: logs, updated_at: new Date() })
-      .where(eq(workLogs.id, id))
+      .where(and(eq(workLogs.id, id), eq(workLogs.user_id, user_id)))
       .returning({ id: workLogs.id, updated_at: workLogs.updated_at });
-    return updated_log;
+    return updated_log[0];
   }
 
-  async deleteLogById(id: string) {
+  async deleteLogById(id: string, user_id: string) {
     const deleted_log = await this.db
       .delete(workLogs)
-      .where(eq(workLogs.id, id))
+      .where(and(eq(workLogs.id, id), eq(workLogs.user_id, user_id)))
       .returning({ id: workLogs.id });
-    return deleted_log;
+    return deleted_log[0];
   }
 }
