@@ -54,7 +54,7 @@ export class ProfilesController {
         }
 
         // add new entry to the database
-        const create_result = await this.db
+        const create_result = await txs
           .insert(profiles)
           .values({ user_id: user_id, signature: data })
           .returning({
@@ -83,10 +83,9 @@ export class ProfilesController {
    *   - The id is missing or empty
    *   - A database operation fails
    */
-  async getEngineerById(id: string) {
+  async getEngineerByUserId(user_id: string) {
     try {
-      if (!id) throw new Error('Missing parameter id!');
-
+      if (!user_id) throw new Error('Missing parameter user_id!');
       const result = await this.db
         .select({
           id: profiles.id,
@@ -96,13 +95,13 @@ export class ProfilesController {
           signature: profiles.signature,
         })
         .from(profiles)
-        .where(eq(profiles.user_id, id));
+        .where(eq(profiles.user_id, user_id));
 
       return result.length > 0 ? result[0] : null;
     } catch (e) {
       if (e instanceof Error) {
         throw new Error(
-          `[${ProfilesController.name}:${this.getEngineerById.name}] Error: ` +
+          `[${ProfilesController.name}:${this.getEngineerByUserId.name}] Error: ` +
             e?.message,
         );
       }
@@ -148,7 +147,7 @@ export class ProfilesController {
         }
 
         // add new entry to the database
-        const created = await this.db
+        const created = await txs
           .insert(profiles)
           .values({ user_id: user_id, signatories: signatories })
           .returning({

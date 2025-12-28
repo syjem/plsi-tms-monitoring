@@ -1,7 +1,7 @@
 'use client';
 
 import { extractTextFromPDF } from '@/app/actions/extract-pdf';
-import { saveExtractedLogs } from '@/app/actions/save-extracted-logs';
+import { createLog } from '@/app/actions/logs/create-log';
 import { isNextRedirectError } from '@/utils/is-next-redirect-error';
 import { processLogs } from '@/utils/process-logs';
 import { useCallback, useEffect, useState } from 'react';
@@ -101,11 +101,7 @@ export const usePDFExtract = (options: UsePDFExtractOptions) => {
       const processedLogs = processLogs(result.data.logs);
 
       setStage('saving');
-      const { success, error } = await saveExtractedLogs(period, processedLogs);
-
-      if (!success) {
-        toast.error(error || 'Failed to save extracted data');
-      }
+      await createLog(period, processedLogs);
     } catch (error: unknown) {
       if (isNextRedirectError(error)) return;
 

@@ -1,29 +1,16 @@
 'use server';
 
-import { createClient } from '@/lib/supabase/server';
-import { WorkLogs } from '@/types';
+import { getUser } from '@/app/actions/get-user';
+import { ERRORS } from '@/constants/errors';
+import { WorkLogsController } from '@/lib/controller/logs.controller';
+import { db } from '@/lib/supabase';
 
-export async function getWorkLogs(): Promise<WorkLogs> {
-  const supabase = await createClient();
+export async function getWorkLogs() {
+  const user = await getUser();
+  if (!user) throw new Error(ERRORS.UNAUTHORIZED);
 
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
+  const controller = new WorkLogsController(db);
+  const work_logs = await controller.getLogsById(user.id);
 
-  if (userError || !user) {
-    return { data: null, error: 'User not authenticated' };
-  }
-
-  const { data, error } = await supabase
-    .from('work_logs')
-    .select('*')
-    .eq('user_id', user.id)
-    .order('created_at', { ascending: false });
-
-  if (error) {
-    return { data: null, error: error.message };
-  }
-
-  return { data };
+  return work_logs;
 }

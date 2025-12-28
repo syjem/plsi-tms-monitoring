@@ -3,11 +3,11 @@
 import { Dropzone } from '@/components/dropzone';
 import FileManager from '@/components/file-manager';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Logs } from '@/types';
+import { WorkLog } from '@/lib/supabase/schema';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState, useTransition } from 'react';
 
-export function MainTab({ logs }: { logs: Logs[] }) {
+export function MainTab({ logs }: { logs: WorkLog[] }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();

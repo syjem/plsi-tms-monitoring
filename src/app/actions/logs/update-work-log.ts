@@ -1,35 +1,27 @@
-"use server";
+'use server';
 
-import { AttendanceData } from "@/types";
-import { createClient } from "@/lib/supabase/server";
+import { getUser } from '@/app/actions/get-user';
+import { ERRORS } from '@/constants/errors';
+import { WorkLogsController } from '@/lib/controller/logs.controller';
+import { db } from '@/lib/supabase';
+import { AttendanceData } from '@/types';
+import { withErrorHandler } from '@/utils/with-error-handler';
 
 export async function updateWorkLog(id: string, logs: AttendanceData) {
-  const supabase = await createClient();
+  const result = await withErrorHandler(async () => {
+    if (!id || !logs) throw new Error(ERRORS.MISSING_REQUIRED_FIELD);
 
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
+    const user = await getUser();
+    if (!user) throw new Error(ERRORS.UNAUTHORIZED);
 
-  if (userError || !user) {
-    return { success: false, error: "User not authenticated" };
-  }
+    const controller = new WorkLogsController(db);
+    const result = await controller.updateLogById(id, user.id, logs);
 
-  const { error } = await supabase
-    .from("work_logs")
-    .update({ logs: logs, updated_at: new Date().toISOString() })
-    .eq("user_id", user.id)
-    .eq("id", id)
-    .single();
+    if (!result) {
+      throw new Error(ERRORS.NOT_FOUND);
+    }
+    return { success: true, data: result };
+  });
 
-  if (error) {
-    return {
-      success: false,
-      error: "Failed to update the log, please try again.",
-    };
-  }
-
-  return {
-    success: true,
-  };
+  return result;
 }

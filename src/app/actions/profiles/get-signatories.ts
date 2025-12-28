@@ -7,17 +7,14 @@ import { db } from '@/lib/supabase';
 import { withErrorHandler } from '@/utils/with-error-handler';
 
 export async function getSignatories() {
-  const result = await withErrorHandler(
-    async () => {
-      const user = await getUser();
-      if (!user) throw new Error(ERRORS.USER_NOT_FOUND);
+  const result = await withErrorHandler(async () => {
+    const user = await getUser();
+    if (!user) throw new Error(ERRORS.UNAUTHORIZED);
 
-      const controller = new ProfilesController(db);
-      const profile = await controller.getEngineerById(user.id);
-      return profile?.signatories || [];
-    },
-    { errorCode: 'SIGNATORIES_FETCH_FAILED' },
-  );
+    const controller = new ProfilesController(db);
+    const profile = await controller.getEngineerByUserId(user.id);
+    return profile?.signatories || [];
+  });
 
   return result;
 }

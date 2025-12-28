@@ -8,6 +8,7 @@ export const ERRORS = {
 
   // Validation
   INVALID_INPUT: 'Invalid input provided',
+  MISSING_REQUIRED_FIELD: 'A required field is missing',
   REQUIRED_FIELD: 'This field is required',
   INVALID_EMAIL: 'Please enter a valid email address',
   INVALID_PASSWORD: 'Password must be at least 8 characters',

@@ -5,7 +5,7 @@ import { AttendanceSheetHeader } from '@/app/monitoring/components/attendance-sh
 import AttendanceSheetTable from '@/app/monitoring/components/attendance-sheet-table';
 import { SheetControls } from '@/app/monitoring/components/sheet-controls';
 import { Signatories } from '@/app/monitoring/components/signatories';
-import type { AttendanceData, AttendanceRow, Logs } from '@/types';
+import type { AttendanceData, AttendanceRow } from '@/types';
 import { isRowEmpty } from '@/utils/is-row-empty';
 import { OperationResult } from '@/utils/with-error-handler';
 import { Edit } from 'lucide-react';
@@ -13,10 +13,10 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 
 export default function AttendanceSheet({
-  workLogs,
+  workLog,
   signature,
 }: {
-  workLogs: Logs | null;
+  workLog: { id: string; logs: AttendanceData };
   signature: OperationResult<
     string | null | undefined,
     Record<string, unknown>
@@ -27,8 +27,8 @@ export default function AttendanceSheet({
   const [isSaving, setIsSaving] = useState(false);
 
   const [attendanceData, setAttendanceData] = useState<AttendanceData>(() => {
-    if (workLogs?.logs && workLogs.logs.length > 0) {
-      return workLogs.logs;
+    if (workLog.id && workLog.logs && workLog.logs.length > 0) {
+      return workLog.logs;
     }
     // Default empty groups if no initial data - 40 single-row
     return Array.from({ length: 40 }, () => [
@@ -69,27 +69,24 @@ export default function AttendanceSheet({
     const toastId = toast.loading('Saving attendance sheet...');
 
     try {
-      if (workLogs) {
-        const { success, error } = await updateWorkLog(
-          workLogs.id,
-          attendanceData,
-        );
+      const { success } = await updateWorkLog(workLog.id, attendanceData);
 
-        if (!success) {
-          toast.error(error);
-          return;
-        }
-
-        toast.success('Attendance sheet saved!', {
-          id: toastId,
-        });
+      if (!success) {
+        toast.error('Failed to save attendance sheet.');
+        return;
       }
+
+      toast.success('Attendance sheet saved!', {
+        id: toastId,
+      });
       setIsEditable(false);
     } catch (error) {
-      console.error(error);
-      toast.error('Failed to save attendance sheet.', { id: toastId });
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : 'Failed to save attendance sheet.';
+      toast.error(errorMessage, { id: toastId });
     } finally {
-      setTimeout(() => toast.dismiss(toastId), 1500);
       setIsSaving(false);
     }
   };

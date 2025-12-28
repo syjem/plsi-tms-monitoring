@@ -29,8 +29,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { WorkLog } from '@/lib/supabase/schema';
 import { cn } from '@/lib/utils';
-import { Logs } from '@/types';
 import { formatISODate } from '@/utils/format-date';
 import { CheckCheck, CircleAlert, Ellipsis, Loader } from 'lucide-react';
 import Link from 'next/link';
@@ -38,7 +38,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-function FileManager({ logs }: { logs: Logs[] }) {
+function FileManager({ logs }: { logs: WorkLog[] }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -55,24 +55,24 @@ function FileManager({ logs }: { logs: Logs[] }) {
     });
 
     try {
-      const { success, message, error } = await deleteWorkLog(id);
+      const { success } = await deleteWorkLog(id);
 
       if (!success) {
-        toast.error(error, {
-          id: toastId,
-          icon: <CircleAlert className="h-4 w-4" />,
-        });
-        return;
+        throw new Error('Not allowed to delete this log');
       }
 
-      toast.success(message, {
+      toast.success('Log deleted successfully', {
         id: toastId,
         icon: <CheckCheck className="h-4 w-4" />,
       });
       router.refresh();
     } catch (error) {
-      console.error(error);
-      toast.error('An error has occurred, please try again!', {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : 'An error has occurred, please try again!';
+
+      toast.error(errorMessage, {
         id: toastId,
         icon: <CircleAlert className="h-4 w-4" />,
       });
