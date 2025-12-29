@@ -1,4 +1,5 @@
 import { BackgroundBottom, BackgroundTop } from '@/components/backgrounds';
+import { Toaster } from '@/components/ui/sonner';
 import AppProvider from '@/provider';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
@@ -32,6 +33,7 @@ export default function RootLayout({
         <BackgroundTop />
         <BackgroundBottom />
         <AppProvider>{children}</AppProvider>
+        <Toaster position="bottom-center" richColors className="print:hidden" />
       </body>
     </html>
   );

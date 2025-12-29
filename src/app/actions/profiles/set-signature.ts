@@ -6,19 +6,14 @@ import { ProfilesController } from '@/lib/controller/profiles.controller';
 import { db } from '@/lib/supabase';
 import { withErrorHandler } from '@/utils/with-error-handler';
 
-export const setEngineerSignature = async (
-  userId: string,
-  signatureData: string,
-) => {
+export const setEngineerSignature = async (signatureData: string) => {
   const result = await withErrorHandler(async () => {
-    if (!userId) throw new Error('userId is required');
-
     const user = await getUser();
     if (!user) throw new Error(ERRORS.UNAUTHORIZED);
 
     const controller = new ProfilesController(db);
 
-    return controller.setSignature(userId, signatureData);
+    return controller.setSignature(user.id, signatureData);
   });
 
   return result;

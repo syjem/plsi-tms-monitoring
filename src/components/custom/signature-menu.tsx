@@ -20,7 +20,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useElementSize } from '@/hooks/use-element-size';
 
 import useScreenSize from '@/hooks/use-screen-size';
-import { useAuthUser } from '@/provider/auth-user.provider';
 import { OperationResult } from '@/utils/with-error-handler';
 import { DialogProps, DialogTitle } from '@radix-ui/react-dialog';
 import { QueryObserverResult, RefetchOptions } from '@tanstack/react-query';
@@ -49,7 +48,6 @@ function SignatureMenu({
   refetch,
   ...rest
 }: SignatureMenuProps) {
-  const { user } = useAuthUser();
   const [edit, setEdit] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const { ref, width, padding } = useElementSize<HTMLDivElement>();
@@ -71,33 +69,28 @@ function SignatureMenu({
         // enable loader
         setSubmitting(true);
 
-        if (!user) throw new Error('user not found!');
+        return toast.promise(() => setEngineerSignature(signatureData), {
+          loading: 'Saving signature...',
+          success: (data) => {
+            if (!data.success) throw new Error(data.error.message);
 
-        return toast.promise(
-          () => setEngineerSignature(user.id, signatureData),
-          {
-            loading: 'Saving signature...',
-            success: (data) => {
-              if (!data.success) throw new Error(data.error.message);
+            // fetch data from the database
+            refetch();
+            // reset edit mode
+            setEdit(false);
+            // reset loader
+            setSubmitting(false);
 
-              // fetch data from the database
-              refetch();
-              // reset edit mode
-              setEdit(false);
-              // reset loader
-              setSubmitting(false);
-
-              return 'Signature saved successfully!';
-            },
-            error: (e) => {
-              setSubmitting(false);
-              return (
-                e?.message ||
-                'Something went wrong while tyring to save signature!'
-              );
-            },
+            return 'Signature saved successfully!';
           },
-        );
+          error: (e) => {
+            setSubmitting(false);
+            return (
+              e?.message ||
+              'Something went wrong while tyring to save signature!'
+            );
+          },
+        });
       } catch (e) {
         if (e instanceof Error) {
           toast.error(e?.message || 'Something went wrong!');
@@ -106,7 +99,7 @@ function SignatureMenu({
         setSubmitting(false);
       }
     },
-    [refetch, user],
+    [refetch],
   );
 
   const onEditClick = useCallback(() => {
