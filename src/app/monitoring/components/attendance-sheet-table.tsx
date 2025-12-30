@@ -1,7 +1,7 @@
 import { CustomTableHead } from '@/app/monitoring/components/table-head';
 import { CustomTableRow } from '@/app/monitoring/components/table-row';
 import { Table, TableBody } from '@/components/ui/table';
-import { AttendanceData, AttendanceRow } from '@/types';
+import type { AttendanceData, AttendanceRow } from '@/types';
 import { isRowEmpty } from '@/utils/is-row-empty';
 import { OperationResult } from '@/utils/with-error-handler';
 import { SetStateAction } from 'react';

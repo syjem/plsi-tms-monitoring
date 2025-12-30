@@ -15,9 +15,7 @@ export async function setSignatory(signatories: unknown) {
     // Zod validation
     const parsed = signatoriesSchema.safeParse(signatories);
 
-    if (!parsed.success) {
-      throw new Error(ERRORS.INVALID_INPUT);
-    }
+    if (!parsed.success) throw new Error(ERRORS.INVALID_INPUT);
 
     const controller = new ProfilesController(db);
     return controller.setSignatories(user.id, parsed.data);

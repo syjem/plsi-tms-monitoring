@@ -5,15 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { createClient } from '@/lib/supabase/client';
+import { emailSchema } from '@/lib/zod/schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader, Mail } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-
-const emailSchema = z.object({
-  email: z.email('Please enter a valid email address'),
-});
 
 type EmailFormData = z.infer<typeof emailSchema>;
 

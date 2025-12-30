@@ -17,9 +17,7 @@ export async function deleteWorkLog(id: string) {
     const controller = new WorkLogsController(db);
     const result = await controller.deleteLogById(id, user.id);
 
-    if (!result) {
-      throw new Error(ERRORS.NOT_FOUND || ERRORS.NOT_ALLOWED);
-    }
+    if (!result) throw new Error(ERRORS.NOT_ALLOWED);
 
     revalidatePath('/');
 

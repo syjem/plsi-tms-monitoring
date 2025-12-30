@@ -4,7 +4,7 @@ import { getUser } from '@/app/actions/get-user';
 import { ERRORS } from '@/constants/errors';
 import { WorkLogsController } from '@/lib/controller/logs.controller';
 import { db } from '@/lib/supabase';
-import { AttendanceData } from '@/types';
+import type { AttendanceData } from '@/types';
 import { redirect } from 'next/navigation';
 
 export async function createLog(period: string, logs: AttendanceData) {

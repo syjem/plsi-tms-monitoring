@@ -1,5 +1,5 @@
 import { workLogs } from '@/lib/supabase/schema';
-import { AttendanceData } from '@/types';
+import type { AttendanceData } from '@/types';
 import { and, eq } from 'drizzle-orm';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 

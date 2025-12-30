@@ -1,25 +1,3 @@
-export interface Employee {
-  id: string;
-  name: string;
-}
-
-export interface Log {
-  BreakIn: string;
-  BreakOut: string;
-  Date: string;
-  Day: string;
-  Remarks: string;
-  Shift: string;
-  TimeIn: string;
-  TimeOut: string;
-}
-
-export interface Data {
-  employee: Employee;
-  logs: Log[];
-}
-
-// Define the structure for each row
 export interface AttendanceRow {
   date: string;
   day: string;
@@ -32,7 +10,7 @@ export interface AttendanceRow {
 }
 
 export type AttendanceGroup = AttendanceRow[];
-export type AttendanceData = AttendanceGroup[];
+export type AttendanceData = AttendanceGroup[]; // two dimensional array
 
 export interface ApiLogData {
   BreakIn: string;
@@ -44,38 +22,3 @@ export interface ApiLogData {
   TimeIn: string;
   TimeOut: string;
 }
-
-type SystemsEngineerSchema = {
-  id: number;
-  field_number: number;
-  name: string;
-  title: string;
-};
-
-export type SystemsEngineerSingle = {
-  data: SystemsEngineerSchema | null;
-  error?: string;
-};
-
-export type SystemsEngineerDataType = {
-  data: SystemsEngineerSchema[];
-  error?: string;
-};
-
-export type Logs = {
-  id: string;
-  period: string;
-  logs: AttendanceData;
-  created_at: string;
-  updated_at: string;
-};
-
-export type WorkLogs = {
-  data: Logs[] | null;
-  error?: string;
-};
-
-export type WorkLogById = {
-  data: Logs | null;
-  error?: string;
-};

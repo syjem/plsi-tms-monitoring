@@ -1,13 +1,13 @@
-import { formatDate } from "@/utils/format-date";
-import { formatTimeTo12Hour } from "@/utils/format-time";
-import type { ApiLogData, AttendanceData } from "@/types";
-import { isRowHasRecords } from "@/utils/is-row-has-records";
+import type { ApiLogData, AttendanceData } from '@/types';
+import { formatDate } from '@/utils/format-date';
+import { formatTimeTo12Hour } from '@/utils/format-time';
+import { isRowHasRecords } from '@/utils/is-row-has-records';
 
 export const processLogs = (logs: ApiLogData[]): AttendanceData => {
   const groupedData: AttendanceData = [];
 
   logs.forEach((log) => {
-    const isDayOff = log.Shift === "X" || log.Remarks === "DAY OFF";
+    const isDayOff = log.Shift === 'X' || log.Remarks === 'DAY OFF';
     const hasRecords = isRowHasRecords(log);
 
     // Check if it's a day off - create single row group
@@ -17,11 +17,11 @@ export const processLogs = (logs: ApiLogData[]): AttendanceData => {
           date: formatDate(log.Date),
           day: log.Day,
           sched: log.Shift,
-          timeIn: "",
-          timeOut: "",
-          destination: "",
+          timeIn: '',
+          timeOut: '',
+          destination: '',
           remarks: log.Remarks,
-          signature: "",
+          signature: '',
         },
       ]);
     } else {
@@ -35,19 +35,19 @@ export const processLogs = (logs: ApiLogData[]): AttendanceData => {
           sched: log.Shift,
           timeIn: formatTimeTo12Hour(log.TimeIn),
           timeOut: formatTimeTo12Hour(log.BreakOut),
-          destination: "OFFICE",
-          remarks: log.Remarks || "DUTY ON CALL",
-          signature: "",
+          destination: 'OFFICE',
+          remarks: log.Remarks || 'DUTY ON CALL',
+          signature: '',
         },
         {
-          date: "",
-          day: "",
-          sched: "",
+          date: '',
+          day: '',
+          sched: '',
           timeIn: formatTimeTo12Hour(log.BreakIn),
           timeOut: formatTimeTo12Hour(log.TimeOut),
-          destination: "OFFICE",
-          remarks: log.Remarks || "DUTY ON CALL",
-          signature: "",
+          destination: 'OFFICE',
+          remarks: log.Remarks || 'DUTY ON CALL',
+          signature: '',
         },
       ]);
     }
@@ -56,20 +56,20 @@ export const processLogs = (logs: ApiLogData[]): AttendanceData => {
   // Fill remaining rows with empty data up to 40 rows
   const currentRowCount = groupedData.reduce(
     (total, group) => total + group.length,
-    0
+    0,
   );
   const remainingRows = 40 - currentRowCount;
   for (let i = 0; i < remainingRows; i++) {
     groupedData.push([
       {
-        date: "",
-        day: "",
-        sched: "",
-        timeIn: "",
-        timeOut: "",
-        destination: "",
-        remarks: "",
-        signature: "",
+        date: '',
+        day: '',
+        sched: '',
+        timeIn: '',
+        timeOut: '',
+        destination: '',
+        remarks: '',
+        signature: '',
       },
     ]);
   }

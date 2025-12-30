@@ -17,21 +17,30 @@ export default function Page() {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleEmailSubmit = async (submittedEmail: string) => {
-    setEmail(submittedEmail);
-    setIsLoading(true);
+    try {
+      setEmail(submittedEmail);
+      setIsLoading(true);
 
-    await new Promise((resolve) => setTimeout(resolve, 500));
+      const { success, error } = await signInWithEmail(submittedEmail);
 
-    const { error } = await signInWithEmail(submittedEmail);
+      if (!success) {
+        toast.error(
+          error?.message || 'Failed to send login link. Please try again.',
+        );
+        return;
+      }
 
-    if (error) {
-      toast.error(error.message || 'Failed to sign in. Please try again.');
-    } else {
       toast.success('Check your email for the login link!');
       setStep('email-sent');
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : 'An unexpected error occurred. Please try again.',
+      );
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   const handleBack = () => {
