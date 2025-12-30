@@ -20,7 +20,7 @@ export async function signInWithEmail(email: string) {
   });
 
   return {
-    success: false,
+    success: !error,
     error: error?.message ? new Error(error.message) : null,
   };
 }
