@@ -175,6 +175,7 @@ export default function AttendanceSheet({
         isEditable={isEditable}
         saveSheet={saveSheet}
         enableEditing={enableEditing}
+        signature={signature}
       />
 
       <div className="mb-4 mx-auto max-w-4xl print:max-w-[700px]">
