@@ -1,13 +1,13 @@
 import { workLogs } from '@/lib/supabase/schema';
 import type { AttendanceData } from '@/types';
-import { and, eq } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 
-type databaseType = PostgresJsDatabase<Record<string, never>>;
+type DatabaseType = PostgresJsDatabase<Record<string, never>>;
 
 export class WorkLogsController {
-  db: databaseType;
-  constructor(db: databaseType) {
+  db: DatabaseType;
+  constructor(db: DatabaseType) {
     this.db = db;
   }
 
@@ -34,7 +34,8 @@ export class WorkLogsController {
     const work_logs = await this.db
       .select()
       .from(workLogs)
-      .where(eq(workLogs.user_id, user_id));
+      .where(eq(workLogs.user_id, user_id))
+      .orderBy(desc(workLogs.updated_at));
     return work_logs;
   }
 
