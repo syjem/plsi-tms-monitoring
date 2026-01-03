@@ -14,7 +14,7 @@ import { OperationResult } from '@/utils/with-error-handler';
 import { Plus } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React, { useState, useTransition } from 'react';
+import React, { useState } from 'react';
 import { toast } from 'sonner';
 
 type SignatoriesProps = {
@@ -47,13 +47,9 @@ export const Signatories = ({
   signatories,
 }: SignatoriesProps) => {
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isFirstDialogOpen, setIsFirstDialogOpen] = useState(false);
   const [isSecondDialogOpen, setIsSecondDialogOpen] = useState(false);
-  const [updatingSignatoryId, setUpdatingSignatoryId] = useState<number | null>(
-    null,
-  );
 
   const [optimisticData, setOptimisticData] = useState<Signatory[] | null>(
     null,
@@ -99,8 +95,6 @@ export const Signatories = ({
       return;
     }
 
-    setUpdatingSignatoryId(id);
-
     const newSignatory = { id, name, title, includeSignature };
 
     const updatedSignatories = [
@@ -113,7 +107,6 @@ export const Signatories = ({
 
     try {
       setOptimisticData(updatedSignatories);
-
       if (id === 1) setIsFirstDialogOpen(false);
       if (id === 2) setIsSecondDialogOpen(false);
       toast.success('Signatories updated successfully');
@@ -124,17 +117,9 @@ export const Signatories = ({
         throw new Error(result.error.message);
       }
 
-      startTransition(() => {
-        router.refresh();
-        setOptimisticData(null);
-        setUpdatingSignatoryId(null);
-      });
+      router.refresh();
     } catch (error) {
-      // Rollback on error
-      setOptimisticData(previousData);
-      setUpdatingSignatoryId(null);
-
-      console.error('Error submitting form:', error);
+      setOptimisticData(previousData); // Rollback on error
       toast.error(
         error instanceof Error ? error.message : 'Failed to update signatories',
       );
@@ -171,7 +156,6 @@ export const Signatories = ({
             onClick={handleAddFirstSignatory}
             className={cn(
               'relative flex-1 flex flex-col items-stretch px-2 md:px-8 py-4 transition-all rounded-sm',
-              isPending && updatingSignatoryId === 1 && 'opacity-30',
               isEditable &&
                 'border-2 border-dashed border-gray-400 active:border-primary active:scale-95',
             )}
@@ -220,7 +204,6 @@ export const Signatories = ({
             onClick={handleAddSecondSignatory}
             className={cn(
               'relative flex-1 flex flex-col items-stretch px-2 md:px-8 py-4 transition-all rounded-sm',
-              isPending && updatingSignatoryId === 2 && 'opacity-30',
               isEditable &&
                 'border-2 border-dashed border-gray-400 active:border-primary active:scale-95',
             )}
