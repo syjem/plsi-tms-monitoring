@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog,
   DialogClose,
@@ -14,7 +15,7 @@ import { Loader } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import z from 'zod';
 
-export function FirstFieldDialog({
+export function FirstSignatoryDialog({
   open,
   setOpen,
   onSubmit,
@@ -27,6 +28,7 @@ export function FirstFieldDialog({
     id: number;
     name: string;
     title: string;
+    includeSignature: boolean;
   }) => Promise<void>;
   isSubmitting: boolean;
   firstSignatory: { name: string; title: string };
@@ -51,6 +53,7 @@ export function FirstFieldDialog({
       id: Number(formData.get('id')),
       name: formData.get('name') as string,
       title: formData.get('title') as string,
+      includeSignature: formData.get('includeSignature') === 'on',
     };
 
     // Validate with Zod
@@ -105,6 +108,25 @@ export function FirstFieldDialog({
                 <p className="text-sm text-red-500">{errors.title}</p>
               )}
             </div>
+            <Label
+              className="hover:bg-accent/50 flex items-start gap-3 rounded-lg border p-3 has-[[aria-checked=true]]:border-primary has-[[aria-checked=true]]:bg-green-50 
+              cursor-pointer"
+            >
+              <Checkbox
+                name="includeSignature"
+                defaultChecked
+                id="signatory-1"
+                className="data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:text-white"
+              />
+              <div className="grid gap-1.5 font-normal">
+                <p className="text-sm leading-none font-medium">
+                  Add Signature
+                </p>
+                <p className="text-muted-foreground text-sm">
+                  Include your signature in this signatory.
+                </p>
+              </div>
+            </Label>
           </div>
           <DialogFooter className="mt-4">
             <DialogClose asChild>

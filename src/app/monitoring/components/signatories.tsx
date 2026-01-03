@@ -1,8 +1,8 @@
 'use client';
 
 import { setSignatory as setEngineerSignatory } from '@/app/actions/profiles/set-signatory';
-import { FirstFieldDialog } from '@/app/monitoring/components/first-dialog';
-import { SecondFieldDialog } from '@/app/monitoring/components/second-dialog';
+import { FirstSignatoryDialog } from '@/app/monitoring/components/first-dialog';
+import { SecondSignatoryDialog } from '@/app/monitoring/components/second-dialog';
 import {
   Empty,
   EmptyDescription,
@@ -14,7 +14,7 @@ import { OperationResult } from '@/utils/with-error-handler';
 import { Plus } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
 type SignatoriesProps = {
@@ -33,7 +33,11 @@ type SignatoriesProps = {
   >;
 };
 
-type Signatory = { id: number; name: string; title: string };
+type Signatory = {
+  id: number;
+  name: string;
+  title: string;
+};
 
 export const Signatories = ({
   isEditable,
@@ -41,9 +45,19 @@ export const Signatories = ({
   signatories,
 }: SignatoriesProps) => {
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isFirstDialogOpen, setIsFirstDialogOpen] = useState(false);
   const [isSecondDialogOpen, setIsSecondDialogOpen] = useState(false);
+  const [updatingSignatoryId, setUpdatingSignatoryId] = useState<number | null>(
+    null,
+  );
+  const [includeSignatureMap, setIncludeSignatureMap] = useState<
+    Record<number, boolean>
+  >({
+    1: false,
+    2: false,
+  });
 
   const [optimisticData, setOptimisticData] = useState<Signatory[] | null>(
     null,
@@ -62,12 +76,12 @@ export const Signatories = ({
     title: '',
   };
 
-  const handleAddFirstField = () => {
+  const handleAddFirstSignatory = () => {
     if (!isEditable) return;
     setIsFirstDialogOpen(true);
   };
 
-  const handleAddSecondField = () => {
+  const handleAddSecondSignatory = () => {
     if (!isEditable) return;
     setIsSecondDialogOpen(true);
   };
@@ -76,15 +90,22 @@ export const Signatories = ({
     id: number;
     name: string;
     title: string;
+    includeSignature: boolean;
   }) => {
     setIsSubmitting(true);
 
-    const { id, name, title } = formData;
+    const { id, name, title, includeSignature } = formData;
 
     if (!id || !name || !title) {
       setIsSubmitting(false);
       return;
     }
+
+    setUpdatingSignatoryId(id);
+    setIncludeSignatureMap((prev) => ({
+      ...prev,
+      [id]: includeSignature,
+    }));
 
     const newSignatory = { id, name, title };
 
@@ -93,8 +114,9 @@ export const Signatories = ({
       newSignatory,
     ].sort((a, b) => a.id - b.id);
 
-    // Store the previous state for rollback in case of error
+    // previous state for rollback in case of error
     const previousData = data;
+    const previousIncludeSignature = includeSignatureMap[id];
 
     try {
       setOptimisticData(updatedSignatories);
@@ -109,10 +131,19 @@ export const Signatories = ({
         throw new Error(result.error.message);
       }
 
-      router.refresh();
+      startTransition(() => {
+        router.refresh();
+        setOptimisticData(null);
+        setUpdatingSignatoryId(null);
+      });
     } catch (error) {
       // Rollback on error
       setOptimisticData(previousData);
+      setUpdatingSignatoryId(null);
+      setIncludeSignatureMap((prev) => ({
+        ...prev,
+        [id]: previousIncludeSignature,
+      }));
 
       console.error('Error submitting form:', error);
       toast.error(
@@ -129,7 +160,7 @@ export const Signatories = ({
 
   return (
     <React.Fragment>
-      <FirstFieldDialog
+      <FirstSignatoryDialog
         open={isFirstDialogOpen}
         setOpen={setIsFirstDialogOpen}
         onSubmit={handleDialogSubmit}
@@ -137,7 +168,7 @@ export const Signatories = ({
         firstSignatory={firstSignatory}
       />
 
-      <SecondFieldDialog
+      <SecondSignatoryDialog
         open={isSecondDialogOpen}
         setOpen={setIsSecondDialogOpen}
         onSubmit={handleDialogSubmit}
@@ -148,14 +179,15 @@ export const Signatories = ({
       <footer className="flex justify-between mx-auto max-w-4xl print:max-w-[700px] gap-x-8">
         {firstSignatory.name ? (
           <div
-            onClick={handleAddFirstField}
+            onClick={handleAddFirstSignatory}
             className={cn(
               'relative flex-1 flex flex-col items-stretch px-2 md:px-8 py-4 transition-all rounded-sm',
+              isPending && updatingSignatoryId === 1 && 'opacity-30',
               isEditable &&
                 'border-2 border-dashed border-gray-400 active:border-primary active:scale-95',
             )}
           >
-            {signature.success && signature.data && (
+            {signature.success && signature.data && includeSignatureMap[1] && (
               <Image
                 src={signature.data}
                 alt="Engineer Signature"
@@ -173,7 +205,7 @@ export const Signatories = ({
           </div>
         ) : (
           <Empty
-            onClick={handleAddFirstField}
+            onClick={handleAddFirstSignatory}
             className={cn(
               'transition-all rounded-sm gap-0 py-2 border-2 border-dashed active:scale-95',
               isEditable
@@ -194,13 +226,23 @@ export const Signatories = ({
 
         {secondSignatory.name ? (
           <div
-            onClick={handleAddSecondField}
+            onClick={handleAddSecondSignatory}
             className={cn(
-              'flex-1 flex flex-col items-stretch px-2 md:px-8 py-4 transition-all rounded-sm',
+              'relative flex-1 flex flex-col items-stretch px-2 md:px-8 py-4 transition-all rounded-sm',
+              isPending && updatingSignatoryId === 2 && 'opacity-30',
               isEditable &&
                 'border-2 border-dashed border-gray-400 active:border-primary active:scale-95',
             )}
           >
+            {signature.success && signature.data && includeSignatureMap[2] && (
+              <Image
+                src={signature.data}
+                alt="Engineer Signature"
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                width={200}
+                height={200}
+              />
+            )}
             <h5 className="text-center text-base md:text-2xl font-semibold print:text-xl">
               {secondSignatory.name}
             </h5>
@@ -210,7 +252,7 @@ export const Signatories = ({
           </div>
         ) : (
           <Empty
-            onClick={handleAddSecondField}
+            onClick={handleAddSecondSignatory}
             className={cn(
               'transition-all rounded-sm gap-0 py-2 border-2 border-dashed active:scale-95',
               isEditable

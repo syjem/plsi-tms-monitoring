@@ -8,6 +8,7 @@ export const signatorySchema = z.object({
   id: z.number(),
   name: z.string().min(1, 'Name is required'),
   title: z.string().min(1, 'Title is required'),
+  includeSignature: z.boolean().default(false),
 });
 
 export const signatoriesSchema = z
