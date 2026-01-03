@@ -10,7 +10,7 @@ export async function getWorkLogs() {
   if (!user) throw new Error(ERRORS.UNAUTHORIZED);
 
   const controller = new WorkLogsController(db);
-  const work_logs = await controller.getLogsById(user.id);
+  const work_logs = await controller.getLogsByUserId(user.id);
 
   return work_logs;
 }

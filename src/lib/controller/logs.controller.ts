@@ -19,7 +19,6 @@ export class WorkLogsController {
     return new_log[0];
   }
 
-  //   Single log
   async getLogById(id: string, user_id: string) {
     const work_log = await this.db
       .select()
@@ -29,8 +28,7 @@ export class WorkLogsController {
     return work_log[0];
   }
 
-  //   Multiple logs
-  async getLogsById(user_id: string) {
+  async getLogsByUserId(user_id: string) {
     const work_logs = await this.db
       .select()
       .from(workLogs)
