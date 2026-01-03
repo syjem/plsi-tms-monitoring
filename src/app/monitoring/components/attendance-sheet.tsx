@@ -12,16 +12,27 @@ import { Edit } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-export default function AttendanceSheet({
-  workLog,
-  signature,
-}: {
+type AttendanceSheetProps = {
   workLog: { id: string; logs: AttendanceData };
   signature: OperationResult<
     string | null | undefined,
     Record<string, unknown>
   >;
-}) {
+  signatories: OperationResult<
+    {
+      id: number;
+      name: string;
+      title: string;
+    }[],
+    Record<string, unknown>
+  >;
+};
+
+export default function AttendanceSheet({
+  workLog,
+  signature,
+  signatories,
+}: AttendanceSheetProps) {
   const [isEditable, setIsEditable] = useState(false);
   const [hoveredGroup, setHoveredGroup] = useState<number | null>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -190,7 +201,11 @@ export default function AttendanceSheet({
         />
       </div>
 
-      <Signatories isEditable={isEditable} signature={signature} />
+      <Signatories
+        isEditable={isEditable}
+        signature={signature}
+        signatories={signatories}
+      />
     </main>
   );
 }

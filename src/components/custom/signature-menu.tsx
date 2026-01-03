@@ -25,6 +25,7 @@ import { DialogProps, DialogTitle } from '@radix-ui/react-dialog';
 import { QueryObserverResult, RefetchOptions } from '@tanstack/react-query';
 import { Pencil } from 'lucide-react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -48,6 +49,7 @@ function SignatureMenu({
   refetch,
   ...rest
 }: SignatureMenuProps) {
+  const router = useRouter();
   const [edit, setEdit] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const { ref, width, padding } = useElementSize<HTMLDivElement>();
@@ -74,12 +76,10 @@ function SignatureMenu({
           success: (data) => {
             if (!data.success) throw new Error(data.error.message);
 
-            // fetch data from the database
-            refetch();
-            // reset edit mode
-            setEdit(false);
-            // reset loader
-            setSubmitting(false);
+            refetch(); // fetch data from the database
+            router.refresh(); // refresh the page to reflect changes
+            setEdit(false); // reset edit mode
+            setSubmitting(false); // reset loader
 
             return 'Signature saved successfully!';
           },
@@ -95,11 +95,10 @@ function SignatureMenu({
         if (e instanceof Error) {
           toast.error(e?.message || 'Something went wrong!');
         }
-        // reset state
-        setSubmitting(false);
+        setSubmitting(false); // reset state
       }
     },
-    [refetch],
+    [refetch, router],
   );
 
   const onEditClick = useCallback(() => {

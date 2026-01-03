@@ -1,6 +1,5 @@
 'use client';
 
-import { getSignatories } from '@/app/actions/profiles/get-signatories';
 import { setSignatory as setEngineerSignatory } from '@/app/actions/profiles/set-signatory';
 import { FirstFieldDialog } from '@/app/monitoring/components/first-dialog';
 import { SecondFieldDialog } from '@/app/monitoring/components/second-dialog';
@@ -10,43 +9,55 @@ import {
   EmptyHeader,
   EmptyMedia,
 } from '@/components/ui/empty';
-import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { OperationResult } from '@/utils/with-error-handler';
-import { useQuery } from '@tanstack/react-query';
 import { Plus } from 'lucide-react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { toast } from 'sonner';
 
-export const Signatories = ({
-  isEditable,
-  signature,
-}: {
+type SignatoriesProps = {
   isEditable: boolean;
   signature: OperationResult<
     string | null | undefined,
     Record<string, unknown>
   >;
-}) => {
+  signatories: OperationResult<
+    {
+      id: number;
+      name: string;
+      title: string;
+    }[],
+    Record<string, unknown>
+  >;
+};
+
+type Signatory = { id: number; name: string; title: string };
+
+export const Signatories = ({
+  isEditable,
+  signature,
+  signatories,
+}: SignatoriesProps) => {
+  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isFirstDialogOpen, setIsFirstDialogOpen] = useState(false);
   const [isSecondDialogOpen, setIsSecondDialogOpen] = useState(false);
 
-  const { data, refetch, isLoading } = useQuery({
-    queryKey: ['signatories'],
-    queryFn: getSignatories,
-    refetchOnWindowFocus: false,
-  });
+  const [optimisticData, setOptimisticData] = useState<Signatory[] | null>(
+    null,
+  );
 
-  const signatories = data?.success ? data.data : [];
+  const serverData = signatories.success ? signatories.data : [];
+  const data = optimisticData ?? serverData;
 
-  const firstSignatory = signatories.find((s) => s.id === 1) || {
+  const firstSignatory = data.find((s) => s.id === 1) || {
     name: '',
     title: '',
   };
 
-  const secondSignatory = signatories.find((s) => s.id === 2) || {
+  const secondSignatory = data.find((s) => s.id === 2) || {
     name: '',
     title: '',
   };
@@ -61,26 +72,36 @@ export const Signatories = ({
     setIsSecondDialogOpen(true);
   };
 
-  const handleDialogSubmit = async (data: {
+  const handleDialogSubmit = async (formData: {
     id: number;
     name: string;
     title: string;
   }) => {
     setIsSubmitting(true);
 
+    const { id, name, title } = formData;
+
+    if (!id || !name || !title) {
+      setIsSubmitting(false);
+      return;
+    }
+
+    const newSignatory = { id, name, title };
+
+    const updatedSignatories = [
+      ...data.filter((s) => s.id !== id),
+      newSignatory,
+    ].sort((a, b) => a.id - b.id);
+
+    // Store the previous state for rollback in case of error
+    const previousData = data;
+
     try {
-      const id = data.id;
-      const name = data.name;
-      const title = data.title;
+      setOptimisticData(updatedSignatories);
 
-      if (!id || !name || !title) return;
-
-      const newSignatory = { id, name, title };
-
-      const updatedSignatories = [
-        ...signatories.filter((s) => s.id !== id),
-        newSignatory,
-      ].sort((a, b) => a.id - b.id);
+      if (id === 1) setIsFirstDialogOpen(false);
+      if (id === 2) setIsSecondDialogOpen(false);
+      toast.success('Signatories updated successfully');
 
       const result = await setEngineerSignatory(updatedSignatories);
 
@@ -88,30 +109,23 @@ export const Signatories = ({
         throw new Error(result.error.message);
       }
 
-      await refetch();
-
-      if (id === 1) setIsFirstDialogOpen(false);
-      if (id === 2) setIsSecondDialogOpen(false);
-
-      toast.success('Signatories updated successfully');
+      router.refresh();
     } catch (error) {
+      // Rollback on error
+      setOptimisticData(previousData);
+
       console.error('Error submitting form:', error);
       toast.error(
         error instanceof Error ? error.message : 'Failed to update signatories',
       );
+
+      // Reopen the dialog on error so user can retry
+      if (id === 1) setIsFirstDialogOpen(true);
+      if (id === 2) setIsSecondDialogOpen(true);
     } finally {
       setIsSubmitting(false);
     }
   };
-
-  if (isLoading) {
-    return (
-      <div className="flex justify-between mx-auto max-w-4xl gap-x-8 px-2 md:px-8 py-4">
-        <Skeleton className="h-20 w-full flex-1" />
-        <Skeleton className="h-20 w-full flex-1" />
-      </div>
-    );
-  }
 
   return (
     <React.Fragment>
