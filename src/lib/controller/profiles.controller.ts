@@ -123,7 +123,12 @@ export class ProfilesController {
    */
   async setSignatories(
     user_id: string,
-    signatories: { id: number; name: string; title: string }[],
+    signatories: {
+      id: number;
+      name: string;
+      title: string;
+      includeSignature: boolean;
+    }[],
   ) {
     try {
       const result = await this.db.transaction(async (txs) => {

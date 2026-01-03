@@ -53,6 +53,7 @@ export function SecondSignatoryDialog({
       id: Number(formData.get('id')),
       name: formData.get('name') as string,
       title: formData.get('title') as string,
+      includeSignature: formData.get('includeSignature') === 'on',
     };
 
     // Validate with Zod

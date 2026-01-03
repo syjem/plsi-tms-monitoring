@@ -7,7 +7,7 @@ import { db } from '@/lib/supabase';
 import { signatoriesSchema } from '@/lib/zod/schema';
 import { withErrorHandler } from '@/utils/with-error-handler';
 
-export async function setSignatory(signatories: unknown) {
+export async function setSignatories(signatories: unknown) {
   const result = await withErrorHandler(async () => {
     const user = await getUser();
     if (!user) throw new Error(ERRORS.UNAUTHORIZED);

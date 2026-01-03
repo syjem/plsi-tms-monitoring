@@ -23,6 +23,7 @@ type AttendanceSheetProps = {
       id: number;
       name: string;
       title: string;
+      includeSignature: boolean;
     }[],
     Record<string, unknown>
   >;

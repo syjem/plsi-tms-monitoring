@@ -22,6 +22,7 @@ export const profiles = pgTable(
         id: number;
         name: string;
         title: string;
+        includeSignature: boolean;
       }[]
     >(),
     user_id: uuid()
