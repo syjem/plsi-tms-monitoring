@@ -31,7 +31,7 @@ export function SecondSignatoryDialog({
     includeSignature: boolean;
   }) => Promise<void>;
   isSubmitting: boolean;
-  secondSignatory: { name: string; title: string };
+  secondSignatory: { name: string; title: string; includeSignature: boolean };
 }) {
   const [errors, setErrors] = useState<{
     name?: string;
@@ -114,6 +114,7 @@ export function SecondSignatoryDialog({
             >
               <Checkbox
                 name="includeSignature"
+                defaultChecked={secondSignatory.includeSignature}
                 id="signatory-2"
                 className="data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:text-white"
               />
