@@ -167,12 +167,12 @@ export default function AttendanceSheet({
 
       return newData;
     });
-    toast.warning('You added a row..', {
+    toast.info('You added a row..', {
       action: {
         label: 'Undo',
         onClick: () => {
           setAttendanceData(prevData);
-          toast.success('You removed the added row');
+          toast.info('Row removed');
         },
       },
     });
