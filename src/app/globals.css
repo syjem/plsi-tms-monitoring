@@ -143,7 +143,14 @@
   opacity: 0.3;
 }
 
-@supports (filter: blur(1px)) and (clip-path: polygon(0% 0%)) {
+@supports not (filter: blur(1px)) {
+  .background-fancy {
+    clip-path: none;
+    filter: none;
+  }
+}
+
+@supports (filter: blur(1px)) {
   .background-fancy {
     filter: blur(64px);
     clip-path: polygon(
