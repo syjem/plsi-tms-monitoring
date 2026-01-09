@@ -55,8 +55,8 @@ export function CustomTableRow({
       <TableCell className="relative border border-black p-1 print:py-0">
         {isEditable && isHighlighted && isFirstRowInGroup && isRowNotEmpty && (
           <Button
-            size="icon"
-            className="absolute -left-[37px] -top-1"
+            size="sm"
+            className="absolute -top-[2px] left-0 md:-left-[33px] print:hidden has-[>svg]:px-2"
             onClick={() => addRowToGroup(groupIndex)}
           >
             <Plus />
