@@ -1,15 +1,19 @@
+export const metadata = {
+  title: 'Privacy Policy - TMS Employee Monitoring',
+};
+
 export default function PrivacyPage() {
   return (
     <main className="mx-auto max-w-3xl px-6 py-12">
       <h1 className="mb-6 text-3xl font-bold">Privacy Policy</h1>
 
       <p className="mb-4 text-sm text-muted-foreground">
-        Effective Date: {new Date().toLocaleDateString()}
+        Effective Date: 1/14/2026
       </p>
 
       <section className="space-y-2">
         <p>
-          The Employee Time Management System (TMS) Monitoring application (“the
+          The Time Management System (TMS) Employee Monitoring application (“the
           App”) is an independently developed web application designed to assist
           with attendance tracking, work log management, and related
           documentation within an organizational environment.

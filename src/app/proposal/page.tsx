@@ -1,8 +1,12 @@
+export const metadata = {
+  title: 'Proposal - TMS Employee Monitoring',
+};
+
 export default function ProposalPage() {
   return (
     <main className="mx-auto max-w-4xl px-6 py-12">
       <h1 className="mb-4 text-4xl font-bold text-center">
-        Proposal: <br /> Employee Time Management System (TMS) Monitoring
+        Time Management System (TMS) Employee Monitoring — Proposal
       </h1>
 
       <p className="mb-8 text-lg text-muted-foreground">
@@ -19,7 +23,7 @@ export default function ProposalPage() {
           This process is repetitive, and time-consuming.
         </p>
         <p>
-          The Employee Time Management System (TMS) Monitoring was built to
+          The Time Management System (TMS) Employee Monitoring was built to
           eliminate this manual work by automating data extraction, work log
           generation, and document preparation — while still allowing full user
           control.
@@ -130,7 +134,7 @@ export default function ProposalPage() {
       <section className="space-y-4">
         <h2 className="text-2xl font-semibold">Conclusion</h2>
         <p>
-          The Employee Time Management System (TMS) Monitoring is a practical
+          The Time Management System (TMS) Employee Monitoring is a practical
           tool designed to improve efficiency, accuracy, and readability of
           attendance reporting.
         </p>

@@ -7,7 +7,7 @@ export function HeroSectionSkeleton() {
         Welcome, <Skeleton className="h-5 w-[150px] bg-primary/40" />
       </div>
       <h1 className="text-2xl font-extrabold text-gray-900 font-sans">
-        Phillogix Systems Employee <br /> Monitoring
+        Time Management System (TMS) Employee <br /> Monitoring
       </h1>
     </div>
   );

@@ -59,7 +59,7 @@ export default function Page() {
                     <div className="w-full flex items-center justify-center mb-4">
                       <AppLogo />
                     </div>
-                    Phillogix Systems Employee <br /> Monitoring
+                    Time Management System (TMS) Employee <br /> Monitoring
                   </React.Fragment>
                 )}
               </h1>

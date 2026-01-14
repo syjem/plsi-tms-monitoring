@@ -7,7 +7,7 @@ export function HeaderSkeleton() {
       <nav className="max-w-4xl mx-auto flex justify-between items-center py-3 px-4 rounded border-b">
         <div className="flex items-center gap-2">
           <AppLogo />
-          <span className="font-medium">Phillogix Systems Inc.</span>
+          <span className="font-medium">TMS Employee Monitoring</span>
         </div>
         <Skeleton className="h-8 w-8 rounded-full" />
       </nav>

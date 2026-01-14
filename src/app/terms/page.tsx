@@ -1,16 +1,20 @@
+export const metadata = {
+  title: 'Terms of Service - TMS Employee Monitoring',
+};
+
 export default function TermsPage() {
   return (
     <main className="mx-auto max-w-3xl px-6 py-12">
       <h1 className="mb-6 text-3xl font-bold">Terms of Service</h1>
 
       <p className="mb-4 text-sm text-muted-foreground">
-        Effective Date: {new Date().toLocaleDateString()}
+        Effective Date: 1/14/2026
       </p>
 
       <section className="space-y-6">
         <h2 className="text-xl font-semibold">Acceptance of Terms</h2>
         <p>
-          By accessing or using the Employee Time Management System (TMS)
+          By accessing or using the Time Management System (TMS) Employee
           Monitoring application (“the App”), you agree to these Terms of
           Service. If you do not agree, do not use the App.
         </p>
@@ -45,7 +49,7 @@ export default function TermsPage() {
 
         <h2 className="text-xl font-semibold">Intellectual Property</h2>
         <p>
-          The Employee Time Management System (TMS) Monitoring application was
+          The Time Management System (TMS) Employee Monitoring application was
           independently developed by the author. All source code, system logic,
           and related intellectual property remain the property of the
           developer, unless explicitly transferred or licensed through a

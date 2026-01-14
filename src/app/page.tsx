@@ -35,7 +35,7 @@ async function HeroSection() {
         <span className="text-primary">{user.user_metadata.full_name}~</span>
       </p>
       <h1 className="text-xl md:text-2xl font-extrabold text-gray-900 font-sans">
-        Phillogix Systems Employee <br /> Monitoring
+        Time Management System (TMS) Employee <br /> Monitoring
       </h1>
     </div>
   );

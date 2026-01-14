@@ -16,8 +16,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Phillogix Systems Monitoring',
-  description: 'AI-powered PDF data extraction and analysis web app.',
+  title: 'TMS Employee Monitoring',
+  description:
+    'Automates the process of preparing attendance monitoring by extracting data from uploaded PDF reports',
 };
 
 export default function RootLayout({
