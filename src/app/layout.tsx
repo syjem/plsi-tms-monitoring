@@ -1,4 +1,3 @@
-import { BackgroundBottom, BackgroundTop } from '@/components/backgrounds';
 import { Toaster } from '@/components/ui/sonner';
 import AppProvider from '@/provider';
 import type { Metadata } from 'next';
@@ -31,8 +30,6 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <BackgroundTop />
-        <BackgroundBottom />
         <AppProvider>{children}</AppProvider>
         <Toaster position="bottom-center" richColors className="print:hidden" />
       </body>

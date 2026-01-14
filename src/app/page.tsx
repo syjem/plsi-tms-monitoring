@@ -1,4 +1,5 @@
 import { getUser } from '@/app/actions/get-user';
+import { BackgroundBottom, BackgroundTop } from '@/components/backgrounds';
 import { Header } from '@/components/header';
 import { HeaderSkeleton } from '@/components/skeletons/header-skeleton';
 import { HeroSectionSkeleton } from '@/components/skeletons/hero-section';
@@ -9,6 +10,7 @@ import React, { Suspense } from 'react';
 export default async function Home() {
   return (
     <React.Fragment>
+      <BackgroundTop />
       <Suspense fallback={<HeaderSkeleton />}>
         <Header />
       </Suspense>
@@ -18,6 +20,7 @@ export default async function Home() {
       <Suspense fallback={<TabSectionSkeleton />}>
         <TabSection />
       </Suspense>
+      <BackgroundBottom />
     </React.Fragment>
   );
 }
