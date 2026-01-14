@@ -10,8 +10,8 @@ export default function ProposalPage() {
       </h1>
 
       <p className="mb-8 text-lg text-muted-foreground">
-        Automating attendance reporting, work logs, and signatures — every
-        cut-off, without the manual hassle.
+        Automating attendance sheets monitoring — every cut-off, without the
+        manual hassle.
       </p>
 
       {/* Introduction */}
@@ -20,7 +20,7 @@ export default function ProposalPage() {
         <p>
           Every cut-off period, employees are required to manually transfer data
           from official attendance records into monitoring or attendance sheets.
-          This process is repetitive, and time-consuming.
+          This process is repetitive, time-consuming, and prone to errors.
         </p>
         <p>
           The Time Management System (TMS) Employee Monitoring was built to
@@ -43,8 +43,7 @@ export default function ProposalPage() {
           <li>
             Repeatedly drawing or signing signatures per row or per document
           </li>
-          <li>Higher chance of mistakes due to fatigue and repetition</li>
-          <li>Time spent on admin work instead of productive tasks</li>
+          <li>Time spent on clerical work instead of productive tasks</li>
         </ul>
       </section>
 
@@ -52,7 +51,7 @@ export default function ProposalPage() {
       <section className="mb-10 space-y-4">
         <h2 className="text-2xl font-semibold">Proposed Solution</h2>
         <p>
-          The TMS Monitoring system provides a centralized, secure web
+          The TMS Employee Monitoring system provides a centralized, secure web
           application that automates the most tedious parts of attendance
           reporting.
         </p>
@@ -106,7 +105,7 @@ export default function ProposalPage() {
             Attendance records are extracted exactly as they appear in the
             official company-generated PDF. Any records or logs that are hidden,
             omitted, or not shown in the PDF must be manually added by the user
-            during the editing step before saving and printing.
+            during the editing stage before saving and printing.
           </li>
 
           <li>

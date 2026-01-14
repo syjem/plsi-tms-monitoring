@@ -23,14 +23,16 @@ export default function TermsPage() {
         <p>
           The App is intended for internal use within an organizational
           environment to manage attendance records, process uploaded reports,
-          maintain work logs, and generate attendance documentation.
+          and maintain work logs.
         </p>
 
         <h2 className="text-xl font-semibold">User Responsibilities</h2>
         <ul className="list-disc space-y-2 pl-6">
-          <li>Provide accurate and truthful information</li>
+          <li>
+            Provide accurate attendance records from the official company
+            website
+          </li>
           <li>Use the App only for its intended business purpose</li>
-          <li>Protect login credentials</li>
           <li>Not attempt to misuse, disrupt, or reverse-engineer the App</li>
         </ul>
 

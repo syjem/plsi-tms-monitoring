@@ -32,11 +32,11 @@ export default function PrivacyPage() {
           </li>
           <li>
             <strong>Work-Related Data:</strong> time records, break periods,
-            destinations, remarks, and uploaded attendance PDF files.
+            destinations, remarks — the uploaded attendance PDF files.
           </li>
           <li>
             <strong>Signature Data:</strong> digitally captured signatures used
-            for document generation.
+            for the Attendance Sheet Monitoring.
           </li>
         </ul>
 
@@ -64,8 +64,7 @@ export default function PrivacyPage() {
 
         <h2 className="mt-6 text-xl font-semibold">Data Sharing</h2>
         <p>
-          The App does not sell, rent, or share user data with third parties,
-          except where required for authentication services or by law.
+          The App does not sell, rent, or share user data with third parties.
         </p>
 
         <h2 className="mt-6 text-xl font-semibold">Cookies and Sessions</h2>
