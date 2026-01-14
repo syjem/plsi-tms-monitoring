@@ -17,6 +17,6 @@ export const config = {
      * - how-it-works (how it works page)
      * - any image file with extensions: svg, png, jpg, jpeg, gif, webp
      */
-    '/((?!_next/static|_next/image|favicon.ico|privacy|terms|how-it-works|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|privacy|terms|how-it-works|proposal|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };
