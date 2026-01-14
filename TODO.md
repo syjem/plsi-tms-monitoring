@@ -1,4 +1,4 @@
-# Todo Lists
+# FINAL Todo Lists
 
 | Icons | Status      |
 | ----- | ----------- |
@@ -19,7 +19,7 @@
 
    - Add a new controller for logs
 
-4. ⏳ Add a proposal page (public)
-5. 🕛 Google Social Sign-in/Sign-up branding
-6. 🕛 Set up custom SMTP
-7. 🕛 Migrate to Next.js 16
+4. ✅ Add a proposal page (public)
+5. ✅ Google Social Sign-in/Sign-up branding
+   - Branding configured in Google Auth Platform
+   - Supabase default auth domain retained (no custom domain)

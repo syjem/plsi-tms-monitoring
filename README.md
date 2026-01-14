@@ -1,27 +1,76 @@
-# Phillogix Systems INC. Employee Time Management System (TMS) Monitoring
+# Employee Time Management System (TMS) Monitoring
 
-## What is this?
+## Overview
 
-A web application for managing employee attendance and time tracking. It automates the process of filling out employee attendance sheets by extracting data from uploaded PDF reports, while also providing full CRUD operations for work logs, signature management, and user authentication.
+The Employee Time Management System (TMS) Monitoring is an independently
+developed web application designed to assist with employee attendance
+tracking and time management within an organizational environment.
 
-Instead of manually writing time-in, breaks, time-out, destinations, and remarks from Daily Time Records for each 15-day cut-off period, users can upload a PDF report from the company's official website. The app uses AI to extract the data, populate the work logs, and generate completed, signed attendance sheets in seconds.
+It automates the process of preparing attendance sheets by extracting
+data from uploaded PDF reports, while also providing full CRUD operations
+for work logs, digital signature management, and secure user
+authentication.
 
-Additionally, the app allows management of work logs, captures and reuses digital signatures across documents, and provides a secure, authenticated environment for employees.
+Instead of manually writing time-in, breaks, time-out, destinations,
+and remarks from Daily Time Records every 15-day cut-off period, users
+can upload a PDF attendance report and have the data automatically
+extracted, reviewed, and formatted into clean, printable documents.
 
-## Why did I build this?
+The system also allows users to capture and reuse digital signatures,
+ensuring consistency across documents and reducing repetitive work.
 
-Every cut-off, employees (including me) had to manually write log data from Daily Time Records into attendance sheets. This was tedious, and time-consuming. This app eliminates that manual work by automating data extraction and sheet generation.
+---
 
-It also centralizes signature management, saving time on future documents and ensuring consistency.
+## Why This Was Built
 
-## Features
+Every cut-off period, employees (including the author) were required to
+manually transfer attendance data from official attendance records into
+monitoring or attendance sheets. This process was repetitive,
+time-consuming, and prone to errors.
 
-- **PDF Data Extraction**: Upload PDFs and automatically extract time logs using AI
-- **Work Log Management**: Create, read, update, and delete work logs
-- **Signature Capture**: Draw and save digital signatures for document signing
-- **Attendance Sheet Generation**: View printable attendance sheets with applied signatures
-- **User Authentication**: Secure login and user management via Supabase
-- **Responsive Design**: Built with modern UI components for desktop and mobile
+This project was built to eliminate that manual workload by automating
+data extraction and document preparation, while still allowing users to
+review and adjust records before final submission.
+
+---
+
+## Key Features
+
+- **PDF Data Extraction**  
+  Upload attendance PDF reports and automatically extract time logs
+  using AI.
+
+- **Work Log Management**  
+  Create, read, update, and delete work logs with full user control.
+
+- **Digital Signature Capture**  
+  Capture a signature once and reuse it across future attendance
+  documents.
+
+- **Attendance Sheet Generation**  
+  Generate clean, readable, and printable attendance sheets with
+  applied signatures.
+
+- **User Authentication**  
+  Secure login and access control powered by Supabase.
+
+- **Responsive Design**  
+  Optimized for both desktop and mobile use.
+
+---
+
+## Intended Use
+
+This application is intended for internal evaluation and use within an
+organizational setting to improve efficiency in attendance reporting
+and documentation workflows.
+
+---
+
+## Ownership
+
+This project was independently developed. Ownership, licensing, or
+transfer of rights, if any, shall be subject to separate agreement.
 
 ---
 
