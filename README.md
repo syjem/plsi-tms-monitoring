@@ -1,8 +1,8 @@
-# Employee Time Management System (TMS) Monitoring
+# Time Management System (TMS) Employee Monitoring
 
 ## Overview
 
-The Employee Time Management System (TMS) Monitoring is an independently
+The Time Management System (TMS) Employee Monitoring is an independently
 developed web application designed to assist with employee attendance
 tracking and time management within an organizational environment.
 
