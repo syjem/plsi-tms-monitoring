@@ -167,8 +167,8 @@ export const Signatories = ({
                   src={signature.data}
                   alt="Engineer Signature"
                   className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-                  width={200}
-                  height={200}
+                  width={180}
+                  height={180}
                 />
               )}
             <h5 className="text-center text-base md:text-2xl font-semibold print:text-xl">
@@ -215,8 +215,8 @@ export const Signatories = ({
                   src={signature.data}
                   alt="Engineer Signature"
                   className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-                  width={200}
-                  height={200}
+                  width={180}
+                  height={180}
                 />
               )}
             <h5 className="text-center text-base md:text-2xl font-semibold print:text-xl">
