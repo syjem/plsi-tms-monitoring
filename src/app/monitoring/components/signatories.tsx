@@ -150,12 +150,12 @@ export const Signatories = ({
         secondSignatory={secondSignatory}
       />
 
-      <footer className="flex justify-between mx-auto max-w-4xl print:max-w-[700px] gap-x-8">
+      <footer className="flex justify-between mx-auto max-w-4xl print:max-w-[700px]">
         {firstSignatory.name ? (
           <div
             onClick={handleAddFirstSignatory}
             className={cn(
-              'relative flex-1 flex flex-col items-stretch px-2 md:px-8 py-4 transition-all rounded-sm',
+              'relative flex flex-col items-stretch max-w-1/2 px-2 md:px-8 py-4 transition-all rounded-sm',
               isEditable &&
                 'border-2 border-dashed border-gray-400 active:border-primary active:scale-95',
             )}
@@ -203,7 +203,7 @@ export const Signatories = ({
           <div
             onClick={handleAddSecondSignatory}
             className={cn(
-              'relative flex-1 flex flex-col items-stretch px-2 md:px-8 py-4 transition-all rounded-sm',
+              'relative flex flex-col items-stretch max-w-1/2 px-2 md:px-8 py-4 transition-all rounded-sm',
               isEditable &&
                 'border-2 border-dashed border-gray-400 active:border-primary active:scale-95',
             )}
