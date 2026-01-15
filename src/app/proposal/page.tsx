@@ -6,7 +6,8 @@ export default function ProposalPage() {
   return (
     <main className="mx-auto max-w-4xl px-6 py-12">
       <h1 className="mb-4 text-4xl font-bold text-center">
-        Time Management System (TMS) Employee Monitoring — Proposal
+        Time Management System <br /> (TMS) Employee <br />
+        Monitoring — Proposal
       </h1>
 
       <p className="mb-8 text-lg text-muted-foreground">

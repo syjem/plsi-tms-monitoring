@@ -8,6 +8,7 @@ import { createClient } from '@/lib/supabase/client';
 import { emailSchema } from '@/lib/zod/schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader, Mail } from 'lucide-react';
+import Link from 'next/link';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -93,30 +94,33 @@ export function LoginForm({ onSubmit, isLoading }: EmailStepProps) {
           Or
         </span>
       </div>
-      <div className="grid">
-        <Button
-          type="button"
-          disabled={loadingProvider !== null}
-          variant="outline"
-          className="w-full border-gray-300 shadow-sm cursor-pointer"
-          onClick={() => handleSocialLogin('google')}
-        >
-          {loadingProvider === 'google' ? (
-            <>
-              <Loader className="animate-spin ml-1" />
-              Continuing...
-            </>
-          ) : (
-            <>
-              <Google />
-              Continue with Google
-            </>
-          )}
-        </Button>
-      </div>
+      <Button
+        type="button"
+        disabled={loadingProvider !== null}
+        variant="outline"
+        className="w-full border-gray-300 shadow-sm cursor-pointer"
+        onClick={() => handleSocialLogin('google')}
+      >
+        {loadingProvider === 'google' ? (
+          <>
+            <Loader className="animate-spin ml-1" />
+            Continuing...
+          </>
+        ) : (
+          <>
+            <Google />
+            Continue with Google
+          </>
+        )}
+      </Button>
       {error && (
         <div className="text-sm text-destructive text-center">{error}</div>
       )}
+      <div className="text-balance text-center text-xs text-muted-foreground [&_a]:text-sky-500 [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary">
+        By continuing, you agree to our{' '}
+        <Link href="/terms-of-service">Terms of Service</Link> and{' '}
+        <Link href="/privacy-policy">Privacy Policy</Link>.
+      </div>
     </form>
   );
 }
