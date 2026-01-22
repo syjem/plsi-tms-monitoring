@@ -13,10 +13,10 @@ export default function PrivacyPage() {
 
       <section className="space-y-2">
         <p>
-          The Time Management System (TMS) Employee Monitoring application (“the
-          App”) is an independently developed web application designed to assist
-          with attendance tracking, work log management, and related
-          documentation within an organizational environment.
+          The TMS Employee Monitoring application (“the App”) is an
+          independently developed web application designed to assist with
+          attendance tracking, work log management, and related documentation
+          within an organizational environment.
         </p>
 
         <p>

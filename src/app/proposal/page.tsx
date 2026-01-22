@@ -24,10 +24,9 @@ export default function ProposalPage() {
           This process is repetitive, time-consuming, and prone to errors.
         </p>
         <p>
-          The Time Management System (TMS) Employee Monitoring was built to
-          eliminate this manual work by automating data extraction, work log
-          generation, and document preparation — while still allowing full user
-          control.
+          The TMS Employee Monitoring was built to eliminate this manual work by
+          automating data extraction, work log generation, and document
+          preparation — while still allowing full user control.
         </p>
       </section>
 
@@ -134,9 +133,8 @@ export default function ProposalPage() {
       <section className="space-y-4">
         <h2 className="text-2xl font-semibold">Conclusion</h2>
         <p>
-          The Time Management System (TMS) Employee Monitoring is a practical
-          tool designed to improve efficiency, accuracy, and readability of
-          attendance reporting.
+          The TMS Employee Monitoring is a practical tool designed to improve
+          efficiency, accuracy, and readability of attendance reporting.
         </p>
         <p>
           By automating repetitive tasks while preserving user control, the

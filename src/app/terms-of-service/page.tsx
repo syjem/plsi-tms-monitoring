@@ -14,9 +14,9 @@ export default function TermsPage() {
       <section className="space-y-6">
         <h2 className="text-xl font-semibold">Acceptance of Terms</h2>
         <p>
-          By accessing or using the Time Management System (TMS) Employee
-          Monitoring application (“the App”), you agree to these Terms of
-          Service. If you do not agree, do not use the App.
+          By accessing or using the TMS Employee Monitoring application (“the
+          App”), you agree to these Terms of Service. If you do not agree, do
+          not use the App.
         </p>
 
         <h2 className="text-xl font-semibold">Purpose of the App</h2>
@@ -51,11 +51,10 @@ export default function TermsPage() {
 
         <h2 className="text-xl font-semibold">Intellectual Property</h2>
         <p>
-          The Time Management System (TMS) Employee Monitoring application was
-          independently developed by the author. All source code, system logic,
-          and related intellectual property remain the property of the
-          developer, unless explicitly transferred or licensed through a
-          separate written agreement.
+          The TMS Employee Monitoring application was independently developed by
+          the author. All source code, system logic, and related intellectual
+          property remain the property of the developer, unless explicitly
+          transferred or licensed through a separate written agreement.
         </p>
         <p>
           Any evaluation, use, or deployment of the system by the company shall
