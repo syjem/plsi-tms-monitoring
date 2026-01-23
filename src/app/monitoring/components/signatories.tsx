@@ -150,12 +150,12 @@ export const Signatories = ({
         secondSignatory={secondSignatory}
       />
 
-      <footer className="flex justify-between mx-auto max-w-4xl print:max-w-[700px]">
+      <footer className="flex gap-4 justify-between mx-auto max-w-4xl print:max-w-[700px]">
         {firstSignatory.name ? (
           <div
             onClick={handleAddFirstSignatory}
             className={cn(
-              'relative flex flex-col items-stretch max-w-1/2 px-2 md:px-8 py-4 transition-all rounded-sm',
+              'relative flex flex-col items-stretch max-w-1/2 px-2 md:px-8 print:px-8 py-4 transition-all rounded-sm',
               isEditable &&
                 'border-2 border-dashed border-gray-400 active:border-primary active:scale-95',
             )}
@@ -182,7 +182,7 @@ export const Signatories = ({
           <Empty
             onClick={handleAddFirstSignatory}
             className={cn(
-              'transition-all rounded-sm gap-0 py-2 border-2 border-dashed active:scale-95',
+              'max-w-1/2 transition-all rounded-sm gap-0 py-2 border-2 border-dashed active:scale-95',
               isEditable
                 ? 'border-slate-700  active:border-primary'
                 : 'border-transparent active:border-transparent',
@@ -203,7 +203,7 @@ export const Signatories = ({
           <div
             onClick={handleAddSecondSignatory}
             className={cn(
-              'relative flex flex-col items-stretch max-w-1/2 px-2 md:px-8 py-4 transition-all rounded-sm',
+              'relative flex flex-col items-stretch max-w-1/2 px-2 md:px-8 print:px-8 py-4 transition-all rounded-sm',
               isEditable &&
                 'border-2 border-dashed border-gray-400 active:border-primary active:scale-95',
             )}
@@ -230,7 +230,7 @@ export const Signatories = ({
           <Empty
             onClick={handleAddSecondSignatory}
             className={cn(
-              'transition-all rounded-sm gap-0 py-2 border-2 border-dashed active:scale-95',
+              'max-w-1/2 transition-all rounded-sm gap-0 py-2 border-2 border-dashed active:scale-95',
               isEditable
                 ? 'border-slate-700  active:border-primary'
                 : 'border-transparent active:border-transparent',
