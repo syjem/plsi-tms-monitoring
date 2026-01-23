@@ -35,7 +35,7 @@ async function HeroSection() {
         <span className="text-primary">{user.user_metadata.full_name}~</span>
       </p>
       <h1 className="text-xl md:text-2xl font-extrabold text-gray-900 font-sans">
-        TMS Employee <br /> Monitoring
+        TMS Employee Monitoring
       </h1>
     </div>
   );
